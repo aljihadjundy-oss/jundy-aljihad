@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import { GradientBlob } from "@/components/GradientBlob";
 import MagneticButton from "@/components/MagneticButton";
+import { digitalProducts } from "@/data/digital-products";
 
 export const metadata: Metadata = {
   title: "Digital Product",
   description:
-    "Produk digital Jundy Aljihad (Keiryuuzaki) — template, panduan, dan resource yang bisa langsung dipakai, tersedia di lynk.id.",
+    "Produk digital Jundy Aljihad (Keiryuuzaki) — template, e-book, dan panduan yang bisa langsung dipakai, tersedia di lynk.id.",
 };
 
 const LYNK_URL = "https://lynk.id/jihadjundy";
@@ -25,8 +26,8 @@ export default function ProductsPage() {
               Hasil kerja gue, dikemas biar bisa lu pakai langsung.
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted">
-              Dari template, panduan, sampai resource yang gue pakai sendiri
-              buat kerja di content strategy dan brand building — semuanya
+              Dari template, e-book, sampai panduan yang gue pakai sendiri
+              buat kerja di content strategy dan personal branding — semuanya
               gue rapiin jadi produk digital yang bisa lu beli dan pakai
               langsung, bukan sekadar teori.
             </p>
@@ -34,21 +35,55 @@ export default function ProductsPage() {
 
           <Reveal delay={0.1}>
             <div className="mt-10">
-              <MagneticButton href={LYNK_URL}>Lihat semua di lynk.id</MagneticButton>
+              <MagneticButton href={LYNK_URL} variant="ghost">
+                Lihat semua di lynk.id
+              </MagneticButton>
             </div>
           </Reveal>
         </div>
       </section>
 
-      <section className="relative border-t border-white/10 px-6 py-16">
-        <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <p className="text-muted">
-              Daftar lengkap produk (nama, harga, dan link masing-masing) lagi
-              disiapin di sini. Sementara itu, semua produk gue udah bisa
-              diakses langsung lewat lynk.id.
-            </p>
-          </Reveal>
+      <section className="relative px-6 py-8">
+        <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2">
+          {digitalProducts.map((product, i) => (
+            <Reveal key={product.slug} delay={i * 0.06}>
+              <a
+                href={product.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                data-cursor-hover
+                className="group flex h-full flex-col justify-between rounded-3xl border border-white/10 p-7 transition-transform duration-300 hover:-translate-y-1"
+              >
+                <div>
+                  <h2 className="font-display text-xl font-bold text-white">
+                    {product.name}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    {product.description}
+                  </p>
+                </div>
+
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-display text-lg font-bold text-white">
+                      {product.price}
+                    </span>
+                    {product.originalPrice && (
+                      <span className="text-sm text-muted line-through">
+                        {product.originalPrice}
+                      </span>
+                    )}
+                  </div>
+                  <span className="inline-flex items-center gap-1 text-sm text-white/80">
+                    Beli
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                      →
+                    </span>
+                  </span>
+                </div>
+              </a>
+            </Reveal>
+          ))}
         </div>
       </section>
     </div>
