@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import { GradientBlob } from "@/components/GradientBlob";
 import { awards, education, skills } from "@/data/experience";
+import { company, businessUnits, builtTools, cooPrinciples } from "@/data/company";
 
 export const metadata: Metadata = {
   title: "About",
@@ -83,6 +84,141 @@ export default function AboutPage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* PT SKD */}
+      <section className="relative overflow-hidden border-t border-white/10 px-6 py-24">
+        <GradientBlob colors={["#F43F5E", "#7C3AED", "#0EA5E9"]} className="opacity-30" />
+        <div className="relative z-10 mx-auto max-w-5xl">
+          <Reveal>
+            <span className="text-xs uppercase tracking-widest text-muted">
+              Beyond content — the operator side
+            </span>
+            <h2 className="font-display mt-3 text-3xl font-bold text-white sm:text-4xl">
+              Co-Founder &amp; COO, {company.legalName}
+            </h2>
+            <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted">
+              Selain jalan di ranah konten, gue juga Co-Founder &amp; Direktur
+              Operasional (COO) di{" "}
+              <a
+                href={company.website}
+                target="_blank"
+                rel="noreferrer noopener"
+                data-cursor-hover
+                className="text-white underline underline-offset-4 hover:text-white/80"
+              >
+                {company.legalName}
+              </a>{" "}
+              ({company.shortName}) — merangkap CEO di dua unit bisnisnya,
+              Sinatif Academy dan Hexolution. {company.model}
+            </p>
+            <p className="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
+              Sebagai COO, semua yang berkaitan dengan operasional harian,
+              delivery proyek, SOP, pengelolaan tim &amp; intern, sampai
+              tooling dan sistem internal perusahaan lewat gue.
+            </p>
+          </Reveal>
+
+          {/* Principles */}
+          <Reveal delay={0.1}>
+            <div className="mt-14">
+              <span className="text-xs uppercase tracking-widest text-muted">
+                Prinsip kerja: efektif &amp; efisien
+              </span>
+              <div className="mt-6 grid gap-5 sm:grid-cols-3">
+                {cooPrinciples.map((p) => (
+                  <div key={p.title} className="glass rounded-3xl p-6">
+                    <h3 className="font-display text-lg font-semibold text-white">
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted">
+                      {p.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Business units */}
+          <Reveal delay={0.15}>
+            <div className="mt-14">
+              <span className="text-xs uppercase tracking-widest text-muted">
+                Unit bisnis {company.shortName}
+              </span>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {businessUnits.map((unit) => (
+                  <a
+                    key={unit.name}
+                    href={unit.instagram}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    data-cursor-hover
+                    className="group flex flex-col justify-between gap-3 rounded-2xl border border-white/10 p-6 transition-transform duration-300 hover:-translate-y-1"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="font-display text-lg font-semibold text-white">
+                          {unit.name}
+                        </h3>
+                        <span
+                          className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] uppercase tracking-widest ${
+                            unit.status === "active"
+                              ? "bg-emerald-400/15 text-emerald-300"
+                              : "bg-amber-400/15 text-amber-300"
+                          }`}
+                        >
+                          {unit.status === "active" ? "Active" : "Building"}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs uppercase tracking-widest text-muted">
+                        {unit.role}
+                      </p>
+                      <p className="mt-3 text-sm leading-relaxed text-muted">
+                        {unit.description}
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-sm text-white/80">
+                      Instagram
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Tools built */}
+          <Reveal delay={0.2}>
+            <div className="mt-14">
+              <span className="text-xs uppercase tracking-widest text-muted">
+                Tools yang gue bangun
+              </span>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                {builtTools.map((tool) => (
+                  <div key={tool.name} className="glass rounded-3xl p-6">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="font-display text-lg font-semibold text-white">
+                        {tool.name}
+                      </h3>
+                      <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[10px] uppercase tracking-widest text-white/70">
+                        {tool.status}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs uppercase tracking-widest text-muted">
+                      {tool.under}
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-muted">
+                      {tool.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 

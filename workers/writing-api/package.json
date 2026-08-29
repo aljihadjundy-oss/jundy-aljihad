@@ -1,0 +1,19 @@
+{
+  "name": "keiryuuzaki-writing-api",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create keiryuuzaki-writing",
+    "db:migrate:local": "wrangler d1 execute keiryuuzaki-writing --local --file=./schema.sql",
+    "db:migrate:remote": "wrangler d1 execute keiryuuzaki-writing --remote --file=./schema.sql",
+    "db:seed:local": "wrangler d1 execute keiryuuzaki-writing --local --file=./seed.sql",
+    "db:seed:remote": "wrangler d1 execute keiryuuzaki-writing --remote --file=./seed.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.0.0",
+    "typescript": "^5.0.0",
+    "wrangler": "^4.0.0"
+  }
+}

@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import { GradientBlob } from "@/components/GradientBlob";
 import WritingList from "@/components/WritingList";
-import { getAllPosts } from "@/lib/mdx";
+import { getAllPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "Writing",
   description: "Keiryuuzaki Notes — tulisan Jundy Aljihad soal strategi, konten, dan cerita di balik proses.",
 };
 
-export default function WritingPage() {
-  const posts = getAllPosts();
+export const revalidate = 60;
+
+export default async function WritingPage() {
+  const posts = await getAllPosts();
 
   return (
     <div>

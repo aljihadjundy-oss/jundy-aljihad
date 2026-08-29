@@ -3,9 +3,18 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
-import type { PostMeta } from "@/lib/mdx";
+import type { Post } from "@/lib/posts";
 
-export default function WritingList({ posts }: { posts: PostMeta[] }) {
+const platformLabel: Record<string, string> = {
+  instagram: "Instagram",
+  youtube: "YouTube",
+};
+
+export default function WritingList({
+  posts,
+}: {
+  posts: (Post & { readingTime: string })[];
+}) {
   const [active, setActive] = useState<string>("All");
 
   const categories = useMemo(() => {
@@ -35,30 +44,53 @@ export default function WritingList({ posts }: { posts: PostMeta[] }) {
       </div>
 
       <div className="mt-10 grid gap-5 sm:grid-cols-2">
-        {filtered.map((post, i) => (
-          <Reveal key={post.slug} delay={i * 0.06}>
-            <Link
-              href={`/writing/${post.slug}`}
-              data-cursor-hover
-              className="group block h-full rounded-3xl border border-white/10 p-7 transition-transform duration-300 hover:-translate-y-1"
-            >
+        {filtered.map((post, i) => {
+          const isLink = post.postType === "link" && !!post.externalUrl;
+          const cardBody = (
+            <>
               <div className="flex items-center gap-3 text-xs text-muted">
                 <span className="glass rounded-full px-3 py-1">{post.category}</span>
-                <span>{post.readingTime}</span>
+                {isLink ? (
+                  <span>{platformLabel[post.externalPlatform || ""] || "Link"}</span>
+                ) : (
+                  <span>{post.readingTime}</span>
+                )}
               </div>
               <h3 className="font-display mt-4 text-xl font-bold text-white">
                 {post.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">{post.excerpt}</p>
               <span className="mt-5 inline-flex items-center gap-1 text-sm text-white/80">
-                Baca
+                {isLink ? "Buka" : "Baca"}
                 <span className="transition-transform duration-300 group-hover:translate-x-1">
                   →
                 </span>
               </span>
-            </Link>
-          </Reveal>
-        ))}
+            </>
+          );
+          const cardClass =
+            "group block h-full rounded-3xl border border-white/10 p-7 transition-transform duration-300 hover:-translate-y-1";
+
+          return (
+            <Reveal key={post.slug} delay={i * 0.06}>
+              {isLink ? (
+                <a
+                  href={post.externalUrl!}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  data-cursor-hover
+                  className={cardClass}
+                >
+                  {cardBody}
+                </a>
+              ) : (
+                <Link href={`/writing/${post.slug}`} data-cursor-hover className={cardClass}>
+                  {cardBody}
+                </Link>
+              )}
+            </Reveal>
+          );
+        })}
 
         {filtered.length === 0 && (
           <p className="text-muted">Belum ada tulisan di kategori ini.</p>
