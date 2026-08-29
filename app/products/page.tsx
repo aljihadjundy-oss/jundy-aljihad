@@ -4,7 +4,7 @@ import { GradientBlob } from "@/components/GradientBlob";
 import MagneticButton from "@/components/MagneticButton";
 
 export const metadata: Metadata = {
-  title: "Product Digital",
+  title: "Digital Product",
   description:
     "Produk digital Jundy Aljihad (Keiryuuzaki) — template, panduan, dan resource yang bisa langsung dipakai, tersedia di lynk.id.",
 };
@@ -19,7 +19,7 @@ export default function ProductsPage() {
         <div className="relative z-10 mx-auto max-w-4xl">
           <Reveal>
             <span className="text-xs uppercase tracking-widest text-muted">
-              Product Digital
+              Digital Product
             </span>
             <h1 className="font-display mt-4 text-4xl font-bold leading-tight text-white sm:text-5xl">
               Hasil kerja gue, dikemas biar bisa lu pakai langsung.
