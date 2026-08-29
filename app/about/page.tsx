@@ -88,7 +88,7 @@ export default function AboutPage() {
       </section>
 
       {/* PT SKD */}
-      <section className="relative overflow-hidden border-t border-white/10 px-6 py-24">
+      <section id="skd" className="relative overflow-hidden border-t border-white/10 px-6 py-24 scroll-mt-24">
         <GradientBlob colors={["#F43F5E", "#7C3AED", "#0EA5E9"]} className="opacity-30" />
         <div className="relative z-10 mx-auto max-w-5xl">
           <Reveal>

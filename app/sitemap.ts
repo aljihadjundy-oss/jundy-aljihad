@@ -5,7 +5,7 @@ import { getAllPosts } from "@/lib/posts";
 const siteUrl = "https://jundyaljihad.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ["", "/about", "/portfolio", "/writing", "/contact"].map((route) => ({
+  const staticRoutes = ["", "/about", "/portfolio", "/products", "/writing", "/contact"].map((route) => ({
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
   }));

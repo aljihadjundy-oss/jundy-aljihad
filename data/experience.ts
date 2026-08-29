@@ -6,7 +6,8 @@ export type Experience = {
 };
 
 export const experience: Experience[] = [
-  { role: "Brand Strategist (Contract)", org: "Sinatif Agency", period: "Jan 2025 – sekarang" },
+  { role: "Co-Founder & COO", org: "PT Sinar Kreatif Digitalia", period: "Jan 2026 – sekarang" },
+  { role: "Brand Strategist (Contract)", org: "Sinatif Agency", period: "Jan 2025 – Des 2025" },
   { role: "Head of HRD", org: "Sinatif", period: "Jan 2023 – Nov 2025" },
   { role: "Social Media Specialist", org: "PT. Aslah Pure Water", period: "" },
   { role: "Data Entry Assistant (Internship)", org: "PT. Citra Surya Indonesia", period: "Jan – Mar 2025" },

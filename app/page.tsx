@@ -4,6 +4,7 @@ import Reveal from "@/components/Reveal";
 import MagneticButton from "@/components/MagneticButton";
 import CountUp from "@/components/CountUp";
 import { projects } from "@/data/projects";
+import { businessUnits, company } from "@/data/company";
 
 export default function Home() {
   return (
@@ -129,6 +130,56 @@ export default function Home() {
             <Link href="/portfolio" className="text-sm text-muted hover:text-white">
               Lihat semua →
             </Link>
+          </div>
+
+          {/* PT SKD business units */}
+          <div className="mt-20">
+            <Reveal>
+              <span className="text-xs uppercase tracking-widest text-muted">
+                Co-Founder &amp; COO
+              </span>
+              <h3 className="font-display mt-3 text-2xl font-bold text-white sm:text-3xl">
+                Unit bisnis {company.shortName}
+              </h3>
+            </Reveal>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {businessUnits.map((unit, i) => (
+                <Reveal key={unit.name} delay={i * 0.06}>
+                  <a
+                    href={unit.instagram}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    data-cursor-hover
+                    className="group block h-full rounded-2xl border border-white/10 p-6 transition-transform duration-300 hover:-translate-y-1"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="font-display text-base font-semibold text-white">
+                        {unit.name}
+                      </h4>
+                      <span
+                        className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] uppercase tracking-widest ${
+                          unit.status === "active"
+                            ? "bg-emerald-400/15 text-emerald-300"
+                            : "bg-amber-400/15 text-amber-300"
+                        }`}
+                      >
+                        {unit.status === "active" ? "Active" : "Building"}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs uppercase tracking-widest text-muted">
+                      {unit.role}
+                    </p>
+                  </a>
+                </Reveal>
+              ))}
+            </div>
+
+            <div className="mt-6">
+              <Link href="/about#skd" className="text-sm text-muted hover:text-white">
+                Selengkapnya soal PT SKD →
+              </Link>
+            </div>
           </div>
         </div>
       </section>

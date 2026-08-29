@@ -11,7 +11,7 @@ export const company = {
   shortName: "PT SKD",
   website: "https://sinatifdigitalia.com",
   model:
-    "Holding kreatif-digital yang menaungi 6 unit bisnis + 1 fungsi internal — dari agency, event, edukasi, sampai pengembangan produk teknologi.",
+    "Holding kreatif-digital yang menaungi 7 unit bisnis + 1 fungsi internal — dari agency, event, edukasi, riset kebijakan, sampai pengembangan produk teknologi.",
 };
 
 export const businessUnits: BusinessUnit[] = [
@@ -60,6 +60,14 @@ export const businessUnits: BusinessUnit[] = [
       "Lini Sinatif Agency yang menyasar UMKM — paket kreatif dengan skala harga dan scope yang lebih ringan.",
     instagram: "https://www.instagram.com/umkmsiniaja/",
     status: "active",
+  },
+  {
+    name: "Politica Intelligence Lab",
+    role: "Political Research Studio",
+    description:
+      "Research studio yang menganalisis isu dan kebijakan politik sebagai fondasi personal branding untuk klien politikus — berdiri sendiri, bukan sub-unit Sinatif Agency.",
+    instagram: "https://www.instagram.com/politicaintelligence/",
+    status: "building",
   },
 ];
 
