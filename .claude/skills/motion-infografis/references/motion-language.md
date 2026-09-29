@@ -14,9 +14,14 @@ These rules make every video feel like the same studio made it. Change them deli
 - **Scene rhythm**: a new beat every 1–2 s *inside* a graphic, with graphics lasting 3.5–8 s, and clean footage between them.
 
 ## Colour
-- Default palette: bg `#0A1E36`, surface `#12355B`, accent teal `#3FB6C4`, emphasis amber `#E0A100`, positive `#5DBB63`, negative `#F06A5F`.
-- Teal marks structure (kickers, nodes, bars). Amber marks *the one thing to look at* (a number, the highlighted bar, the active caption word).
-  Using amber everywhere removes its meaning.
+- Locked palette `jundy` (the user's site): bg `#06050A`, surface `#0B0A12`, ink `#F5F3FF`, accent violet `#A78BFA`,
+  emphasis orange `#FB923C`, pink `#F472B6` (gradients only), positive `#34D399`, negative `#FB7185`, backdrop glows
+  `#7C3AED` / `#DB2777`. The palette library (`scripts/runtime/palettes.js`) keeps every earlier palette: `navy`
+  (the original teal/amber house look), `maroon`, `paper`, `ink`. Palettes are only ever added.
+- Violet (accent) marks structure (kickers, nodes, bars). Orange (accent2) marks *the one thing to look at* (a number,
+  the highlighted bar, the active caption word). Using orange everywhere removes its meaning.
+- The site's signature is the violet → pink → orange text gradient: `^words^` in a headline. One gradient phrase per
+  screen at most.
 - Over footage, text is white with a strong shadow, or sits on a glass card (`rgba(10,30,54,.84)` + blur). Never place thin text on bright footage.
 - Red is for danger or negatives only, and never for disaster casualty numbers (use neutral white).
 

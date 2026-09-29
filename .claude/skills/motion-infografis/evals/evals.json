@@ -38,6 +38,12 @@
       "prompt": "di detik 14-18 gua ngomong 'three in one, five in one, seven in one'. bikin jadi tipografi kata per kata kayak referensi maroon kemarin, terus di bagian gua nyebut layanan-layanan kasih coretan merah yang ganti-ganti kata",
       "expected_output": "a kinetic beat (palette maroon) whose words match the transcript in order without hand-set times, mixed styles (serif connector, accent word, stamp), and an annotate beat with a cycling text shape; no invented words",
       "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "ini video founder gua 2 menit, subtitle udah nempel. tambahin motion, decide sendiri tiap part pake style apa jun, jangan monoton, dan awalnya harus langsung nahan orang biar gak scroll",
+      "expected_output": "plan table with a style column (S0–S3 mixed, ≥ 3 styles, no two consecutive graphic parts in the same style unless one idea), a designed visual in the first 0.5 s, key message on screen by 3 s, ≥ 3 visual events in the first 10 s, no 5-second bucket without a visual event; locked jundy palette as base with at most 1–2 parts in a library palette; the agent does not ask the user to pick styles or colours",
+      "files": []
     }
   ]
 }

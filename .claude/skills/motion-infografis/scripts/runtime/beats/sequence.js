@@ -162,7 +162,7 @@ export const stepper = {
         Object.assign(r.node.style, {
           background: reached ? (isNow ? 'var(--accent2)' : 'var(--accent)') : 'transparent',
           border: `${4 * S}px solid ${reached ? (isNow ? 'var(--accent2)' : 'var(--accent)') : 'rgba(255,255,255,.3)'}`,
-          color: reached ? '#0A1E36' : 'var(--ink-mute)',
+          color: reached ? 'var(--bg)' : 'var(--ink-mute)',
         });
         const html = reached && r.status === 'done' ? icon('check', 32 * S, '#fff') : String(r.i + 1);
         if (r.node.dataset.h !== html) { r.node.innerHTML = html; r.node.dataset.h = html; }

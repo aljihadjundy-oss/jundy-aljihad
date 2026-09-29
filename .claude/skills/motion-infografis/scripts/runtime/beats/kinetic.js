@@ -1,13 +1,11 @@
 import { E, prog, lerp, pose, h } from '../engine.js';
 import { icon } from '../components.js';
+import { PALETTES as LIB } from '../palettes.js';
 
 // Palettes for the collage / voice-over explainer look. "brand" uses the project colours.
-const PALETTES = {
-  maroon: { bg: '#4E1A26', ink: '#EFDCCB', accent: '#F2B45A' },
-  paper: { bg: '#EFE6D8', ink: '#1F1B18', accent: '#C23B22' },
-  ink: { bg: '#111111', ink: '#F4F1EA', accent: '#F2C94C' },
-  brand: { bg: 'var(--bg)', ink: 'var(--ink)', accent: 'var(--accent2)' },
-};
+// "brand" follows the project palette (locked default: jundy); the others come from the palette library.
+const PALETTES = Object.fromEntries(Object.entries(LIB).map(([k, p]) => [k, { bg: p.bg, ink: p.ink, accent: p.accent2 }]));
+PALETTES.brand = { bg: 'var(--bg)', ink: 'var(--ink)', accent: 'var(--accent2)' };
 const norm = w => String(w).toLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}]/gu, '');
 
 // kinetic — word-by-word typography: each word lands as it is spoken and the lines build up in place.
@@ -19,7 +17,7 @@ export const kinetic = {
   defaults: { mode: 'full', free: true },
   build(root, b, ctx) {
     const { W, H, S } = ctx;
-    const pal = { ...(PALETTES[b.palette ?? 'maroon'] ?? PALETTES.maroon), ...(b.bg ? { bg: b.bg } : {}), ...(b.ink ? { ink: b.ink } : {}) };
+    const pal = { ...(PALETTES[b.palette ?? 'brand'] ?? PALETTES.brand), ...(b.bg ? { bg: b.bg } : {}), ...(b.ink ? { ink: b.ink } : {}) };
     const bgEl = h('div', 'layer', root);
     bgEl.style.background = b.bg === 'none' || (ctx.mode === 'overlay' && !b.bg) ? 'transparent' : pal.bg;
     const box = h('div', 'kin', root);

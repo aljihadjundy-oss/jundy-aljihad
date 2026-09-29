@@ -3,7 +3,7 @@ import { icon } from '../components.js';
 
 const SOLID = {
   blue: ['#1D6FE8', '#FFFFFF'], black: ['#0B0B0B', '#FFFFFF'], white: ['#FFFFFF', '#0B0B0B'],
-  red: ['#E5322D', '#FFFFFF'], teal: ['var(--accent)', '#FFFFFF'], amber: ['var(--accent2)', '#0A1E36'],
+  red: ['#E5322D', '#FFFFFF'], teal: ['var(--accent)', '#FFFFFF'], amber: ['var(--accent2)', 'var(--bg)'], violet: ['var(--accent)', 'var(--bg)'], gradient: ['linear-gradient(120deg, var(--accent), var(--accent3), var(--accent2))', '#FFFFFF'],
 };
 
 // callout — a short phrase on a solid box, placed anywhere (x, y = fractions of the canvas), optionally with an arrow.

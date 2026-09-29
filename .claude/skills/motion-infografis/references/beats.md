@@ -28,8 +28,10 @@
 ```
 - `footage`: true when `prep_footage.py` was run (it fills `duration`). For from-scratch videos use false and set `duration`,
   or leave it out to end 0.6 s after the last beat.
-- `brand`: every key is optional. `accent` is the main highlight, `accent2` the emphasis/number colour. `font` is an
-  `@fontsource` package id installed via `setup.sh`.
+- `brand`: every key is optional. `palette` picks a library palette (default `jundy`, the user's locked palette; also
+  `navy`, `maroon`, `paper`, `ink`); `bg`, `surface`, `ink`, `accent` (structure), `accent2` (emphasis/numbers),
+  `accent3` (gradient middle), `pos`, `neg`, `glass`, `glow` ([two hex colours for the backdrop]) override single tokens.
+  `font` is an `@fontsource` package id installed via `setup.sh`; `serif` the display serif (default `dm-serif-display`).
 - `chrome`: `false` hides it. Omit `name` and `logo` for a bare progress bar. `logo` sits on a white rounded badge.
 - `captions`: needs `transcript/words.json`. `y` is the fraction of height where the caption line starts.
   `style`: `karaoke` (spoken word highlighted, default), `plain` (white bold with a shadow), `box` (white on a black box).
@@ -73,6 +75,7 @@ shrunk automatically and the renderer prints a warning. Stat numbers shrink to f
 | `glass` | overlay card background on/off |
 | `scale` | content size multiplier |
 | `align` | `"top"` to pin insert/full content to the top of its zone instead of centring |
+| `palette` | colour just this beat with a library palette (`navy`, `maroon`, `paper`, `ink`, `jundy`) for variety |
 
 ## 4. Beat types
 
@@ -158,7 +161,8 @@ See `custom-scenes.md`.
 
 ### callout: a phrase on a solid box (tutorial highlight)
 `{ "type": "callout", "t": 6, "dur": 2.4, "text": "keluar sebagai 0% AI generated", "style": "blue", "x": 0.5, "y": 0.4 }`
-`style`: `blue` (default), `black`, `white`, `red`, `teal`, `amber`, or `bg` + `color`. `x`, `y`: anchor point as fractions
+`style`: `blue` (default), `black`, `white`, `red`, `violet` / `teal` (both = the palette accent), `amber` (= accent2),
+`gradient` (the site gradient), or `bg` + `color`. `x`, `y`: anchor point as fractions
 of the canvas; `anchor`: `center` (default), `left`, `right`. `size` (px, default 40), `icon`, `rot` (degrees),
 `arrow: [x, y]` draws a red arrow from the box to that point (`arrowColor`). `at`: seconds before it pops in (default 0.12).
 
@@ -199,14 +203,15 @@ It sits above captions and the chrome. Use it on a change of layout (face → sc
 Words land one by one as they are spoken (matched in order against `transcript/words.json` from the beat start; `at`
 overrides) and build lines in place (`br: true` starts a new line). Per word: `size` (px), `style` (`bold` default,
 `light`, `serif`, `outline`, `stamp`, `vert`), `color` (`accent`, `ink` or a hex), `rot`. Beat fields: `palette`
-(`maroon` default, `paper`, `ink`, `brand`), `bg` / `ink` overrides (`bg: "none"` to type over the footage with
+(`brand` default = the project palette, or any library palette: `maroon`, `paper`, `ink`, `navy`, `jundy`), `bg` / `ink` overrides (`bg: "none"` to type over the footage with
 `mode: "overlay"`), `y` (vertical centre, default 0.5), `wordGap`, `lineGap`, `every` (spacing for words with no match),
 `exit` (`cut` default, or `fade`), `sfx` (false to mute the per-word ticks). `stickers`: PNG cut-outs (`src`) with a
 white paper edge, or a line `icon`; `at`, `x`, `y` (centre), `w` (fraction of width), `rot`.
 The default mode is `full`, so the footage fades out behind it. Keep one phrase per beat (1.5–5 s) and cut to the next.
 
 ## 5. Text markup
-In `title`, `text` and quotes: `*teal words*`, `_amber words_`, `~red words~` (markers can span several words), `\n` for a line break.
+In `title`, `text` and quotes: `*accent words*` (violet in `jundy`), `_accent2 words_` (orange), `~negative words~`,
+`^gradient words^` (violet → pink → orange, the site's text gradient); markers can span several words; `\n` for a line break.
 Keep headlines ≤ ~7 words. Wrapping is automatic.
 
 ## 6. Complete example (footage mode, 43 s talking head)

@@ -51,8 +51,8 @@ export const cta = {
     if (b.sub || b.handle) {
       const wrap = div(box, { marginTop: `${40 * S}px`, display: 'flex', justifyContent: 'center' });
       pill = div(wrap, { display: 'inline-flex', alignItems: 'center', gap: `${16 * S}px`, padding: `${18 * S}px ${34 * S}px`, borderRadius: '999px',
-        background: 'var(--accent2)', color: '#0A1E36', fontSize: `${34 * S}px`, fontWeight: '800' }, `<span>${b.handle || b.sub}</span>`);
-      arrow = div(pill, {}, icon('arrow', 40 * S, '#0A1E36'));
+        background: 'var(--accent2)', color: 'var(--bg)', fontSize: `${34 * S}px`, fontWeight: '800' }, `<span>${b.handle || b.sub}</span>`);
+      arrow = div(pill, {}, icon('arrow', 40 * S, 'var(--bg)'));
     }
     ctx.cue(ctx.t0, 'whoosh', { gain: 0.6 });
     if (pill) ctx.cue(ctx.t0 + 0.8, 'pop');

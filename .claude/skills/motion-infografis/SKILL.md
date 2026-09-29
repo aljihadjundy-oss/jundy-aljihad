@@ -5,9 +5,12 @@ description: Add infographic motion graphics to a video, or build a motion-infog
 
 # motion-infografis
 
-Turns footage + a transcript (or pure data) into a vertical motion-graphics video in one consistent house style:
-navy/teal/amber by default, topographic contour backdrop, kinetic type, charts that grow, lists that land one by one.
-Everything on screen is a pure function of time, so renders are deterministic and any frame can be previewed.
+Turns footage + a transcript (or pure data) into a vertical motion-graphics video. The look is the user's locked
+palette (`jundy`, from jundy-aljihad.vercel.app: near-black, violet → pink → orange) plus a style library that grows
+with every reference the user sends: house infographics (S0), tutorial split-screen (S1), kinetic collage typography
+(S2), tracked hand-drawn annotation (S3), and whatever comes next. Styles are combined part by part so the audience
+never sees one look for a whole video. Everything on screen is a pure function of time, so renders are deterministic
+and any frame can be previewed.
 
 Two modes, one engine:
 - **Footage mode**: the raw video is the base layer. Motion "beats" float over it (`overlay`), shrink the speaker into a
@@ -26,7 +29,8 @@ Collect, and ask only for what you cannot infer:
 - **Transcript source**: an SRT/VTT they already have (CapCut, Descript, YouTube) is best. Otherwise auto-transcribe
   if `faster-whisper` works in this environment. Failing that, ask for an SRT or for key moments with timestamps.
 - **Canvas**: default 1080×1920 at 30 fps. Other sizes work (layout scales with the short side), but 9:16 is the tuned one.
-- **Brand**: colours, logo, and a name for the top-left badge. If none are given, use the default palette and no badge.
+- **Brand**: the `jundy` palette is locked as the default for this user; do not ask about colours. Other palettes
+  from the library can colour single parts for variety (see `references/style-library.md`). Logo/badge only if given.
 - **Numbers and claims** they want shown, with their source. On-screen facts must come from the transcript or from
   material the user supplied. Never invent statistics. If a number sounds important but has no source, ask.
 - **Captions** on or off (default on when there is speech).
@@ -51,9 +55,12 @@ python3 $S/transcribe.py proj --srt subs.srt             # or: python3 $S/transc
 
 Then:
 1. **Read `proj/transcript/transcript.md`** end to end. Understand the argument before placing anything.
-2. **Draft a motion plan** as a short table: time, beat type, mode, on-screen text or data, and why. Show it to the user and
-   **wait for approval** before the full render. This user explicitly prefers approval gates, and a full render costs
-   minutes. Stills are cheap, so offer a few preview frames with the plan if helpful.
+2. **Draft a motion plan** as a short table: time, part (hook / body / re-hook / CTA), **style** (S0, S1, … chosen by
+   you with the rubric in `references/style-library.md`, never asked of the user), beat type, mode, on-screen text or
+   data, and why. Run the 5-second-bucket check from `references/retention.md` on it (a visual in the first 0.5 s, the
+   key message on screen by 3 s, ≥ 3 visual events in the first 10 s, no bucket without a visual event). Show it to the
+   user and **wait for approval** before the full render. This user explicitly prefers approval gates, and a full
+   render costs minutes. Stills are cheap, so offer a few preview frames with the plan.
 3. **Write the beats** into `proj/project.json` (schema and every type: `references/beats.md`).
 4. **Preview**: `node $S/render.mjs proj --stills 3,9.5,17,...` (one or two stills per beat, mid-beat), then
    `python3 $S/contact.py proj/out/stills 6` and look at the sheet. Check that nothing covers the face, nothing collides with
@@ -78,8 +85,14 @@ the `siaga-sumatra-motion/` project if it is available.
 Motion should explain, not decorate. Guidelines, with the reasoning:
 - **One beat = one idea the speaker is saying right now.** Start a beat about 0.2–0.4 s *before* the phrase it illustrates,
   because the eye needs a moment to land. End it when the speaker moves on.
-- **Leave clean footage.** Aim for roughly 30–50 % of the runtime with no beat except captions. Constant graphics tire
-  viewers and bury the person, who is usually the reason people watch.
+- **Front-load the opening (retention).** Viewers decide in 1.5–3 s. Put a designed visual on screen in the first 0.5 s,
+  the key message by 3 s, at least 3 visual events in the first 10 s, and start the second beat no later than about
+  1 s after the first ends. The first cut of "banyak jasa chaos" waited until 0:15 for its second graphic; that gap
+  is the mistake to avoid. After 10 s, never leave more than ~8 s without some change. Data and rules:
+  `references/retention.md`.
+- **Leave clean footage in the body.** Aim for roughly 30–50 % of the runtime after the opening with no card over the
+  speaker. Light interrupts (`zoom` punch, a small `callout`, an `annotate` stroke) keep the rhythm without hiding the
+  face and do not count against clean footage.
 - **Pick the lightest mode that works.** `overlay` for a single word, number or name (the speaker stays full-frame);
   `insert` when there are ≥ 3 items, a chart, or a screenshot (it needs room); `full` only for chapter dividers, the CTA,
   or when the footage has nothing to show. Adjacent insert beats merge, so the PiP does not bounce.
@@ -93,11 +106,16 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
   and `top` is safe if the head sits low. If the footage already has burned-in subtitles, set `layout.overlayBottom`
   just above them and use `pos: "bottom"`, so cards land between the chin and the subtitles. Check stills.
 - **Chapters**: for videos with numbered sections, a `chapter` beat per section updates the top-right chapter label.
-- **Benchmark styles**: the user's reference edits are broken down in `references/reference-styles.md` with recipes:
-  tutorial split-screen (screen on top, face below, boxed captions on the seam, blue callouts, red UI boxes), kinetic
-  collage typography (words land as spoken on a solid colour, mixed type, paper stickers) and tracked hand-drawn
-  annotation (boiling red marks that follow objects, cycling words). Read it when the user asks for "gaya kayak referensi",
-  a tutorial or tool demo, a text-only explainer, or marks drawn on the footage. Mix styles by moment, not per video.
+- **Combine styles, part by part; you decide.** Read `references/style-library.md` before every plan. Give each part
+  the style that does its job (hook, structure, proof, punchline, "look at this", CTA), rotate so no two consecutive
+  graphic parts share a style unless they are one idea, and use at least 3 styles in a 60 s video. The user wants the
+  agent to make this call and show it in the plan, not to be asked.
+- **New reference = new style, nothing removed.** When the user sends a benchmark video, analyse it and add it to the
+  style library as the next S-number (with its palette in the palette library). Never delete or overwrite an earlier
+  style or palette; the library only grows, and old styles stay in the rotation.
+- **Palette.** `jundy` is locked as the base for chrome, captions and most beats. A library palette (`navy`, `maroon`,
+  `paper`, `ink`, …) may colour one or two parts per video (`"palette": "maroon"` on the beat) for variety.
+  `^words^` in a headline gets the site's violet → pink → orange gradient.
 - **Showing a screen without hiding the face**: prefer `split` over `insert` when the screen needs to be readable. If the
   footage has burned-in subtitles, the split crops them, so enable `captions` with `when: "split"` to put boxed captions on the seam.
 
@@ -113,8 +131,10 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
 - `references/motion-language.md`: easing, stagger, typography, colour and sound rules behind the look. Read it before
   changing styles or writing custom scenes.
 - `references/custom-scenes.md`: engine API and a template for `custom` beat modules.
-- `references/reference-styles.md`: the user's benchmark edits (tutorial split-screen, kinetic collage typography, tracked
-  annotation), measured, with project.json recipes and when to use each.
+- `references/style-library.md`: the growing style library (S0 house, S1 tutorial split-screen, S2 kinetic collage,
+  S3 tracked annotation, …), the palette library with the locked `jundy` palette, the per-part decision rubric, and how
+  to add a new reference. Read it before every motion plan.
+- `references/retention.md`: attention-span research and the opening/pacing rules, with sources.
 
 ## Troubleshooting
 - *Blank or black frames*: frames missing in `proj/footage/frames`. Re-run `prep_footage.py`.

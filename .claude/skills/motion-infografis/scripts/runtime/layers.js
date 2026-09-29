@@ -21,7 +21,8 @@ function hexToRgba(hex, a) {
 export function buildBackground(stage, W, H, brand) {
   const bg = h('div', 'layer', stage);
   bg.style.background = 'var(--bg)';
-  const glows = [[brand.surface || '#1D5FD1', 0.55, 1.4 * W], [brand.accent || '#1B7F8C', 0.3, 1.2 * W]].map(([c, a, size]) => {
+  const [g1, g2] = brand.glow ?? [brand.surface || '#1D5FD1', brand.accent || '#1B7F8C'];
+  const glows = [[g1, 0.55, 1.4 * W], [g2, 0.3, 1.2 * W]].map(([c, a, size]) => {
     const g = h('div', 'abs', bg);
     Object.assign(g.style, { width: `${size}px`, height: `${size}px`, borderRadius: '50%', background: `radial-gradient(circle, ${hexToRgba(c, a)} 0%, rgba(0,0,0,0) 68%)` });
     return g;

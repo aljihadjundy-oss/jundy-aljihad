@@ -4,6 +4,7 @@ import { buildFootage } from './footage.js';
 import { buildCaptions } from './captions.js';
 import { headline } from './components.js';
 import { BEATS } from './beats/index.js';
+import { PALETTES, applyPalette } from './palettes.js';
 
 const PROJ = '/p/';
 const asset = src => (/^(https?:|data:|\/)/.test(src) ? src : PROJ + src);
@@ -34,9 +35,10 @@ async function init() {
   Object.assign(stage.style, { width: `${W}px`, height: `${H}px` });
 
   // brand → CSS tokens + font
-  const brand = { bg: '#0A1E36', surface: '#12355B', ink: '#FFFFFF', accent: '#3FB6C4', accent2: '#E0A100', pos: '#5DBB63', neg: '#F06A5F', font: 'plus-jakarta-sans', ...(proj.brand || {}) };
+  // locked default palette "jundy" (the user's site); brand.palette picks another library palette, brand keys override
+  const brand = { ...(PALETTES[proj.brand?.palette] ?? PALETTES.jundy), font: 'plus-jakarta-sans', ...(proj.brand || {}) };
   const root = document.documentElement.style;
-  for (const k of ['bg', 'surface', 'ink', 'accent', 'accent2', 'pos', 'neg']) root.setProperty(`--${k}`, brand[k]);
+  applyPalette(root, brand);
   const css = [400, 500, 600, 700, 800].map(w => `@font-face{font-family:"BrandFont";font-weight:${w};src:url("/fonts/${brand.font}/files/${brand.font}-latin-${w}-normal.woff2") format("woff2");}`).join('')
     // display serif for kinetic / annotate words (installed by setup.sh; falls back to a system serif)
     + ['normal', 'italic'].map(st => `@font-face{font-family:"SerifFont";font-weight:400;font-style:${st};src:url("/fonts/${brand.serif ?? 'dm-serif-display'}/files/${brand.serif ?? 'dm-serif-display'}-latin-400-${st}.woff2") format("woff2");}`).join('');
@@ -89,6 +91,7 @@ async function init() {
   for (const it of beats) {
     const { b, def } = it;
     const layer = h('div', 'layer', def.defaults.onTop ? fxLayer : beatsLayer);
+    if (b.palette && PALETTES[b.palette]) applyPalette(layer.style, PALETTES[b.palette]); // per-part palette for variety
     const t0 = b.mode === 'overlay' ? 0.2 : 0.55;
     const OUT = b.dur - 0.45;
     const ctx = {

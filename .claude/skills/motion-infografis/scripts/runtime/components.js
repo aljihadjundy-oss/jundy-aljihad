@@ -46,7 +46,7 @@ export function headline(parent, text, { x = 0, y = 0, w, size = 80, color = 'va
   if (flow) { if (w) el.style.width = `${w}px`; } else place(el, x, y, w);
   Object.assign(el.style, { fontSize: `${size}px`, color, textAlign: align, lineHeight: lh, fontWeight: weight });
   const words = [];
-  const ACC = { '*': 'acc-1', '_': 'acc-2', '~': 'acc-3' };
+  const ACC = { '*': 'acc-1', '_': 'acc-2', '~': 'acc-3', '^': 'acc-g' };
   let acc = '';
   String(text).split('\n').forEach((line, li) => {
     if (li) h('br', null, el);
@@ -54,13 +54,23 @@ export function headline(parent, text, { x = 0, y = 0, w, size = 80, color = 'va
       let word = tok;
       while (word && ACC[word[0]]) { acc = acc === ACC[word[0]] ? '' : ACC[word[0]]; word = word.slice(1); }
       const cls = acc;
-      const m = word.match(/^(.*?)([*_~])([.,:;!?—)"']*)$/);
+      const m = word.match(/^(.*?)([*_~^])([.,:;!?—)"']*)$/);
       if (m) { word = m[1] + m[3]; acc = ''; }
       if (wi) el.appendChild(document.createTextNode(' '));
       const wrap = h('span', 'w', el);
       words.push(h('span', `wi ${cls}`, wrap, word));
     });
   });
+  // ^gradient^ words share one gradient across the headline width (like the site's .text-gradient), not one per word
+  const grads = words.filter(wi => wi.classList.contains('acc-g'));
+  if (grads.length) {
+    const er = el.getBoundingClientRect();
+    grads.forEach(wi => {
+      const r = wi.getBoundingClientRect();
+      wi.style.backgroundSize = `${er.width.toFixed(1)}px ${r.height.toFixed(1)}px`;
+      wi.style.backgroundPosition = `${(er.left - r.left).toFixed(1)}px 0`;
+    });
+  }
   return {
     el,
     update(t, tin, tout = null, { stagger = 0.055, dur = 0.8, dout = 0.4, exitDy = -30 } = {}) {
@@ -89,7 +99,7 @@ export function imageCard(parent, src, aspect, { w = 520, hgt = null, radius = 3
   if (tag) {
     const tg = h('div', 'abs', el, tag);
     Object.assign(tg.style, { left: '50%', bottom: '16px', transform: 'translateX(-50%)', whiteSpace: 'nowrap', fontSize: '19px', fontWeight: '700',
-      letterSpacing: '.08em', textTransform: 'uppercase', color: '#fff', background: 'rgba(10,30,54,.78)', padding: '7px 14px', borderRadius: '999px' });
+      letterSpacing: '.08em', textTransform: 'uppercase', color: '#fff', background: 'var(--glass)', padding: '7px 14px', borderRadius: '999px' });
   }
   const api = {
     el, w, h: H0, aspect,
