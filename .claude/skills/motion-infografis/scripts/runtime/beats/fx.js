@@ -68,6 +68,8 @@ export const annotate = {
         text = s('text', { fill: color, 'font-size': (sh.size ?? 56) * S, 'font-weight': sh.weight ?? 700, 'text-anchor': sh.align ?? 'middle', 'dominant-baseline': 'middle' }, g);
         text.style.fontFamily = sh.font === 'sans' ? 'var(--font), sans-serif' : '"SerifFont", "DejaVu Serif", Georgia, serif';
         if (sh.italic) text.style.fontStyle = 'italic';
+        // dark halo behind the letters so red marks stay readable on busy footage (a patterned shirt, a bright wall)
+        if ((sh.halo ?? b.halo) !== false) Object.assign(text.style, { paintOrder: 'stroke', stroke: sh.haloColor ?? 'rgba(8, 6, 14, 0.62)', strokeWidth: `${(sh.size ?? 56) * S * 0.09}px`, strokeLinejoin: 'round' });
       } else {
         path = s('path', { stroke: color, 'stroke-width': sw, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', pathLength: 1 }, g);
         if (sh.kind === 'arrow') head = s('path', { stroke: color, 'stroke-width': sw, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g);

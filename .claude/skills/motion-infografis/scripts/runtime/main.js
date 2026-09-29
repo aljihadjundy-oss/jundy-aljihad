@@ -187,6 +187,7 @@ async function init() {
   // the chrome (progress bar, badge) steps aside over a screen in split mode and over kinetic typography scenes
   const kinW = beats.filter(x => x.b.type === 'kinetic' && x.b.chrome !== true).map(x => [x.b.t, x.b.t + x.b.dur]);
   const chromeHideSplit = proj.chrome?.hideInSplit !== false;
+  const kinCapW = beats.filter(x => x.b.type === 'kinetic' && x.b.captions !== true).map(x => [x.b.t + 0.1, x.b.t + x.b.dur + 0.1]);
   const kOf = (T, ws) => Math.max(0, ...ws.map(([a, b]) => prog(T, a - 0.15, 0.6) * (1 - prog(T, b - 0.35, 0.6))));
   insertW.forEach(([a, b]) => { cues.push({ t: a - 0.1, type: 'whoosh', gain: 0.7 }); cues.push({ t: b - 0.3, type: 'swoosh', gain: 0.5 }); });
   fullW.forEach(([a, b]) => { cues.push({ t: a - 0.1, type: 'whoosh', gain: 0.8 }); cues.push({ t: b - 0.3, type: 'swoosh', gain: 0.5 }); });
@@ -233,7 +234,8 @@ async function init() {
     }
     const splitK = kOf(T, splitW);
     if (footage) await footage.update(T, kOf(T, insertW), kOf(T, fullW), splitK, zoomAt(T));
-    if (captions) captions.update(T, 0, splitK);
+    // kinetic scenes already show the spoken words, so captions step aside (kinetic `captions: true` keeps them)
+    if (captions) captions.update(T, kOf(T, kinCapW), splitK);
     if (chrome) {
       const ch = [...chapters].reverse().find(c => T >= c.start) || null;
       chrome.update(T, ch, Math.max(chromeHideSplit ? splitK : 0, kOf(T, kinW)));

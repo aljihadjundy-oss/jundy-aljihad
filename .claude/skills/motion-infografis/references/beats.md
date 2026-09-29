@@ -180,6 +180,7 @@ default or `sans`, `align`, `rot`; `{}` in `text` is replaced by the current `cy
 All coordinates are fractions of the canvas. Per shape: `at` (draw-on start, s from beat start), `draw` (draw-on length,
 default 0.35), `until` (default: the beat end), `color`, `width`, `keys` ([{t, x, y, w, h, from, to}] relative to `at`, linear).
 `boil` (default true) re-jitters strokes `boilFps` times a second (10) by `boilAmp` px (2.4); use `false` for clean UI boxes.
+Text gets a dark `halo` so red stays readable on busy footage (`halo: false` to drop it, `haloColor` to change it).
 
 ### zoom: punch-in on the footage
 `{ "type": "zoom", "t": 2.45, "dur": 0.9, "z": 1.16, "fx": 0.5, "fy": 0.33, "ease": "cut" }`
@@ -205,7 +206,8 @@ overrides) and build lines in place (`br: true` starts a new line). Per word: `s
 `light`, `serif`, `outline`, `stamp`, `vert`), `color` (`accent`, `ink` or a hex), `rot`. Beat fields: `palette`
 (`brand` default = the project palette, or any library palette: `maroon`, `paper`, `ink`, `navy`, `jundy`), `bg` / `ink` overrides (`bg: "none"` to type over the footage with
 `mode: "overlay"`), `y` (vertical centre, default 0.5), `wordGap`, `lineGap`, `every` (spacing for words with no match),
-`exit` (`cut` default, or `fade`), `sfx` (false to mute the per-word ticks). `stickers`: PNG cut-outs (`src`) with a
+`exit` (`cut` default, or `fade`), `sfx` (false to mute the per-word ticks). Captions step aside during a kinetic beat
+because it already shows the words (`captions: true` keeps them). `stickers`: PNG cut-outs (`src`) with a
 white paper edge, or a line `icon`; `at`, `x`, `y` (centre), `w` (fraction of width), `rot`.
 The default mode is `full`, so the footage fades out behind it. Keep one phrase per beat (1.5–5 s) and cut to the next.
 
