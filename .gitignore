@@ -45,3 +45,6 @@ workers/**/.dev.vars
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# motion-infografis skill test workspace (frames, renders)
+.claude/skills/motion-infografis-workspace/

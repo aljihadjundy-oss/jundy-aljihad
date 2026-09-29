@@ -40,9 +40,10 @@ export function icon(name, size = 40, color = 'currentColor') {
 
 // ---------------------------------------------------------------- kinetic headline
 // *word* → accent, _word_ → accent2, ~word~ → negative colour; markers may span several words.
-export function headline(parent, text, { x = 0, y = 0, w, size = 80, color = 'var(--ink)', align = 'left', lh = 1.06, weight = 800 } = {}) {
-  const el = h('div', 'abs hl', parent);
-  place(el, x, y, w);
+export function headline(parent, text, { x = 0, y = 0, w, size = 80, color = 'var(--ink)', align = 'left', lh = 1.06, weight = 800, flow = false } = {}) {
+  // flow: take part in normal layout (inside a flex/block container) instead of absolute placement
+  const el = h('div', flow ? 'hl' : 'abs hl', parent);
+  if (flow) { if (w) el.style.width = `${w}px`; } else place(el, x, y, w);
   Object.assign(el.style, { fontSize: `${size}px`, color, textAlign: align, lineHeight: lh, fontWeight: weight });
   const words = [];
   const ACC = { '*': 'acc-1', '_': 'acc-2', '~': 'acc-3' };
