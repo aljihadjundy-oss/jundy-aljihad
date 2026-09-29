@@ -54,7 +54,7 @@ export const kinetic = {
     });
 
     const stickers = (b.stickers || []).map((sk, i) => {
-      const el = h('div', 'sticker', root);
+      const el = h('div', sk.outline === false ? 'sticker plain' : 'sticker', root); // outline:false for logos/cards
       const w = (sk.w ?? 0.26) * W;
       if (sk.src) { const img = h('img', null, el); img.src = ctx.asset(sk.src); }
       else el.innerHTML = icon(sk.icon ?? 'star', w, pal.accent);

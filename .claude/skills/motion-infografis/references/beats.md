@@ -208,7 +208,8 @@ overrides) and build lines in place (`br: true` starts a new line). Per word: `s
 `mode: "overlay"`), `y` (vertical centre, default 0.5), `wordGap`, `lineGap`, `every` (spacing for words with no match),
 `exit` (`cut` default, or `fade`), `sfx` (false to mute the per-word ticks). Captions step aside during a kinetic beat
 because it already shows the words (`captions: true` keeps them). `stickers`: PNG cut-outs (`src`) with a
-white paper edge, or a line `icon`; `at`, `x`, `y` (centre), `w` (fraction of width), `rot`.
+white paper edge, or a line `icon`; `at`, `x`, `y` (centre), `w` (fraction of width), `rot`, `outline: false` for
+logos or cards that should keep their own edge (a soft shadow only).
 The default mode is `full`, so the footage fades out behind it. Keep one phrase per beat (1.5–5 s) and cut to the next.
 
 ## 5. Text markup

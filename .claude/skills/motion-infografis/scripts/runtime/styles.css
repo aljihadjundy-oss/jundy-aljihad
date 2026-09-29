@@ -73,6 +73,7 @@ html, body { margin: 0; overflow: hidden; background: var(--bg); color: var(--in
 .kin .kw.stamp { padding: 0.04em 0.12em 0.02em; border-radius: 0.06em; letter-spacing: 0.02em; text-transform: uppercase; }
 .kin .kw.vert { writing-mode: vertical-rl; transform-origin: 50% 50%; letter-spacing: 0.04em; text-transform: uppercase; }
 .sticker { position: absolute; }
+.sticker.plain img { filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.45)) !important; }
 .sticker img { display: block; width: 100%; height: auto;
   filter: drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff) drop-shadow(0 5px 0 #fff) drop-shadow(0 -5px 0 #fff) drop-shadow(0 16px 18px rgba(0, 0, 0, 0.35)); }
 
