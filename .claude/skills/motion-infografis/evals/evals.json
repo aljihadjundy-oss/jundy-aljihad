@@ -5,18 +5,38 @@
       "id": 1,
       "prompt": "ini video talking head gua 45 detik soal 3 hal kesiapsiagaan banjir (raw.mp4, landscape) plus srt dari capcut. tambahin motion kayak video SIAGA kemarin: judul, checklist, alur, angka 13 pos lapangan, subtitle nyala per kata. jangan render full sebelum gua approve rencananya",
       "expected_output": "prep_footage + transcribe from SRT, a motion plan table shown for approval, then project.json beats (title/list/checklist/flow/stat/cta), stills contact sheet, final 1080x1920 mp4 with voice kept and karaoke captions",
-      "files": ["testdata/raw_landscape.mp4", "testdata/raw.srt"]
+      "files": [
+        "testdata/raw_landscape.mp4",
+        "testdata/raw.srt"
+      ]
     },
     {
       "id": 2,
       "prompt": "bikinin video infografis vertikal 45 detik dari data ini tanpa footage: skor 3 rater (Cukup/Baik), data BNPB gabungan 3 provinsi (sensitif, kasih disclaimer), roadmap 5 tahap (2 selesai), dan screenshot pusat bantuan. warna brand navy/teal/amber",
       "expected_output": "new_project scaffold, full-mode beats: ordinal bars, stat grid with countUp false + note + source, stepper, image with camera/rings, cta; ambient pad audio; mp4",
-      "files": ["proj_scratch/assets/bantuan.jpg"]
+      "files": [
+        "proj_scratch/assets/bantuan.jpg"
+      ]
     },
     {
       "id": 3,
       "prompt": "video reels gua udah di-cut, 30 detik ngomongin growth akun IG klien (reach naik 128%, 2,4 juta views). tambahin angka yang naik, lower third nama gua Jundy Aljihad - COO PT SKD, dan CTA follow di akhir. subtitle gak usah, udah ada dari capcut",
       "expected_output": "captions disabled, lowerthird beat, stat beat with two count-up items taken exactly from what is said, cta beat; numbers not invented",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "ini video tutorial gua 60 detik, gua nunjukin cara pake Claude buat nulis. udah ada subtitle nempel dari capcut. bikin kayak referensi tutorial kemarin: layar di atas, muka gua di bawah, kotak biru buat klaim penting, kotak merah buat nunjuk tombol. screenshot ada di assets/",
+      "expected_output": "split-mode image beats filling the top panel with camera pans, layout.splitFocus calibrated to the face, captions enabled with when:'split' (burned-in subs get cropped), callout blue boxes and annotate boxes with boil:false, a hook title with upper:true, a leak transition at the first face→screen cut; stills checked before render",
+      "files": [
+        "assets/claude_1.png",
+        "assets/claude_2.png"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "di detik 14-18 gua ngomong 'three in one, five in one, seven in one'. bikin jadi tipografi kata per kata kayak referensi maroon kemarin, terus di bagian gua nyebut layanan-layanan kasih coretan merah yang ganti-ganti kata",
+      "expected_output": "a kinetic beat (palette maroon) whose words match the transcript in order without hand-set times, mixed styles (serif connector, accent word, stamp), and an annotate beat with a cycling text shape; no invented words",
       "files": []
     }
   ]

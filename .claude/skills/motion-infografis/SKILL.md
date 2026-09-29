@@ -1,6 +1,6 @@
 ---
 name: motion-infografis
-description: Add infographic motion graphics to a video, or build a motion-infographic video from data. Kinetic titles, count-up numbers, bar charts, checklists, numbered lists, flow diagrams, roadmaps, before/after comparisons, lower thirds, screenshot cards with camera moves and word-timed karaoke captions, rendered frame by frame (HTML + headless Chromium + ffmpeg, no Remotion) to MP4. Use whenever the user uploads or points to raw content footage (talking head, vlog, reels, TikTok, podcast clip, screen recording) and wants motion added, e.g. "tambahin motion", "kasih animasi/infografis", "bikin kayak motion graphics", "kasih chart atau angka di video", "subtitle yang nyala per kata", or wants a vertical explainer or infographic video built from a report, data or app screenshots, even if they only say "bikin video kayak SIAGA SUMATRA kemarin". Not for cut-only editing of raw footage; do the cuts first (editing-style skill), then use this for the motion layer.
+description: Add infographic motion graphics to a video, or build a motion-infographic video from data. Kinetic titles, count-up numbers, bar charts, checklists, numbered lists, flow diagrams, roadmaps, before/after comparisons, lower thirds, screenshot cards with camera moves, tutorial split-screen (screen on top, speaker below), blue callout labels, hand-drawn tracked red annotations, punch-in zooms, light-leak transitions, word-by-word kinetic typography with collage stickers and word-timed captions (karaoke, plain or boxed), rendered frame by frame (HTML + headless Chromium + ffmpeg, no Remotion) to MP4. Use whenever the user uploads or points to raw content footage (talking head, vlog, reels, TikTok, podcast clip, screen recording) and wants motion added, e.g. "tambahin motion", "kasih animasi/infografis", "bikin kayak motion graphics", "kasih chart atau angka di video", "subtitle yang nyala per kata", or wants a vertical explainer or infographic video built from a report, data or app screenshots, even if they only say "bikin video kayak SIAGA SUMATRA kemarin". Not for cut-only editing of raw footage; do the cuts first (editing-style skill), then use this for the motion layer.
 ---
 
 # motion-infografis
@@ -11,7 +11,8 @@ Everything on screen is a pure function of time, so renders are deterministic an
 
 Two modes, one engine:
 - **Footage mode**: the raw video is the base layer. Motion "beats" float over it (`overlay`), shrink the speaker into a
-  picture-in-picture while a chart or list takes the screen (`insert`), or briefly take over the whole frame (`full`).
+  picture-in-picture while a chart or list takes the screen (`insert`), move the speaker to the bottom half while a
+  screenshot or graphic fills the top half (`split`), or briefly take over the whole frame (`full`).
   The original voice is kept; soft UI sound effects are mixed under it; captions are generated from the transcript.
 - **From-scratch mode**: no footage. The same beats play on the motion backdrop, with a quiet synthesized ambient pad.
   For bespoke visuals (maps, custom diagrams), write a `custom` beat module (see `references/custom-scenes.md`).
@@ -92,6 +93,13 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
   and `top` is safe if the head sits low. If the footage already has burned-in subtitles, set `layout.overlayBottom`
   just above them and use `pos: "bottom"`, so cards land between the chin and the subtitles. Check stills.
 - **Chapters**: for videos with numbered sections, a `chapter` beat per section updates the top-right chapter label.
+- **Benchmark styles**: the user's reference edits are broken down in `references/reference-styles.md` with recipes:
+  tutorial split-screen (screen on top, face below, boxed captions on the seam, blue callouts, red UI boxes), kinetic
+  collage typography (words land as spoken on a solid colour, mixed type, paper stickers) and tracked hand-drawn
+  annotation (boiling red marks that follow objects, cycling words). Read it when the user asks for "gaya kayak referensi",
+  a tutorial or tool demo, a text-only explainer, or marks drawn on the footage. Mix styles by moment, not per video.
+- **Showing a screen without hiding the face**: prefer `split` over `insert` when the screen needs to be readable. If the
+  footage has burned-in subtitles, the split crops them, so enable `captions` with `when: "split"` to put boxed captions on the seam.
 
 ## 6. Tell the user at the end
 
@@ -105,6 +113,8 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
 - `references/motion-language.md`: easing, stagger, typography, colour and sound rules behind the look. Read it before
   changing styles or writing custom scenes.
 - `references/custom-scenes.md`: engine API and a template for `custom` beat modules.
+- `references/reference-styles.md`: the user's benchmark edits (tutorial split-screen, kinetic collage typography, tracked
+  annotation), measured, with project.json recipes and when to use each.
 
 ## Troubleshooting
 - *Blank or black frames*: frames missing in `proj/footage/frames`. Re-run `prep_footage.py`.

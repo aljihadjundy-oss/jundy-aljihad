@@ -9,6 +9,7 @@ export const image = {
   build(box, b, ctx) {
     const S = ctx.S;
     const aspect = ctx.aspect(b.src);
+    if (ctx.mode === 'split' && b.fill !== false) return fillPanel(b, ctx, aspect);
     const maxH = b.height ? b.height * S : ctx.zone.h - (b.caption ? 90 * S : 0);
     // width: px (>2), fraction of the zone (≤1), or a default per mode
     let w = b.width > 2 ? b.width * S : (b.width || (ctx.mode === 'overlay' ? 0.62 : 0.78)) * ctx.zone.w;
@@ -37,6 +38,28 @@ export const image = {
     };
   },
 };
+
+// split mode: the image fills the whole top panel edge to edge, like a screen recording above the speaker.
+// The camera pans/zooms inside it (default: start at the top of the image); rings work as usual.
+function fillPanel(b, ctx, aspect) {
+  const P = ctx.panel;
+  const card = imageCard(ctx.root, ctx.asset(b.src), aspect, { w: P.w, hgt: P.h, radius: 0 });
+  Object.assign(card.el.style, { left: `${P.x}px`, top: `${P.y}px`, height: `${P.h}px`, background: b.bg ?? '#fff', boxShadow: 'none' });
+  const rings = (b.rings || []).map(r => ({ ...r, el: card.ring(r.x, r.y, r.w, r.h) }));
+  ctx.cue(ctx.t0, 'soft');
+  rings.forEach(r => ctx.cue(ctx.t0 + (r.t0 ?? 1), 'tick'));
+  const cam = b.camera || [{ t: 0, z: 1, fx: 0.5, fy: 0 }];
+  return lt => {
+    const k = E.outCubic(prog(lt, ctx.t0 - 0.35, 0.35)), x = E.inCubic(prog(lt, ctx.OUT + 0.2, 0.25));
+    pose(card.el, { s: lerp(1.04, 1, k), o: k * (1 - x) });
+    camera(card, lt - ctx.t0, cam);
+    rings.forEach(r => {
+      const rk = E.outBack(prog(lt, ctx.t0 + (r.t0 ?? 1), 0.5)) * (1 - E.inCubic(prog(lt, ctx.t0 + (r.t1 ?? 99), 0.35)));
+      r.el.style.opacity = Math.min(1, rk).toFixed(3);
+      r.el.style.transform = `scale(${lerp(1.2, 1, Math.min(1, rk)).toFixed(3)})`;
+    });
+  };
+}
 
 // custom — escape hatch: a project-local ES module (default export { build(box, beat, ctx) → update(lt) })
 export const custom = {

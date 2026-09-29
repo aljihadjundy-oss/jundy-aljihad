@@ -37,14 +37,18 @@ async function init() {
   const brand = { bg: '#0A1E36', surface: '#12355B', ink: '#FFFFFF', accent: '#3FB6C4', accent2: '#E0A100', pos: '#5DBB63', neg: '#F06A5F', font: 'plus-jakarta-sans', ...(proj.brand || {}) };
   const root = document.documentElement.style;
   for (const k of ['bg', 'surface', 'ink', 'accent', 'accent2', 'pos', 'neg']) root.setProperty(`--${k}`, brand[k]);
-  const css = [400, 500, 600, 700, 800].map(w => `@font-face{font-family:"BrandFont";font-weight:${w};src:url("/fonts/${brand.font}/files/${brand.font}-latin-${w}-normal.woff2") format("woff2");}`).join('');
+  const css = [400, 500, 600, 700, 800].map(w => `@font-face{font-family:"BrandFont";font-weight:${w};src:url("/fonts/${brand.font}/files/${brand.font}-latin-${w}-normal.woff2") format("woff2");}`).join('')
+    // display serif for kinetic / annotate words (installed by setup.sh; falls back to a system serif)
+    + ['normal', 'italic'].map(st => `@font-face{font-family:"SerifFont";font-weight:400;font-style:${st};src:url("/fonts/${brand.serif ?? 'dm-serif-display'}/files/${brand.serif ?? 'dm-serif-display'}-latin-400-${st}.woff2") format("woff2");}`).join('');
   h('style', null, document.head, css);
-  const probe = h('div', 'abs', document.body, [400, 500, 600, 700, 800].map(w => `<span style="font-weight:${w}">a</span>`).join(''));
+  const probe = h('div', 'abs', document.body, [400, 500, 600, 700, 800].map(w => `<span style="font-weight:${w}">a</span>`).join('')
+    + '<span style="font-family:SerifFont">a</span><span style="font-family:SerifFont;font-style:italic">a</span>');
   probe.style.opacity = '0';
 
   const footageMeta = proj.footage ? await getJSON(PROJ + 'footage/footage.json') : null;
   const capCfg = { enabled: true, ...(proj.captions || {}) };
-  const words = footageMeta && capCfg.enabled ? await getJSON(PROJ + (capCfg.words || 'transcript/words.json')) : null;
+  const allWords = await getJSON(PROJ + (capCfg.words || 'transcript/words.json')); // also used by kinetic beats
+  const words = footageMeta && capCfg.enabled ? allWords : null;
 
   const aspects = {};
   const srcs = new Set((proj.beats || []).filter(b => b.src).map(b => b.src));
@@ -59,15 +63,18 @@ async function init() {
   const m = Math.round(72 * S);
   const top = Math.round(Math.max(0.135 * H, 250 * S));
   const captionsY = Math.round((capCfg.y ?? 0.775) * H);
-  const bottom = words ? captionsY - Math.round(28 * S) : Math.round(0.82 * H);
+  const bottom = words && capCfg.when !== 'split' ? captionsY - Math.round(28 * S) : Math.round(0.82 * H);
   // footage that already carries text (burned-in subtitles): overlay cards stay above this line
   const overlayBottom = proj.layout?.overlayBottom != null ? Math.min(bottom, Math.round(proj.layout.overlayBottom * H)) : bottom;
   const pip = { w: Math.round(0.3 * W), h: Math.round(0.3 * H), x: 0, y: top, r: Math.round(34 * S) };
   pip.x = W - m - pip.w;
+  // split mode: top panel for a screen/graphic, bottom panel shows the face window of the footage
+  const split = { seam: Math.round((proj.layout?.seam ?? 0.5) * H), focus: proj.layout?.splitFocus ?? 0.33, zoom: proj.layout?.splitZoom ?? 1 };
 
   const bg = buildBackground(stage, W, H, brand);
-  const footage = footageMeta ? buildFootage(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, pip) : null;
+  const footage = footageMeta ? buildFootage(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, pip, split) : null;
   const beatsLayer = h('div', 'layer', stage);
+  const fxLayer = h('div', 'layer', stage); // transitions: above captions and chrome (moved to the end below)
   const cues = [];
 
   const beats = (proj.beats || []).map((b0, i) => {
@@ -81,12 +88,13 @@ async function init() {
 
   for (const it of beats) {
     const { b, def } = it;
-    const layer = h('div', 'layer', beatsLayer);
+    const layer = h('div', 'layer', def.defaults.onTop ? fxLayer : beatsLayer);
     const t0 = b.mode === 'overlay' ? 0.2 : 0.55;
     const OUT = b.dur - 0.45;
     const ctx = {
       W, H, S, m, mode: b.mode, t0, OUT, dur: b.dur, captionsY, locale: proj.locale || 'id-ID', brand,
-      asset, aspect: src => aspects[src] ?? 1,
+      asset, aspect: src => aspects[src] ?? 1, root: layer, panel: { x: 0, y: 0, w: W, h: split.seam }, seam: split.seam,
+      words: allWords, beatT: b.t, hasFootage: !!footage,
       cue: (lt, type, opt = {}) => cues.push({ t: +(b.t + lt).toFixed(3), type, ...opt }),
     };
     // header (kicker + title) for data beats
@@ -128,8 +136,9 @@ async function init() {
         };
         headH = head.offsetHeight;
       }
-      const mainTop = b.mode === 'insert' ? Math.max(pip.y + pip.h + 40 * S, hasHead ? top + headH + 48 * S : 0) : (hasHead ? top + headH + 56 * S : top);
-      zone = { x: m, y: mainTop, w: W - 2 * m, h: bottom - mainTop };
+      const mainTop = b.mode === 'insert' ? Math.max(pip.y + pip.h + 40 * S, hasHead ? top + headH + 48 * S : 0) : (hasHead ? top + headH + (b.mode === 'split' ? 36 : 56) * S : top);
+      const zoneBottom = b.mode === 'split' ? split.seam - Math.round(48 * S) : bottom;
+      zone = { x: m, y: mainTop, w: W - 2 * m, h: zoneBottom - mainTop };
       ctx.zone = zone;
       place(box, zone.x, zone.y, zone.w);
     }
@@ -171,13 +180,38 @@ async function init() {
     for (const v of iv) { const l = out[out.length - 1]; if (l && v[0] - l[1] < 1.0) l[1] = Math.max(l[1], v[1]); else out.push([...v]); }
     return out;
   };
-  const insertW = footage ? windows('insert') : [], fullW = footage ? windows('full') : [];
+  const insertW = footage ? windows('insert') : [], fullW = footage ? windows('full') : [], splitW = footage ? windows('split') : [];
+  // the chrome (progress bar, badge) steps aside over a screen in split mode and over kinetic typography scenes
+  const kinW = beats.filter(x => x.b.type === 'kinetic' && x.b.chrome !== true).map(x => [x.b.t, x.b.t + x.b.dur]);
+  const chromeHideSplit = proj.chrome?.hideInSplit !== false;
   const kOf = (T, ws) => Math.max(0, ...ws.map(([a, b]) => prog(T, a - 0.15, 0.6) * (1 - prog(T, b - 0.35, 0.6))));
   insertW.forEach(([a, b]) => { cues.push({ t: a - 0.1, type: 'whoosh', gain: 0.7 }); cues.push({ t: b - 0.3, type: 'swoosh', gain: 0.5 }); });
   fullW.forEach(([a, b]) => { cues.push({ t: a - 0.1, type: 'whoosh', gain: 0.8 }); cues.push({ t: b - 0.3, type: 'swoosh', gain: 0.5 }); });
+  splitW.forEach(([a, b]) => { cues.push({ t: a - 0.1, type: 'whoosh', gain: 0.6 }); cues.push({ t: b - 0.3, type: 'swoosh', gain: 0.45 }); });
+  // zoom beats: punch-in ("cut"), eased push ("smooth") or a slow drift ("slow") on the full-frame footage
+  const zoomBeats = beats.filter(x => x.b.type === 'zoom').map(x => x.b);
+  const zoomAt = T => {
+    let best = null, bk = 0;
+    for (const z of zoomBeats) {
+      const lt = T - z.t;
+      if (lt < 0 || lt > z.dur) continue;
+      const ease = z.ease ?? 'cut';
+      let k;
+      if (ease === 'slow') k = E.inOutCubic(prog(lt, 0, z.dur));
+      else {
+        const din = z.in ?? (ease === 'cut' ? 0 : 0.45), dout = z.out ?? (ease === 'cut' ? 0 : 0.45);
+        const a = din ? E.outCubic(prog(lt, 0, din)) : 1;
+        const x = dout ? E.inOutCubic(prog(lt, z.dur - dout, dout)) : 0;
+        k = a * (1 - x);
+      }
+      if (k >= bk) { bk = k; best = { z: 1 + ((z.z ?? 1.18) - 1) * k, fx: z.fx ?? 0.5, fy: z.fy ?? 0.38 }; }
+    }
+    return best;
+  };
 
-  const captions = words ? buildCaptions(stage, W, H, words, capCfg) : null;
+  const captions = words ? buildCaptions(stage, W, H, words, capCfg, splitW.length ? split : null) : null;
   const chrome = proj.chrome !== false ? buildChrome(stage, W, H, proj.chrome || {}, asset, total) : null;
+  stage.appendChild(fxLayer);
   const chapters = beats.filter(x => x.b.type === 'chapter').map(x => ({ num: x.b.num, name: x.b.label ?? x.b.name, start: x.b.t }));
 
   window.seek = async T => {
@@ -194,11 +228,12 @@ async function init() {
       }
       it.update(lt);
     }
-    if (footage) await footage.update(T, kOf(T, insertW), kOf(T, fullW));
-    if (captions) captions.update(T);
+    const splitK = kOf(T, splitW);
+    if (footage) await footage.update(T, kOf(T, insertW), kOf(T, fullW), splitK, zoomAt(T));
+    if (captions) captions.update(T, 0, splitK);
     if (chrome) {
       const ch = [...chapters].reverse().find(c => T >= c.start) || null;
-      chrome.update(T, ch);
+      chrome.update(T, ch, Math.max(chromeHideSplit ? splitK : 0, kOf(T, kinW)));
     }
   };
   window.__duration = total;

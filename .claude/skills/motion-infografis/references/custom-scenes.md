@@ -40,6 +40,8 @@ export default {
 | `cue(lt, type, {gain})` | schedule a sound: `whoosh`, `swoosh`, `soft`, `pop`, `tick` |
 | `asset(path)`, `aspect(path)` | URL for a project file; h/w ratio of preloaded images (only images used by `image` beats or the chrome logo are preloaded; load others yourself and await `img.decode()`) |
 | `captionsY`, `brand`, `locale` | caption line y, brand colours, number locale |
+| `root`, `panel`, `seam` | the beat's own full-canvas layer (for free placement), the split top panel `{x, y, w, h}`, the seam y |
+| `words`, `beatT`, `hasFootage` | transcript words `[{w, s, e}]` (clip time) or null, the beat start in clip time, whether footage exists |
 
 ## Rules that keep custom scenes deterministic
 - The update function must depend only on `lt`. No `Date.now()`, no CSS transitions or animations, no `requestAnimationFrame`, no unseeded randomness (use `rng(seed)` from engine.js).

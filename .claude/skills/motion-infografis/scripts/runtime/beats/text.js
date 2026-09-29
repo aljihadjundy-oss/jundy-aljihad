@@ -13,6 +13,7 @@ export const title = {
     const size = (b.size ?? (ctx.mode === 'full' ? 96 : 78)) * S;
     const hl = headline(box, b.text, { flow: true, size, align, w: ctx.zone.w });
     if (ctx.mode === 'overlay' && !b.glass) hl.el.style.textShadow = '0 4px 0 rgba(0,0,0,.35), 0 0 30px rgba(0,0,0,.55)';
+    if (b.upper) hl.el.style.textTransform = 'uppercase'; // hook style: "CARA SKRIPSI\n*PAKE AI??*"
     ctx.cue(ctx.t0, 'soft');
     return lt => {
       if (kick) appear(kick, lt, ctx.t0 - 0.1, ctx.OUT, { dy: 20 });

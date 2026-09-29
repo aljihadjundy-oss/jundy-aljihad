@@ -74,7 +74,7 @@ export function buildChrome(stage, W, H, cfg, assetUrl, total) {
   }
   let last = '';
   return {
-    update(T, chapterInfo) {
+    update(T, chapterInfo, hideK = 0) {
       if (fill) fill.style.transform = `scaleX(${clamp(T / total).toFixed(4)})`;
       const label = chapterInfo ? `${chapterInfo.num ? `${chapterInfo.num}` : ''}<b>${chapterInfo.name}</b>` : '';
       if (label !== last) { chap.innerHTML = label; last = label; }
@@ -82,7 +82,7 @@ export function buildChrome(stage, W, H, cfg, assetUrl, total) {
       chap.style.opacity = k.toFixed(3);
       chap.style.transform = `translate3d(0,${((1 - k) * 16).toFixed(1)}px,0)`;
       const vis = E.outExpo(prog(T, cfg.showAt ?? 0.4, 0.8));
-      root.style.opacity = vis.toFixed(3);
+      root.style.opacity = (vis * (1 - hideK)).toFixed(3);
     },
   };
 }
