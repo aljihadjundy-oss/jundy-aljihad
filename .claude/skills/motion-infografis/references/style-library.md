@@ -53,8 +53,9 @@ Outcome first: every part has a job, and the style is whatever does that job bes
 2. **Map job → style**: hook → S1 (uppercase title + `zoom` punch) or S2 (one kinetic hook screen); structure → S0;
    proof → S1 split; punchline, idiom, words said fast → S2; "look at this" → S3 (or an S1 red box on a screen);
    section change → `transition` + the next part's style; CTA → S0 `cta` or an S1 callout, in the locked palette.
-3. **Break ties with evidence, then novelty**: prefer the style that shows proof (a screen, a number) over one that only
-   decorates; if still tied, pick the style used least recently.
+3. **Break ties with evidence, then novelty**: prefer the style that shows proof (a screen, a number, a real output)
+   over one that only decorates; if still tied, pick the style used least recently. When the proof needs an asset the
+   user has not sent, plan the fallback style and put the asset on the wishlist (see SKILL.md, "Proof over decoration").
 4. **Anti-monotony checks**: no two consecutive graphic parts in the same style unless they are one continuous idea;
    a 60 s video uses at least 3 styles and a 2-minute video at least 3–4; no single style takes more than half of the
    graphic time; at most 1–2 parts in a non-base palette.

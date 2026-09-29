@@ -61,6 +61,10 @@ Then:
    key message on screen by 3 s, ≥ 3 visual events in the first 10 s, no bucket without a visual event). Show it to the
    user and **wait for approval** before the full render. This user explicitly prefers approval gates, and a full
    render costs minutes. Stills are cheap, so offer a few preview frames with the plan.
+   Add an **asset wishlist** under the table (see "Proof over decoration" in section 5): every part where a real
+   screenshot, photo, document or before/after would beat a generic graphic, with a filename, what it must show, how it
+   will be used, and whether it is *wajib* or *opsional*. Plan each of those parts with a fallback graphic, and render
+   only after the assets arrive or the user says to go with the fallback.
 3. **Write the beats** into `proj/project.json` (schema and every type: `references/beats.md`).
 4. **Preview**: `node $S/render.mjs proj --stills 3,9.5,17,...` (one or two stills per beat, mid-beat), then
    `python3 $S/contact.py proj/out/stills 6` and look at the sheet. Check that nothing covers the face, nothing collides with
@@ -106,6 +110,13 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
   and `top` is safe if the head sits low. If the footage already has burned-in subtitles, set `layout.overlayBottom`
   just above them and use `pos: "bottom"`, so cards land between the chin and the subtitles. Check stills.
 - **Chapters**: for videos with numbered sections, a `chapter` beat per section updates the top-right chapter label.
+- **Proof over decoration (asset wishlist).** The user asked for this to be standing practice. Whenever the speaker
+  talks about something that exists (an output, a document, a tool, a result, a rubric, a source article, a
+  before/after, a place or a class), a real asset on screen is stronger than a checklist or a kinetic word: show it in
+  `split` (S1) or as an `image` card (S0), and mark it with `annotate`/`callout`/`rings`. Propose these proactively in
+  every plan, as a list the user can fill: `assets/<name>.png`, what it shows, where it goes (timecode, style), *wajib*
+  or *opsional*. Remind them to blur private details (names, client data, faces of others) before sending. Keep the
+  anti-monotony rules: alternate split (S1) and image card (S0) when several proof parts sit close together.
 - **Combine styles, part by part; you decide.** Read `references/style-library.md` before every plan. Give each part
   the style that does its job (hook, structure, proof, punchline, "look at this", CTA), rotate so no two consecutive
   graphic parts share a style unless they are one idea, and use at least 3 styles in a 60 s video. The user wants the
