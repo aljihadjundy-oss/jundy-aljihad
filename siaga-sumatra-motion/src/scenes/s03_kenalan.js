@@ -24,7 +24,8 @@ export default {
     place(cimg, 0, 0, CWd, CH);
     const home = shotCard(root, ctx, 'home', { w: 400, hgt: 560, radius: 34 });
     place(home.el, 500, 560);
-    home.setView(1, 0.5, 0);
+    const HZ = ctx.assets.shots.home.ok ? 1.42 : 1; // crop the white page around the phone mockup
+    home.setView(HZ, 0.503, 0);
 
     const lead = h('div', 'abs', root);
     place(lead, X0, 1170, CW);
@@ -51,7 +52,7 @@ export default {
       hdr(t, OUT);
       enter(cover, t, 0.8, OUT, { dy: 120, r0: -8, s0: 0.9, din: 1.1 });
       enter(home.el, t, 1.1, OUT, { dy: 140, r0: 6, s0: 0.9, din: 1.1 });
-      home.setView(1, 0.5, lerp(0, 1, E.inOutCubic(prog(t, 3.2, 3.5))));
+      home.setView(HZ, 0.503, lerp(0.02, 1, E.inOutCubic(prog(t, 3.2, 3.5))));
       enter(lead, t, 2.2, OUT, { dy: 30 });
       counter(num, t, 2.25, 1.2, F.length);
       cells.forEach((c, i) => {

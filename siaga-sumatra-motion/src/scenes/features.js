@@ -43,7 +43,7 @@ export const s06 = {
     return t => {
       sh(t, OUT);
       enter(card.el, t, 0.7, OUT, { dy: 140, s0: 0.92, din: 1.1 });
-      camera(card, t, [{ t: 0, z: 1, fx: 0.5, fy: 0.12 }, { t: 2.4, z: 1.12, fx: 0.5, fy: 0.43, d: 1.1 }, { t: 4.4, z: 1.18, fx: 0.5, fy: 0.74, d: 1.1 }]);
+      camera(card, t, [{ t: 0, z: 1, fx: 0.5, fy: 0.12 }, { t: 2.4, z: 1, fx: 0.5, fy: 0.43, d: 1.1 }, { t: 4.4, z: 1, fx: 0.5, fy: 0.76, d: 1.1 }]);
       ringFade(r1, t, 2.3, 4.0);
       ringFade(r2, t, 4.3, 6.0);
     };
