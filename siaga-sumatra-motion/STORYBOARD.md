@@ -14,7 +14,7 @@ sedangkan kalimat pendukung dari `narrasi_referensi.md`. Scene 02 dan 13 masing-
 | 05 | 0:42–0:55 | Detail Zona Risiko | `risk_framework` | Screenshot zona dan daftar 4 unsur. Nama unsur lalu "terbang" menjadi judul kartu 2×2, rumus risiko tersusun per suku dengan garis pecahan yang digambar. |
 | 06 | 0:54–1:01 | Deteksi Dini | `usage_flow[2]` | Kamera menyusuri screenshot dengan highlight ring per bagian. |
 | 07 | 1:00–1:07 | Jalur Evakuasi | `usage_flow[4]` | Rute dekoratif digambar dengan titik berjalan dari "Lokasi Anda" ke "Titik aman". Screenshot di-zoom dengan pulse di posisi pengguna dan tujuan. |
-| 08 | 1:06–1:13 | Mode Siaga | `usage_flow[3]` | Centang digambar satu per satu di checkbox screenshot (aktif setelah file asli masuk). |
+| 08 | 1:06–1:13 | Mode Siaga | `usage_flow[3]` | Centang digambar satu per satu tepat di checkbox screenshot. |
 | 09 | 1:12–1:20 | Edukasi & Tips | `usage_flow[3]` | Dua kartu miring bergulir seperti feed. |
 | 10 | 1:19–1:28 | Bantuan & Lapor | `usage_flow[5]`, `usage_flow[6]` | Screenshot bantuan dengan kamera + ring (nomor darurat, lalu posko), dan 2 blok teks dengan badge langkah. |
 | 11 | 1:27–1:40 | Hasil evaluasi *(baru)* | `form_rater_scores` | Latar berganti ke terang lewat circle reveal. Grouped bar horizontal tumbuh dari 0 di skala ordinal Tidak Baik/Cukup/Baik, lalu 2 callout hasil hitung dari data. |

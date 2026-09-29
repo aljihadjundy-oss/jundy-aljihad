@@ -24,7 +24,7 @@ assets/photos/foto1.jpg foto2.jpg foto3.jpg
 assets/screenshots/home|peta|zona|deteksi|jalur|siaga|edukasi|tips|bantuan.jpg   (.png juga bisa)
 ```
 
-Screenshot yang belum ada otomatis diganti placeholder berlabel "file belum masuk". Begitu file-nya ditaruh, cukup render ulang.
+Kalau ada screenshot yang belum masuk, otomatis diganti placeholder berlabel "file belum masuk". Begitu file-nya ditaruh, cukup render ulang.
 
 ## Cara kerja
 
