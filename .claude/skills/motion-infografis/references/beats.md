@@ -113,15 +113,19 @@ Per-item `color` (`accent`, `accent2`, `pos`, `neg` or hex) and `display` (custo
   "left": { "title": "Salah", "items": ["Nunggu air naik", "Cari info di grup"] },
   "right": { "title": "Benar", "items": ["Kenali jalur dulu", "Pantau info resmi"] } }
 ```
-`leftTone` / `rightTone` default `neg` / `pos` (x and check icons).
+`leftTone` / `rightTone` default `neg` / `pos` (x and check icons). `rightAt`: seconds the right column waits after the
+left one (default 0.9); raise it to land the right column on the spoken word.
 
 ### list: numbered points
 `{ "type": "list", "t": 8.4, "dur": 7, "title": "Kenali status wilayah", "items": [ { "title": "Bahaya", "detail": "Risiko tinggi" }, "Waspada", "Relatif aman" ] }`
-Items land one after another, spread over the beat (`every` = seconds between items, optional).
+Items land one after another, spread over the beat (`every` = seconds between items, optional). Any item given as an
+object can carry `at` (seconds from the beat start) to land on the word it names: `{ "title": "Ghosting", "at": 2.4 }`.
+The same goes for `checklist` items and `flow` steps.
 
 ### checklist: items get checked one by one
 `{ "type": "checklist", "t": 15.5, "dur": 7.5, "title": "Siapkan tas siaga", "items": ["Air minum", "Makanan tahan lama", "Obat-obatan"] }`
-`every`, `size` (text px, default 31) optional.
+`every`, `size` (text px, default 31) optional. `mark: "x"` turns it into a list of what is wrong (red cross in place of the
+green tick), e.g. for "orang yang nggak reliable, ghosting, nggak komit".
 
 ### flow: vertical process with drawn arrows
 `{ "type": "flow", "t": 23.6, "dur": 6.5, "title": "Ikuti alurnya", "steps": [ { "label": "Kenali", "icon": "map", "detail": "Lihat peta risiko" }, { "label": "Waspada", "icon": "bell" } ] }`

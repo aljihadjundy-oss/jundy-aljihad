@@ -10,14 +10,15 @@ export const checklist = {
   build(box, b, ctx) {
     const S = ctx.S;
     const items = b.items || [];
-    const times = sequence(items.length, ctx.t0, ctx.OUT, b.every);
+    const times = sequence(items.length, ctx.t0, ctx.OUT, b.every, items);
+    const neg = b.mark === 'x'; // a list of things that are wrong: red cross instead of the green tick
     const rows = items.map((it, i) => {
       const r = div(box, { display: 'flex', gap: `${22 * S}px`, alignItems: 'flex-start', marginTop: `${(i ? 22 : 0) * S}px` });
       const bx = div(r, { flex: `0 0 ${50 * S}px`, height: `${50 * S}px` });
       bx.innerHTML = `<svg viewBox="0 0 56 56" style="width:100%;height:100%;overflow:visible">
         <rect x="2" y="2" width="52" height="52" rx="14" fill="none" stroke="currentColor" stroke-width="3.5" pathLength="1"/>
-        <rect x="2" y="2" width="52" height="52" rx="14" fill="var(--pos)"/>
-        <path d="M14 29l9 9 19-20" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>`;
+        <rect x="2" y="2" width="52" height="52" rx="14" fill="var(${neg ? '--neg' : '--pos'})"/>
+        <path d="${neg ? 'M18 18l20 20M38 18L18 38' : 'M14 29l9 9 19-20'}" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>`;
       const [outline, fill, check] = bx.querySelectorAll('rect, path');
       const tx = div(r, { fontSize: `${(b.size ?? 31) * S}px`, fontWeight: '700', lineHeight: '1.3', paddingTop: `${6 * S}px` }, typeof it === 'string' ? it : it.title);
       ctx.cue(times[i] + 0.4, 'tick');
@@ -42,7 +43,7 @@ export const list = {
   build(box, b, ctx) {
     const S = ctx.S;
     const items = (b.items || []).map(text);
-    const times = sequence(items.length, ctx.t0, ctx.OUT, b.every);
+    const times = sequence(items.length, ctx.t0, ctx.OUT, b.every, items);
     const rows = items.map((it, i) => {
       const r = div(box, { display: 'flex', gap: `${24 * S}px`, alignItems: 'flex-start', marginTop: `${(i ? 26 : 0) * S}px` });
       const n = div(r, { flex: `0 0 ${96 * S}px`, fontSize: `${78 * S}px`, fontWeight: '800', lineHeight: '0.9', color: 'var(--accent2)', letterSpacing: '-0.04em' }, String(i + 1).padStart(2, '0'));
@@ -67,7 +68,7 @@ export const flow = {
   build(box, b, ctx) {
     const S = ctx.S;
     const steps = (b.steps || []).map(text);
-    const times = sequence(steps.length, ctx.t0, ctx.OUT, b.every);
+    const times = sequence(steps.length, ctx.t0, ctx.OUT, b.every, steps);
     const N = 76 * S;
     box.style.position = box.style.position || 'absolute';
     const svg = document.createElementNS(NS, 'svg');

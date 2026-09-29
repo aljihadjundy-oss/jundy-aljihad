@@ -112,10 +112,11 @@ export const compare = {
       });
       return { col, head, rows, si };
     });
-    sides.forEach(sd => ctx.cue(ctx.t0 + sd.si * 0.9, 'pop'));
+    const at = (si) => ctx.t0 + (si ? (b.rightAt ?? 0.9) : 0); // rightAt: seconds the right column waits
+    sides.forEach(sd => ctx.cue(at(sd.si), 'pop'));
     return lt => {
       sides.forEach(({ col, head, rows, si }) => {
-        const t = ctx.t0 + si * 0.9;
+        const t = at(si);
         appear(col, lt, t, ctx.OUT, { dy: 50 });
         rows.forEach((r, i) => appear(r, lt, t + 0.3 + i * 0.18, ctx.OUT, { dx: -20, dy: 0 }));
       });
