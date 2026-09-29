@@ -60,6 +60,8 @@ async function init() {
   const top = Math.round(Math.max(0.135 * H, 250 * S));
   const captionsY = Math.round((capCfg.y ?? 0.775) * H);
   const bottom = words ? captionsY - Math.round(28 * S) : Math.round(0.82 * H);
+  // footage that already carries text (burned-in subtitles): overlay cards stay above this line
+  const overlayBottom = proj.layout?.overlayBottom != null ? Math.min(bottom, Math.round(proj.layout.overlayBottom * H)) : bottom;
   const pip = { w: Math.round(0.3 * W), h: Math.round(0.3 * H), x: 0, y: top, r: Math.round(34 * S) };
   pip.x = W - m - pip.w;
 
@@ -98,7 +100,7 @@ async function init() {
     }
     let zone;
     if (b.mode === 'overlay') {
-      zone = { x: m, y: top, w: W - 2 * m, h: bottom - top };
+      zone = { x: m, y: top, w: W - 2 * m, h: overlayBottom - top };
       if (b.glass !== false) { box.className = 'glass'; box.style.padding = `${32 * S}px`; }
       place(box, zone.x, 0, zone.w);
       ctx.zone = { ...zone, w: zone.w - (b.glass !== false ? 64 * S : 0) };
@@ -153,7 +155,7 @@ async function init() {
     cues.push(...pend);
     // vertical placement once the content has a size
     if (b.mode === 'overlay') {
-      const y = b.pos === 'top' ? top : b.pos === 'center' ? Math.round((top + bottom) / 2 - bh / 2) : bottom - bh;
+      const y = b.pos === 'top' ? top : b.pos === 'center' ? Math.round((top + overlayBottom) / 2 - bh / 2) : overlayBottom - bh;
       box.style.top = `${y}px`;
     } else if (b.align !== 'top') {
       box.style.top = `${Math.round(zone.y + Math.max(0, (zone.h - bh) / 2))}px`;

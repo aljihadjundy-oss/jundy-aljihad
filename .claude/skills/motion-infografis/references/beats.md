@@ -30,6 +30,9 @@
   `@fontsource` package id installed via `setup.sh`.
 - `chrome`: `false` hides it. Omit `name` and `logo` for a bare progress bar. `logo` sits on a white rounded badge.
 - `captions`: needs `transcript/words.json`. `y` is the fraction of height where the caption line starts.
+- `layout.overlayBottom`: optional fraction of height that overlay cards must stay above, for footage that already has
+  burned-in subtitles or on-screen text (e.g. `0.75` when the subtitles start at y ≈ 1460 of 1920). With `pos: "bottom"`
+  the card then sits in the band between the chin and the subtitles. Insert and full content is not affected.
 - `audio.music`: optional path to a licensed track, ducked under the voice. It is not looped, so use a track at least as long as the video.
 
 ## 2. Modes, positions, zones

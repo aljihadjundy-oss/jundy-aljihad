@@ -89,7 +89,8 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
 - **Sensitive figures** (casualties, illness, money lost): use `countUp: false`, `tone: "neutral"`, a small card, and a
   `note` with any disclaimer. Skip the dramatic sound effects.
 - **Faces**: overlay beats default to `top` or `bottom` zones. For a centred talking head, `bottom` is usually safe,
-  and `top` is safe if the head sits low. Check stills.
+  and `top` is safe if the head sits low. If the footage already has burned-in subtitles, set `layout.overlayBottom`
+  just above them and use `pos: "bottom"`, so cards land between the chin and the subtitles. Check stills.
 - **Chapters**: for videos with numbered sections, a `chapter` beat per section updates the top-right chapter label.
 
 ## 6. Tell the user at the end
