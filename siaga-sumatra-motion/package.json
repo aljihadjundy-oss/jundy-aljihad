@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "spike": "node spike/render.mjs"
+    "render": "node render.mjs",
+    "preview": "node render.mjs --range",
+    "stills": "node render.mjs --stills"
   },
   "dependencies": {
     "@fontsource/plus-jakarta-sans": "5.3.0",
