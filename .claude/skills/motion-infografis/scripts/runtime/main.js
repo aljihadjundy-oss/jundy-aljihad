@@ -85,6 +85,8 @@ async function init() {
     const b = { ...def.defaults, ...b0 };
     if (!footage && b.mode !== 'overlay') b.mode = 'full';
     if (!footage && b.mode === 'overlay' && !def.defaults.free) b.mode = 'full';
+    // a beat that reaches the end of the video holds to the last frame: no exit fade, no PiP springing back mid-frame
+    if (b.t + b.dur >= total - 0.3) b.dur = total - b.t + 60;
     return { b, def, i };
   });
 

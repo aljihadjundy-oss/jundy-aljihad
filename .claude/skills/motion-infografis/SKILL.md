@@ -152,4 +152,6 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
 - *Captions out of sync*: the SRT was made from a different cut. If the clip was trimmed, `transcribe.py` subtracts `--start`
   automatically; pass `--clip-relative` if the SRT already matches the trimmed clip.
 - *Fonts look wrong*: run `setup.sh <font>` and set `brand.font` to the @fontsource package id (e.g. `inter`).
+- *The last frame shows a half-faded CTA or a PiP mid-move*: fixed in the engine; any beat that ends within 0.3 s of
+  the video end (or later) now holds to the last frame. Give the closing beat an end at or past the video end.
 - *Audio too loud or quiet*: set `audio.target_lufs` (−14 social, −16 to −19 for calm explainers) and `audio.sfx` (0 disables effects).
