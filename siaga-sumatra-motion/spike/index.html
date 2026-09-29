@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "PJS"; font-weight: 400; src: url("../node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "PJS"; font-weight: 700; src: url("../node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "PJS"; font-weight: 800; src: url("../node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-800-normal.woff2") format("woff2"); }
+  :root { --navy: #0B1F3A; --blue: #1E5AA8; --teal: #14A3A3; --amber: #F2A91D; --ink: #F4F7FB; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--navy); font-family: "PJS", sans-serif; color: var(--ink); }
+  .stage { position: absolute; inset: 0; }
+  .kicker { position: absolute; left: 96px; top: 520px; font-size: 34px; font-weight: 700; letter-spacing: .18em; color: var(--teal); }
+  .num { position: absolute; left: 90px; top: 580px; font-size: 300px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .label { position: absolute; left: 96px; top: 900px; font-size: 52px; font-weight: 700; }
+  .bar-track { position: absolute; left: 96px; top: 1010px; width: 888px; height: 28px; border-radius: 14px; background: rgba(255,255,255,.1); overflow: hidden; }
+  .bar { height: 100%; width: 100%; border-radius: 14px; background: linear-gradient(90deg, var(--teal), var(--amber)); transform-origin: left center; }
+  .row { position: absolute; left: 96px; font-size: 44px; font-weight: 400; display: flex; gap: 24px; align-items: center; }
+  .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--amber); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="kicker" id="kicker">PIPELINE TEST</div>
+  <div class="num" id="num">0</div>
+  <div class="label" id="label">frame-by-frame render</div>
+  <div class="bar-track"><div class="bar" id="bar"></div></div>
+  <div class="row" id="r0" style="top:1120px"><span class="dot"></span>HTML/CSS → Chromium</div>
+  <div class="row" id="r1" style="top:1200px"><span class="dot"></span>seek(t) deterministik</div>
+  <div class="row" id="r2" style="top:1280px"><span class="dot"></span>ffmpeg → H.264</div>
+</div>
+<script>
+  // cubic-bezier solver (same curve definition as CSS)
+  function bezier(x1, y1, x2, y2) {
+    const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+    const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+    const sx = t => ((ax * t + bx) * t + cx) * t, sy = t => ((ay * t + by) * t + cy) * t;
+    const dx = t => (3 * ax * t + 2 * bx) * t + cx;
+    return x => {
+      if (x <= 0) return 0; if (x >= 1) return 1;
+      let t = x;
+      for (let i = 0; i < 8; i++) { const e = sx(t) - x; if (Math.abs(e) < 1e-6) break; t -= e / dx(t); }
+      return sy(t);
+    };
+  }
+  const outExpo = bezier(0.16, 1, 0.3, 1);
+  const p = (t, a, b) => Math.min(1, Math.max(0, (t - a) / (b - a)));
+  const $ = id => document.getElementById(id);
+
+  window.seek = t => {
+    const k = outExpo(p(t, 0, .6));
+    $('kicker').style.opacity = k; $('kicker').style.transform = `translateY(${(1 - k) * 40}px)`;
+    const c = outExpo(p(t, .3, 1.8));
+    $('num').textContent = Math.round(c * 13);
+    $('num').style.opacity = p(t, .3, .5);
+    const l = outExpo(p(t, .6, 1.2));
+    $('label').style.opacity = l; $('label').style.transform = `translateY(${(1 - l) * 30}px)`;
+    $('bar').style.transform = `scaleX(${outExpo(p(t, .8, 2.2))})`;
+    for (let i = 0; i < 3; i++) {
+      const r = outExpo(p(t, 1.6 + i * .12, 2.3 + i * .12));
+      $('r' + i).style.opacity = r; $('r' + i).style.transform = `translateX(${(1 - r) * -60}px)`;
+    }
+  };
+  window.seek(0);
+</script>
+</body>
+</html>
