@@ -32,7 +32,7 @@
   `navy`, `maroon`, `paper`, `ink`); `bg`, `surface`, `ink`, `accent` (structure), `accent2` (emphasis/numbers),
   `accent3` (gradient middle), `pos`, `neg`, `glass`, `glow` ([two hex colours for the backdrop]) override single tokens.
   `font` is an `@fontsource` package id installed via `setup.sh`; `serif` the display serif (default `dm-serif-display`).
-- `chrome`: `false` hides it. Omit `name` and `logo` for a bare progress bar. `logo` sits on a white rounded badge.
+- `chrome`: `false` hides it. `progressY` (fraction of height, default ≈ 0.11) moves the progress bar, e.g. `0.028` to sit at the very top above a title band. Omit `name` and `logo` for a bare progress bar. `logo` sits on a white rounded badge.
 - `captions`: needs `transcript/words.json`. `y` is the fraction of height where the caption line starts.
   `style`: `karaoke` (spoken word highlighted, default), `plain` (white bold with a shadow), `box` (white on a black box).
   `when`: `always` or `split` (only during split beats, e.g. to replace burned-in subtitles that the split crops away).
@@ -40,6 +40,9 @@
 - `layout.overlayBottom`: optional fraction of height that overlay cards must stay above, for footage that already has
   burned-in subtitles or on-screen text (e.g. `0.75` when the subtitles start at y ≈ 1460 of 1920). With `pos: "bottom"`
   the card then sits in the band between the chin and the subtitles. Insert and full content is not affected.
+- `layout.overlayTop`: fraction of height where overlay titles and insert/full headers start (default about 0.135). Lower it
+  (e.g. `0.07`) for a tight close-up whose hair starts near the top, so a title sits in the band above the head instead of on the forehead.
+  The PiP moves up with it. Free-placed beats (`callout`, `annotate`) are not affected: give them their own `y`.
 - `layout.seam` / `splitFocus` / `splitZoom`: split mode geometry. `seam` is where the top panel ends (fraction of height,
   default 0.5). `splitFocus` is the vertical centre of the face in the footage (fraction of height, default 0.33); the
   bottom panel shows the window around it. `splitZoom` > 1 punches in on that window.

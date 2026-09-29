@@ -70,7 +70,7 @@ export function buildChrome(stage, W, H, cfg, assetUrl, total) {
   let fill = null;
   if (cfg.progress !== false) {
     const pbar = h('div', 'pbar', root);
-    Object.assign(pbar.style, { left: `${m}px`, top: `${top + 96}px`, width: `${W - 2 * m}px` });
+    Object.assign(pbar.style, { left: `${m}px`, top: `${cfg.progressY != null ? Math.round(cfg.progressY * H) : top + 96}px`, width: `${W - 2 * m}px` }); // progressY: fraction of height, to lift the bar clear of a title band
     fill = h('i', null, pbar);
   }
   let last = '';

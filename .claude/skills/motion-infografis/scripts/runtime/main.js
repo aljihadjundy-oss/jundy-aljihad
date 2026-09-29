@@ -63,7 +63,8 @@ async function init() {
 
   // zones (all numbers scale with S so 4:5 / 16:9 canvases stay proportional)
   const m = Math.round(72 * S);
-  const top = Math.round(Math.max(0.135 * H, 250 * S));
+  // overlay titles / insert headers start here; layout.overlayTop raises it for tight close-ups where the hair starts near the top
+  const top = proj.layout?.overlayTop != null ? Math.round(proj.layout.overlayTop * H) : Math.round(Math.max(0.135 * H, 250 * S));
   const captionsY = Math.round((capCfg.y ?? 0.775) * H);
   const bottom = words && capCfg.when !== 'split' ? captionsY - Math.round(28 * S) : Math.round(0.82 * H);
   // footage that already carries text (burned-in subtitles): overlay cards stay above this line
