@@ -69,6 +69,7 @@ html, body { margin: 0; overflow: hidden; background: var(--bg); color: var(--in
 .kin .kw { display: inline-block; line-height: 0.95; }
 .kin .kw.serif { font-family: "SerifFont", "DejaVu Serif", Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
 .kin .kw.light { font-weight: 400; }
+.kin.over .kw:not(.stamp) { text-shadow: 0 3px 0 rgba(0, 0, 0, 0.55), 0 0 22px rgba(0, 0, 0, 0.6); }
 .kin .kw.outline { color: transparent !important; -webkit-text-stroke: 0.035em var(--kink); }
 .kin .kw.stamp { padding: 0.04em 0.12em 0.02em; border-radius: 0.06em; letter-spacing: 0.02em; text-transform: uppercase; }
 .kin .kw.vert { writing-mode: vertical-rl; transform-origin: 50% 50%; letter-spacing: 0.04em; text-transform: uppercase; }

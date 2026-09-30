@@ -19,8 +19,9 @@ export const kinetic = {
     const { W, H, S } = ctx;
     const pal = { ...(PALETTES[b.palette ?? 'brand'] ?? PALETTES.brand), ...(b.bg ? { bg: b.bg } : {}), ...(b.ink ? { ink: b.ink } : {}) };
     const bgEl = h('div', 'layer', root);
-    bgEl.style.background = b.bg === 'none' || (ctx.mode === 'overlay' && !b.bg) ? 'transparent' : pal.bg;
-    const box = h('div', 'kin', root);
+    const over = b.bg === 'none' || (ctx.mode === 'overlay' && !b.bg); // typing straight over the footage
+    bgEl.style.background = over ? 'transparent' : pal.bg;
+    const box = h('div', over ? 'kin over' : 'kin', root);
     Object.assign(box.style, { width: `${W}px`, height: `${H}px`, color: pal.ink, gap: `${(b.lineGap ?? 6) * S}px`, transform: `translateY(${(((b.y ?? 0.5) - 0.5) * H).toFixed(1)}px)` });
     box.style.setProperty('--kink', pal.ink);
     const items = (b.words || []).map(x => (typeof x === 'string' ? { w: x } : { ...x }));
@@ -48,7 +49,7 @@ export const kinetic = {
       const size = (it.size ?? b.size ?? 96) * S;
       const col = it.color === 'accent' ? pal.accent : it.color === 'ink' || !it.color ? pal.ink : it.color;
       Object.assign(el.style, { fontSize: `${size}px`, fontWeight: st === 'light' ? '400' : st === 'serif' ? '400' : '800', color: col });
-      if (st === 'stamp') Object.assign(el.style, { background: col, color: pal.bg === 'transparent' ? '#111' : pal.bg });
+      if (st === 'stamp') Object.assign(el.style, { background: col, color: over || pal.bg === 'transparent' ? '#111' : pal.bg });
       if (b.sfx !== false) ctx.cue(it.at, 'pop', { gain: 0.35 });
       return { el, it, rot: it.rot ?? (st === 'stamp' ? -3 : st === 'vert' ? 0 : 0) };
     });
