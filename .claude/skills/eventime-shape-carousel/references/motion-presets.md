@@ -39,6 +39,14 @@ Satu baris per slide, urutan eksplisit. Contoh:
 
 ## Dari preview ke file posting
 
-Preview HTML adalah sumber kebenaran. Untuk posting:
-- **Slide statis:** `python3 scripts/screenshot.py preview.html out/png` → PNG 1080×1350 (keadaan akhir animasi).
-- **Slide bergerak:** IG carousel boleh mencampur video dan gambar, jadi slide yang geraknya penting bisa diekspor jadi MP4 pendek (±4-6 detik, loop-able). Ini tahap render final (v2): rekam preview dengan Playwright `record_video_dir` lalu ffmpeg ke MP4 H.264, 1080×1350, 30fps. Belum dibuat di v1; tanya user dulu slide mana yang mau dibuat video.
+Preview HTML adalah sumber kebenaran. Dari situ ada dua keluaran:
+
+- **Slide statis (JPEG/PNG):** `python3 scripts/screenshot.py preview.html out/png` → PNG 1080×1350 keadaan akhir animasi. Untuk JPEG posting: `ffmpeg -i slide-01.png -q:v 10 slide-01.jpg`.
+- **Slide bergerak (MP4):** `python3 scripts/render_video.py preview.html out/video --prefix C01` → satu MP4 H.264 1080×1350, 30fps, 5 detik per slide, tanpa audio. Animasi dipause lalu digeser frame demi frame, jadi hasilnya sama di komputer mana pun. Satu carousel 5 slide dirender ±1 menit.
+
+Catatan penting:
+- IG carousel boleh mencampur video dan gambar, jadi semua slide bisa diposting sebagai MP4 yang saling berurutan.
+- Frame pertama tiap video = keadaan akhir slide (poster), supaya thumbnail grid tidak kosong. Ada kedipan 1 frame di awal; matikan dengan `--no-poster`.
+- Pola `search` (diketik) dan `stat` (angka naik) tampil langsung dalam keadaan akhir di MP4; itu keterbatasan mode render.
+- Loop (float/pulse/nudge) tidak dijahit mulus di titik ulang 5 detik. Kalau terasa, naikkan `--seconds` ke kelipatan durasi loop.
+- Belum dites di aplikasi IG asli: cek durasi, ukuran, dan kualitas saat upload pertama.

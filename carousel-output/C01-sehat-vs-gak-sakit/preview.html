@@ -141,6 +141,7 @@ body.final [data-m],body.final .bar{animation:none!important;opacity:1!important
 
 <script id="deck" type="application/json">{"meta": {"title": "C01 · Sep W1 · B2C · Health — Sehat vs Sekadar Gak Sakit", "style": "base", "segment": "b2c", "pillar": "health"}, "slides": [{"pattern": "cover", "icon": "pulse", "ghost": "SEHAT", "kicker": "Health", "title": "{{Sehat}} ≠\nSekadar\nGak Sakit", "sub": "3 tanda yang sering kelewat.\nNomor 2 paling sering diremehkan.", "notes": {"visual": "Cover tipografi besar, simbol ≠ sebagai inti kontras. Ghost word SEHAT samar, ikon denyut di bulatan putih", "element": "Highlight biru di kata 'Sehat' (kontras vs 'Sekadar Gak Sakit' yang polos)", "motion": "Ikon pop → kicker rise → headline rise, highlight 'Sehat' menyusul → sub rise; panah next nudge", "asset": "Tidak ada"}}, {"pattern": "numbered", "num": "1", "label": "Tanda #1", "title": "Gampang capek &\nsusah fokus", "body": "Gak ada yang sakit, tapi energi kamu habis duluan.", "notes": {"visual": "Numeral besar samar di belakang, label pill, judul 2 baris, body 1 kalimat", "element": "Posisi angka & label konsisten di ketiga slide tanda", "motion": "Numeral fade → label stamp → judul rise → body rise", "asset": "Tidak ada"}}, {"pattern": "numbered", "num": "2", "label": "Tanda #2", "title": "Jarang gerak, tapi\n[[ngerasa cukup]]", "body": "Duduk seharian lalu jalan ke parkiran, itu sering belum cukup.", "notes": {"visual": "Sama seperti Tanda #1, tapi ini slide paling penting (disebut di hook dan caption)", "element": "Satu-satunya aksen merah carousel ini di 'ngerasa cukup'. Di plan merah juga dipakai di cover; digeser ke sini supaya jatah 1x terpenuhi dan jatuh di poin paling penting", "motion": "Sama dengan #1, 'ngerasa cukup' stamp merah paling akhir", "asset": "Tidak ada"}}, {"pattern": "numbered", "num": "3", "label": "Tanda #3", "title": "Cek badan baru\nkalau ada keluhan", "body": "Sehat itu dijaga sebelum ada tanda, bukan dicari setelahnya.", "notes": {"visual": "Sama seperti dua slide tanda sebelumnya", "element": "Tanda #3 ditambahkan: plan hanya merinci 2 tanda padahal hook menyebut 3. Sejalan dengan tema preventive health Sesi 2", "motion": "Sama dengan #1", "asset": "Tidak ada"}}, {"pattern": "cta", "icon": "heart", "title": "Simpan biar inget lagi 📌", "sub": "Kirim ke teman yang suka bilang\n“gue sehat kok”", "handle": "Follow @shape.indonesia", "notes": {"visual": "Penutup tenang: kotak biru + pill handle lime, tanpa panah next", "element": "CTA simpan & share (B2C edukasi, bukan daftar webinar)", "motion": "Ikon pop → kotak rise → sub rise → handle pulse", "asset": "Tidak ada"}}]}</script>
 <script>
+const CAPTURE = new URLSearchParams(location.search).has('capture');
 const DECK = JSON.parse(document.getElementById('deck').textContent);
 const META = DECK.meta || {};
 const SLIDES = DECK.slides;
@@ -330,13 +331,13 @@ document.querySelectorAll('[data-m]').forEach(el=>{
   (el.dataset.x||'').split(';').forEach(kv=>{ const i=kv.indexOf(':'); if(i>0) el.style.setProperty(kv.slice(0,i).trim(), kv.slice(i+1).trim()); });
 });
 function typed(el){
-  const t = el.dataset.text||''; el.textContent=''; let k=0;
+  const t = el.dataset.text||''; if(CAPTURE){ el.textContent=t; return; } el.textContent=''; let k=0;
   const go=()=>{ if(!el.isConnected||!el.closest('.slide.play'))return; el.textContent=t.slice(0,++k); if(k<t.length) setTimeout(go,55); };
   setTimeout(go,500);
 }
 function counters(sl){
   sl.querySelectorAll('.cnt').forEach(c=>{
-    const to = parseFloat(c.dataset.to); if(isNaN(to))return;
+    const to = parseFloat(c.dataset.to); if(isNaN(to))return; if(CAPTURE){ c.textContent=to; return; }
     const t0=performance.now()+300, dur=1100;
     const step=now=>{ const p=Math.min(1,Math.max(0,(now-t0)/dur)); c.textContent=Math.round(to*(1-Math.pow(1-p,3))); if(p<1&&sl.classList.contains('play'))requestAnimationFrame(step); else c.textContent=to; };
     requestAnimationFrame(step);

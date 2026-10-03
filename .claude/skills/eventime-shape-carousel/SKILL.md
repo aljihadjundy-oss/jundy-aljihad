@@ -53,6 +53,7 @@ Tanya user hanya kalau ada fakta yang tidak ada di tabel fakta (tanggal sesi, na
 ```bash
 python3 .claude/skills/eventime-shape-carousel/scripts/build_preview.py carousel-output/C05/deck.json carousel-output/C05/preview.html
 python3 .claude/skills/eventime-shape-carousel/scripts/screenshot.py carousel-output/C05/preview.html carousel-output/C05/png
+python3 .claude/skills/eventime-shape-carousel/scripts/render_video.py carousel-output/C05/preview.html carousel-output/C05/video --prefix C05
 ```
 
 `build_preview.py` mengecek aturan keras (merah >1x, pola speaker di luar playful, kuota/harga di B2B, "daftar webinar" di B2C) dan keluar dengan error kalau dilanggar. Perbaiki sampai bersih. Peringatan (jumlah slide, slide terakhir bukan CTA) dipertimbangkan, bukan otomatis diabaikan.
@@ -70,6 +71,8 @@ python3 .claude/skills/eventime-shape-carousel/scripts/screenshot.py carousel-ou
 | `deck.json` | Sumber preview |
 | `preview.html` (+ `fonts/`) | Preview bergerak, buka di browser |
 | `png/` | Keadaan akhir tiap slide, untuk review cepat |
+| `post/` | JPEG siap posting + `caption.txt` |
+| `video/` | MP4 per slide (versi bergerak, siap upload ke IG) |
 
 Lapor ke user singkat: apa yang dibuat, di mana, keputusan desain utama, dan **daftar apa yang masih dibutuhkan dari user**. Jangan menempel seluruh dokumen ke chat.
 
@@ -102,4 +105,5 @@ Gaya: Base Blue · Funnel: Awareness · CTA: simpan & share · Posting: Minggu m
 ## Status v1
 
 Sudah ada: brand kit, aturan, kalender 17 carousel, 14 pola slide dengan motion, validator, preview HTML, screenshot PNG, 3 contoh deck (C03 playful, C05 B2C, C06 B2B).
-Belum ada: render MP4 per slide, logo Shape asli (wordmark teks sebagai pengganti), foto/logo yang harus dari user, uji di akun nyata.
+Sudah ada juga: render MP4 per slide (`scripts/render_video.py`).
+Belum ada: logo Shape asli (wordmark teks sebagai pengganti), foto/logo yang harus dari user, uji di akun nyata.

@@ -141,6 +141,7 @@ body.final [data-m],body.final .bar{animation:none!important;opacity:1!important
 
 <script id="deck" type="application/json">__DECK__</script>
 <script>
+const CAPTURE = new URLSearchParams(location.search).has('capture');
 const DECK = JSON.parse(document.getElementById('deck').textContent);
 const META = DECK.meta || {};
 const SLIDES = DECK.slides;
@@ -330,13 +331,13 @@ document.querySelectorAll('[data-m]').forEach(el=>{
   (el.dataset.x||'').split(';').forEach(kv=>{ const i=kv.indexOf(':'); if(i>0) el.style.setProperty(kv.slice(0,i).trim(), kv.slice(i+1).trim()); });
 });
 function typed(el){
-  const t = el.dataset.text||''; el.textContent=''; let k=0;
+  const t = el.dataset.text||''; if(CAPTURE){ el.textContent=t; return; } el.textContent=''; let k=0;
   const go=()=>{ if(!el.isConnected||!el.closest('.slide.play'))return; el.textContent=t.slice(0,++k); if(k<t.length) setTimeout(go,55); };
   setTimeout(go,500);
 }
 function counters(sl){
   sl.querySelectorAll('.cnt').forEach(c=>{
-    const to = parseFloat(c.dataset.to); if(isNaN(to))return;
+    const to = parseFloat(c.dataset.to); if(isNaN(to))return; if(CAPTURE){ c.textContent=to; return; }
     const t0=performance.now()+300, dur=1100;
     const step=now=>{ const p=Math.min(1,Math.max(0,(now-t0)/dur)); c.textContent=Math.round(to*(1-Math.pow(1-p,3))); if(p<1&&sl.classList.contains('play'))requestAnimationFrame(step); else c.textContent=to; };
     requestAnimationFrame(step);
