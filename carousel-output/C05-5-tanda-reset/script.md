@@ -18,5 +18,5 @@ Kalau salah satunya kamu banget, tenang, itu bukan berarti kamu lemah. Badan dan
 #MindPower #ShapeIndonesia #LiveBetterLongerFitter
 
 ## Catatan
-- 5 tanda dipadatkan di satu slide `list` supaya total tetap 4 slide (plan: 3-5). Kalau mau 1 tanda per slide, jadinya 7 slide; perlu keputusan user.
+- 5 tanda dipadatkan di satu slide `list` supaya total tetap 4 slide (plan: 3-5). Keputusan user: checklist 1 slide (final).
 - Tanpa klaim medis dan tanpa data. "Tanda" ditulis sebagai pengalaman umum, bukan diagnosis.
