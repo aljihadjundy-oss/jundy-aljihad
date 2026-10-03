@@ -1,0 +1,105 @@
+---
+name: eventime-shape-carousel
+description: Bikin carousel Instagram end-to-end untuk Eventime (@eventime.indonesia) yang mempromosikan Shape Indonesia Executive Forum / Shape Expert Network / Shape Indonesia Expo 2027. Dari content plan jadi script per slide, design plan (copy, visual, elemen seperti chart/timeline/tabel/mockup, motion), daftar aset + prompt GPT image, dan preview HTML bergerak per slide. Pakai skill ini setiap kali user minta carousel, script carousel, design plan, slide, atau konten visual untuk Shape, Eventime, Founding Circle Partners, webinar Shape, atau menyebut kode kalender seperti C05 / "Okt minggu 2" — walau tidak bilang "skill" atau "carousel" secara eksplisit.
+---
+
+# Carousel Eventime × Shape Indonesia
+
+Skill ini mengubah satu baris content plan jadi carousel yang siap dieksekusi: script, design plan, dan preview yang bergerak. Tujuannya konten yang **engaging, interaktif, worth to follow**, dengan estetika yang sejalan tren visual (glass card, grid blueprint, tipografi besar, motion kecil yang punya alasan).
+
+Konteks bisnis: Eventime Creative Nusantara adalah organizer. Shape Indonesia adalah brand/klien. Carousel hidup di feed @eventime.indonesia dan sering di-cross-post ke @shape.indonesia/LinkedIn. Jangan menyamakan ini dengan Osiris Event, Sinatif, atau Hexolution; itu unit lain.
+
+## Keputusan yang sudah dikunci user (jangan ditanya ulang)
+
+- Tanggal Expo 2027: **8-10 Oktober 2027** (ikuti content plan; proposal sponsorship tertulis 5-7 Okt, itu diabaikan).
+- Penomoran sesi webinar: ikuti content plan (Sesi 1 Kickoff … Sesi 7 Closing).
+- Logo di slide: **hanya logo Shape**. Logo Eventime belum dipakai.
+- Gaya: **Base Blue** untuk semua carousel; **Expert Playful** hanya untuk carousel speaker/event.
+- Scope v1: script + design plan + preview HTML bergerak. Render final MP4 menyusul.
+- Bagi aset: user mencarikan foto pembicara/aset Google dan menjalankan prompt GPT image; skill menyiapkan daftar dan prompt.
+
+## Cara kerja
+
+Baca file referensi **sebelum** menulis apa pun, karena aturan keras (jatah merah, larangan B2B/B2C) ada di sana dan tidak bisa ditebak.
+
+1. `references/brand-kit.md`: token warna, tipografi, elemen tetap, dua gaya.
+2. `references/content-rules.md`: tabel fakta (satu-satunya sumber angka/tanggal), aturan B2C vs B2B, larangan.
+3. `references/calendar-carousels.md`: 17 carousel Sep-Des 2026 dengan brief aslinya.
+4. `references/slide-patterns.md`: pilih pola slide berdasarkan peran, plus resep per tipe konten.
+5. `references/motion-presets.md`: preset motion dan aturan koreografi.
+6. `references/asset-requests.md`: format daftar aset dan template prompt GPT image.
+
+### Langkah
+
+**1. Intake.** Tentukan carousel mana:
+- User menyebut kode (C05), bulan+minggu, atau topik → cari di `calendar-carousels.md`.
+- Brief bebas di luar kalender → tentukan sendiri segmen (B2C/B2B), pilar, gaya, funnel stage.
+
+Dari baris kalender ambil: segmen, pilar, brief, hook caption, CTA, brief visual. Catat bentrokan antara kalender dan brand kit (mis. plan menulis "highlight box" sementara referensi memakai glass card; ikuti pola di `slide-patterns.md`).
+
+Tanya user hanya kalau ada fakta yang tidak ada di tabel fakta (tanggal sesi, nama pembicara baru, angka). Jangan mengarang. Kalau data belum ada, pakai placeholder yang jelas dan masukkan ke daftar pertanyaan terbuka.
+
+**2. Script.** Tulis copy per slide dalam bentuk tabel: no, peran slide (Hook / Development / Closing), copy persis, kata yang di-highlight. Prinsip yang sering terlupa:
+- Satu ide per slide, 3-5 slide. Slide harus bisa berdiri sendiri kalau di-screenshot.
+- Hook slide 1 maksimal 2 baris dan harus terbaca dalam 1 detik (pola: mitos vs fakta, angka + janji, niat vs realita, pertanyaan, reframe).
+- B2C: santai, menertawakan diri bareng, CTA simpan/share, tanpa data dan tanpa "daftar webinar". B2B: profesional, kelangkaan lewat kata "terpilih", CTA LinkedIn Events/DM, tanpa kuota/harga sponsor.
+- Aksen merah (`[[ ]]`) satu kali per carousel, pada istilah yang paling ingin diingat.
+- Bukan klaim medis absolut.
+
+**3. Design plan.** Untuk tiap slide tulis lima hal: **copy, visual, elemen visual, motion, aset**. Pilih pola dari `slide-patterns.md` berdasarkan peran slide. Pikirkan elemen yang membuat carousel "interaktif": search bar mockup yang mengetik, checklist yang muncul satu per satu, perbandingan dua kartu, batang yang tumbuh, timeline yang tergambar, sticker yang di-stamp. Pilih elemen yang menjelaskan isi, bukan yang paling ramai. Slide B2B: tenang dan formal.
+
+**4. Bangun preview.** Tulis `deck.json` (skema di `slide-patterns.md`, contoh di `assets/examples/`), lalu:
+
+```bash
+python3 .claude/skills/eventime-shape-carousel/scripts/build_preview.py carousel-output/C05/deck.json carousel-output/C05/preview.html
+python3 .claude/skills/eventime-shape-carousel/scripts/screenshot.py carousel-output/C05/preview.html carousel-output/C05/png
+```
+
+`build_preview.py` mengecek aturan keras (merah >1x, pola speaker di luar playful, kuota/harga di B2B, "daftar webinar" di B2C) dan keluar dengan error kalau dilanggar. Perbaiki sampai bersih. Peringatan (jumlah slide, slide terakhir bukan CTA) dipertimbangkan, bukan otomatis diabaikan.
+
+**Lihat hasilnya.** Buka PNG yang dihasilkan dan periksa: teks tidak menabrak logo/panah, tidak lebih dari 2-3 baris per kotak, hirarki jelas, kontras cukup, urutan motion masuk akal (preview HTML punya tombol Replay dan panel Catatan). Sebuah deck yang lolos validator belum tentu enak dilihat. Perbaiki yang meleset sebelum melapor.
+
+**5. Aset.** Susun daftar aset sesuai `asset-requests.md`, plus prompt GPT image yang siap dicopas untuk yang perlu dibuat. Tandai yang harus dicari user (foto pembicara, logo).
+
+**6. Serahkan.** Simpan semuanya di `carousel-output/<kode>-<slug>/`:
+
+| File | Isi |
+|---|---|
+| `script.md` | Tabel script per slide + caption (hook dari kalender) + jam/hari posting |
+| `design-plan.md` | Per slide: copy, visual, elemen, motion, aset. Tambah daftar aset & pertanyaan terbuka |
+| `deck.json` | Sumber preview |
+| `preview.html` (+ `fonts/`) | Preview bergerak, buka di browser |
+| `png/` | Keadaan akhir tiap slide, untuk review cepat |
+
+Lapor ke user singkat: apa yang dibuat, di mana, keputusan desain utama, dan **daftar apa yang masih dibutuhkan dari user**. Jangan menempel seluruh dokumen ke chat.
+
+## Format design-plan.md
+
+```markdown
+# C05 · Okt W1 · B2C · Mind Power — "5 Tanda Butuh Reset"
+Gaya: Base Blue · Funnel: Awareness · CTA: simpan & share · Posting: Minggu malam 18.00-21.00 WIB
+
+## Slide 1 — Hook (pola: cover)
+- Copy: …
+- Visual: …
+- Elemen: …
+- Motion: A → B → C
+- Aset: …
+
+## Aset & pertanyaan terbuka
+…
+```
+
+## Hal yang gampang salah
+
+- Mengambil angka reach/sponsor dari proposal. Hanya pakai tabel fakta di `content-rules.md`.
+- Menaruh foto/nama pembicara atau logo partner tanpa file dari user. Pakai placeholder.
+- Menaruh dua gaya dalam satu carousel, atau merah lebih dari sekali.
+- Menambah slide >5 tanpa bertanya.
+- Motion yang terlalu ramai di konten B2B formal.
+- Mengklaim sesuatu sudah dites di perangkat/IG asli. Preview diverifikasi di Chromium, bukan di aplikasi IG.
+
+## Status v1
+
+Sudah ada: brand kit, aturan, kalender 17 carousel, 14 pola slide dengan motion, validator, preview HTML, screenshot PNG, 3 contoh deck (C03 playful, C05 B2C, C06 B2B).
+Belum ada: render MP4 per slide, logo Shape asli (wordmark teks sebagai pengganti), foto/logo yang harus dari user, uji di akun nyata.
