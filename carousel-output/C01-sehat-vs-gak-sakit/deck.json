@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "title": "C01 · Sep W1 · B2C · Health — Sehat vs Sekadar Gak Sakit",
+    "style": "base",
+    "segment": "b2c",
+    "pillar": "health"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "icon": "pulse",
+      "ghost": "SEHAT",
+      "kicker": "Health",
+      "title": "{{Sehat}} ≠\nSekadar\nGak Sakit",
+      "sub": "3 tanda yang sering kelewat.\nNomor 2 paling sering diremehkan.",
+      "notes": {
+        "visual": "Cover tipografi besar, simbol ≠ sebagai inti kontras. Ghost word SEHAT samar, ikon denyut di bulatan putih",
+        "element": "Highlight biru di kata 'Sehat' (kontras vs 'Sekadar Gak Sakit' yang polos)",
+        "motion": "Ikon pop → kicker rise → headline rise, highlight 'Sehat' menyusul → sub rise; panah next nudge",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "1",
+      "label": "Tanda #1",
+      "title": "Gampang capek &\nsusah fokus",
+      "body": "Gak ada yang sakit, tapi energi kamu habis duluan.",
+      "notes": {
+        "visual": "Numeral besar samar di belakang, label pill, judul 2 baris, body 1 kalimat",
+        "element": "Posisi angka & label konsisten di ketiga slide tanda",
+        "motion": "Numeral fade → label stamp → judul rise → body rise",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "2",
+      "label": "Tanda #2",
+      "title": "Jarang gerak, tapi\n[[ngerasa cukup]]",
+      "body": "Duduk seharian lalu jalan ke parkiran, itu sering belum cukup.",
+      "notes": {
+        "visual": "Sama seperti Tanda #1, tapi ini slide paling penting (disebut di hook dan caption)",
+        "element": "Satu-satunya aksen merah carousel ini di 'ngerasa cukup'. Di plan merah juga dipakai di cover; digeser ke sini supaya jatah 1x terpenuhi dan jatuh di poin paling penting",
+        "motion": "Sama dengan #1, 'ngerasa cukup' stamp merah paling akhir",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "3",
+      "label": "Tanda #3",
+      "title": "Cek badan baru\nkalau ada keluhan",
+      "body": "Sehat itu dijaga sebelum ada tanda, bukan dicari setelahnya.",
+      "notes": {
+        "visual": "Sama seperti dua slide tanda sebelumnya",
+        "element": "Tanda #3 ditambahkan: plan hanya merinci 2 tanda padahal hook menyebut 3. Sejalan dengan tema preventive health Sesi 2",
+        "motion": "Sama dengan #1",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "heart",
+      "title": "Simpan biar inget lagi 📌",
+      "sub": "Kirim ke teman yang suka bilang\n“gue sehat kok”",
+      "handle": "Follow @shape.indonesia",
+      "notes": {
+        "visual": "Penutup tenang: kotak biru + pill handle lime, tanpa panah next",
+        "element": "CTA simpan & share (B2C edukasi, bukan daftar webinar)",
+        "motion": "Ikon pop → kotak rise → sub rise → handle pulse",
+        "asset": "Tidak ada"
+      }
+    }
+  ]
+}
