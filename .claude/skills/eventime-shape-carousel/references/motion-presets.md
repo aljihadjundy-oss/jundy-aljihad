@@ -37,16 +37,20 @@ Easing default `cubic-bezier(.2,.8,.2,1)` (keluar cepat, berhenti lembut). `stam
 Satu baris per slide, urutan eksplisit. Contoh:
 `Ikon pop → kicker rise → headline rise, 'Reset' stamp merah menyusul → sub rise; panah next nudge`
 
-## Dari preview ke file posting
+## Motion di PPTX (deliverable utama)
 
-Preview HTML adalah sumber kebenaran. Dari situ ada dua keluaran:
+`build_pptx.py` memetakan preset ke animasi masuk bawaan PowerPoint, otomatis jalan saat slide tampil (efek pertama "After Previous", sisanya "With Previous" dengan jeda masing-masing):
 
-- **Slide statis (JPEG/PNG):** `python3 scripts/screenshot.py preview.html out/png` → PNG 1080×1350 keadaan akhir animasi. Untuk JPEG posting: `ffmpeg -i slide-01.png -q:v 10 slide-01.jpg`.
-- **Slide bergerak (MP4):** `python3 scripts/render_video.py preview.html out/video --prefix C01` → satu MP4 H.264 1080×1350, 30fps, 5 detik per slide, tanpa audio. Animasi dipause lalu digeser frame demi frame, jadi hasilnya sama di komputer mana pun. Satu carousel 5 slide dirender ±1 menit.
+| Preset | Animasi PowerPoint |
+|---|---|
+| `rise` | Float In (naik) |
+| `pop`, `stamp` | Zoom |
+| `slide-l`, `slide-r` | Fly In dari kiri/kanan (jarak pendek) |
+| `wipe` | Wipe dari kiri |
+| `fade` | Fade |
 
-Catatan penting:
-- IG carousel boleh mencampur video dan gambar, jadi semua slide bisa diposting sebagai MP4 yang saling berurutan.
-- Frame pertama tiap video = keadaan akhir slide (poster), supaya thumbnail grid tidak kosong. Ada kedipan 1 frame di awal; matikan dengan `--no-poster`.
-- Pola `search` (diketik) dan `stat` (angka naik) tampil langsung dalam keadaan akhir di MP4; itu keterbatasan mode render.
-- Loop (float/pulse/nudge) tidak dijahit mulus di titik ulang 5 detik. Kalau terasa, naikkan `--seconds` ke kelipatan durasi loop.
-- Belum dites di aplikasi IG asli: cek durasi, ukuran, dan kualitas saat upload pertama.
+Loop (float/pulse/nudge), count-up, dan teks diketik tidak ada di PPTX (hanya di preview HTML). Ekspor video: File > Export > Create a Video (animasi ikut terekam). Animasi baru terverifikasi terbaca oleh LibreOffice, belum diuji di PowerPoint/Keynote/Google Slides.
+
+## Preview HTML & MP4 (opsional)
+
+Hanya kalau user minta: `build_preview.py` → HTML bergerak (tombol Replay + panel catatan), `screenshot.py` → PNG, `render_video.py` → MP4 H.264 1080×1350 30fps (animasi digeser frame demi frame, deterministik). Frame pertama MP4 = keadaan akhir slide (poster) agar thumbnail tidak kosong, dengan kedipan 1 frame di awal (`--no-poster` mematikannya). Keluaran ini tidak disimpan di repo.

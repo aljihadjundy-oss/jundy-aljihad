@@ -7,7 +7,7 @@
      "sub": "Bukan liburan mahal.\nCukup istirahat yang bener.",
      "notes": {"visual": "Cover tipografi besar di atas gradient+grid, ghost word RESET samar di belakang, ikon otak di bulatan putih",
                "element": "Kicker pill pilar, highlight box biru, satu-satunya aksen merah carousel ini di kata 'Reset'",
-               "motion": "Ikon pop → kicker rise → headline rise, 'Reset' stamp merah menyusul → sub rise; panah next nudge",
+               "motion": "Ikon pop → kicker rise → headline rise, 'Reset' stamp merah menyusul → sub rise; panah next fade",
                "asset": "Tidak ada (semua dibuat dari tipografi + ikon)"}},
     {"pattern": "list", "title": "Pernah ngerasain ini?",
      "items": ["Bangun tidur, tetap capek", "Hal kecil gampang bikin kesel", "Fokus buyar, scroll HP tanpa sadar", "Males, padahal biasanya semangat", "Tidur lama, tapi gak terasa pulih"],

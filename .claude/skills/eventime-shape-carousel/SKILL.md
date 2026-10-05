@@ -48,17 +48,19 @@ Tanya user hanya kalau ada fakta yang tidak ada di tabel fakta (tanggal sesi, na
 
 **3. Design plan.** Untuk tiap slide tulis lima hal: **copy, visual, elemen visual, motion, aset**. Pilih pola dari `slide-patterns.md` berdasarkan peran slide. Pikirkan elemen yang membuat carousel "interaktif": search bar mockup yang mengetik, checklist yang muncul satu per satu, perbandingan dua kartu, batang yang tumbuh, timeline yang tergambar, sticker yang di-stamp. Pilih elemen yang menjelaskan isi, bukan yang paling ramai. Slide B2B: tenang dan formal.
 
-**4. Bangun preview.** Tulis `deck.json` (skema di `slide-patterns.md`, contoh di `assets/examples/`), lalu:
+**4. Bangun PPTX.** Deliverable utama adalah **file PPTX yang bisa diedit user** (bukan PNG/JPG/MP4). Tulis `deck.json` (skema di `slide-patterns.md`, contoh di `assets/examples/`), lalu:
 
 ```bash
-python3 .claude/skills/eventime-shape-carousel/scripts/build_preview.py carousel-output/C05/deck.json carousel-output/C05/preview.html
-python3 .claude/skills/eventime-shape-carousel/scripts/screenshot.py carousel-output/C05/preview.html carousel-output/C05/png
-python3 .claude/skills/eventime-shape-carousel/scripts/render_video.py carousel-output/C05/preview.html carousel-output/C05/video --prefix C05
+python3 .claude/skills/eventime-shape-carousel/scripts/build_pptx.py carousel-output/C05-slug/deck.json carousel-output/C05-slug/C05.pptx
 ```
 
-`build_preview.py` mengecek aturan keras (merah >1x, pola speaker di luar playful, kuota/harga di B2B, "daftar webinar" di B2C) dan keluar dengan error kalau dilanggar. Perbaiki sampai bersih. Peringatan (jumlah slide, slide terakhir bukan CTA) dipertimbangkan, bukan otomatis diabaikan.
+Isi PPTX: semua teks/kotak/kartu/ikon adalah objek native (bisa digeser dan diganti), latar grid miring + logo Shape + 3 titik ada di Layout "Shape Carousel" (ganti sekali berlaku di semua slide), highlight kata memakai highlight teks PowerPoint, motion = animasi masuk bawaan PowerPoint yang jalan otomatis, dan catatan visual/elemen/motion/aset per slide ada di Speaker Notes. Ekspor ke video lewat File > Export > Create a Video. User perlu memasang font Poppins dari `assets/fonts-ttf/`; tanpa itu PowerPoint memakai font pengganti dan tampilan bergeser.
 
-**Lihat hasilnya.** Buka PNG yang dihasilkan dan periksa: teks tidak menabrak logo/panah, tidak lebih dari 2-3 baris per kotak, hirarki jelas, kontras cukup, urutan motion masuk akal (preview HTML punya tombol Replay dan panel Catatan). Sebuah deck yang lolos validator belum tentu enak dilihat. Perbaiki yang meleset sebelum melapor.
+`build_pptx.py` mengecek aturan keras (merah >1x, pola speaker di luar playful, kuota/harga di B2B, "daftar webinar" di B2C) dan keluar dengan error kalau dilanggar. Perbaiki sampai bersih. Peringatan (jumlah slide, slide terakhir bukan CTA) dipertimbangkan, bukan otomatis diabaikan.
+
+**Lihat hasilnya sebelum melapor.** Render PPTX lewat LibreOffice (`soffice --headless --convert-to pdf`, lalu `pdftoppm -png`; paket `libreoffice-impress` harus terpasang) dan periksa gambarnya: teks tidak menabrak logo/panah, maksimal 2-3 baris per kotak, hirarki jelas, kontras cukup. Gambar render ini hanya untuk pengecekan sendiri, jangan disimpan ke repo atau diserahkan ke user. Animasi tidak ikut terlihat di render; ia hanya terverifikasi terbaca oleh LibreOffice, belum diuji di PowerPoint/Keynote.
+
+Opsional, hanya kalau user minta preview di browser atau MP4: `build_preview.py` (HTML bergerak), `screenshot.py` (PNG), `render_video.py` (MP4). Keluarannya tidak masuk repo kecuali diminta.
 
 **5. Aset.** Susun daftar aset sesuai `asset-requests.md`, plus prompt GPT image yang siap dicopas untuk yang perlu dibuat. Tandai yang harus dicari user (foto pembicara, logo).
 
@@ -66,13 +68,13 @@ python3 .claude/skills/eventime-shape-carousel/scripts/render_video.py carousel-
 
 | File | Isi |
 |---|---|
+| `<kode>.pptx` | Carousel yang bisa diedit (deliverable utama) |
 | `script.md` | Tabel script per slide + caption (hook dari kalender) + jam/hari posting |
-| `design-plan.md` | Per slide: copy, visual, elemen, motion, aset. Tambah daftar aset & pertanyaan terbuka |
-| `deck.json` | Sumber preview |
-| `preview.html` (+ `fonts/`) | Preview bergerak, buka di browser |
-| `png/` | Keadaan akhir tiap slide, untuk review cepat |
-| `post/` | JPEG siap posting + `caption.txt` |
-| `video/` | MP4 per slide (versi bergerak, siap upload ke IG) |
+| `design-plan.md` | Per slide: copy, visual, elemen, motion, aset. Tambah daftar aset & pertanyaan terbuka (`scripts/deck_to_plan.py` membuat kerangkanya dari `deck.json`) |
+| `caption.txt` | Caption siap copas |
+| `deck.json` | Sumber PPTX |
+
+Satu carousel = satu folder. Kalau di-revisi, **timpa** file yang ada dan hapus keluaran lama, supaya repo tidak menumpuk versi.
 
 Lapor ke user singkat: apa yang dibuat, di mana, keputusan desain utama, dan **daftar apa yang masih dibutuhkan dari user**. Jangan menempel seluruh dokumen ke chat.
 
@@ -104,6 +106,5 @@ Gaya: Base Blue · Funnel: Awareness · CTA: simpan & share · Posting: Minggu m
 
 ## Status v1
 
-Sudah ada: brand kit, aturan, kalender 17 carousel, 14 pola slide dengan motion, validator, preview HTML, screenshot PNG, 3 contoh deck (C03 playful, C05 B2C, C06 B2B).
-Sudah ada juga: render MP4 per slide (`scripts/render_video.py`).
-Belum ada: logo Shape asli (wordmark teks sebagai pengganti), foto/logo yang harus dari user, uji di akun nyata.
+Sudah ada: brand kit, aturan, kalender 17 carousel, 14 pola slide, validator, builder PPTX native dengan animasi bawaan PowerPoint, latar grid miring + logo Shape asli (dari contoh user), 3 contoh deck (C03 playful, C05 B2C, C06 B2B). Preview HTML dan render MP4 tersedia sebagai opsi.
+Belum ada: uji animasi di PowerPoint/Keynote/Google Slides, foto pembicara dan logo partner (harus dari user), uji upload ke akun IG nyata.

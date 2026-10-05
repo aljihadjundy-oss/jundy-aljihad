@@ -29,23 +29,22 @@ body.export .toolbar,body.export .notes{display:none}
 @media (max-width:900px){.notes{display:none}}
 
 .stage{width:1080px;height:1350px;flex:none;transform-origin:center center;position:relative;overflow:hidden;border-radius:0;
-  background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%)}
-.stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:#0B233D url(bg-grid.jpg) center/cover no-repeat}
+.stage::before{display:none;content:"";position:absolute;inset:0;pointer-events:none;
   background-image:linear-gradient(var(--grid) 1.5px,transparent 1.5px),linear-gradient(90deg,var(--grid) 1.5px,transparent 1.5px);background-size:54px 54px}
-.stage::after{content:"";position:absolute;width:900px;height:900px;border-radius:50%;right:-380px;bottom:-300px;
-  background:radial-gradient(circle,rgba(255,255,255,.14),transparent 65%);pointer-events:none}
+.stage::after{display:none}
 
 /* chrome */
-.logo{position:absolute;top:56px;left:0;right:0;display:flex;justify-content:center;z-index:5}
-.logo img{height:92px}
+.logo{position:absolute;top:89px;left:0;right:0;display:flex;justify-content:center;z-index:5}
+.logo img{height:70px}
 .wm{font-weight:800;font-size:84px;letter-spacing:-.04em;line-height:.8;text-align:center}
 .wm small{display:block;font-size:13px;letter-spacing:.32em;font-weight:700;margin-top:16px}
-.dots3{position:absolute;top:84px;left:64px;display:flex;gap:14px;z-index:5}
-.dots3 i{width:22px;height:22px;border-radius:50%;background:rgba(173,216,255,.55)}
-.dots3 i.on{background:#cfe9ff}
-.next{position:absolute;right:64px;bottom:64px;width:104px;height:104px;border-radius:50%;border:5px solid #fff;display:grid;place-items:center;z-index:5}
+.dots3{position:absolute;top:77px;left:46px;display:flex;gap:15.5px;z-index:5}
+.dots3 i{width:31px;height:31px;border-radius:50%;background:#67A1C4}
+.dots3 i.on{background:#67A1C4}
+.next{position:absolute;right:109px;bottom:109px;width:118px;height:118px;border-radius:50%;border:5px solid #fff;display:grid;place-items:center;z-index:5}
 .next svg{width:52px;height:52px}
-.pager{position:absolute;bottom:34px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:5}
+.pager{display:none;position:absolute;bottom:34px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:5}
 .pager i{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.35)}
 .pager i.on{background:#fff}
 

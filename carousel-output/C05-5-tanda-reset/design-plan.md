@@ -30,8 +30,4 @@ Gaya: Base Blue · Format: carousel 4 slide, 1080×1350 · Funnel: Awareness · 
 - **Aset:** tidak ada.
 
 ## Aset & pertanyaan terbuka
-| # | Aset | Sumber | Status |
-|---|------|--------|--------|
-| 1 | Logo Shape putih (PNG transparan) → `.claude/skills/eventime-shape-carousel/assets/logo-shape.png` | User, belum dapat dari pihak Shape | Menunggu. Folder dikosongkan; saat file ditaruh di sana, build berikutnya otomatis memakainya |
-
-Keputusan user: 5 tanda dipadatkan di 1 slide checklist (4 slide total). Logo Shape menyusul; preview memakai wordmark teks sampai file `logo-shape.png` ada.
+Tidak ada aset tambahan. Logo Shape dan latar grid miring sudah ada di Layout PPTX. Keputusan user: 5 tanda dipadatkan di 1 slide checklist (total 4 slide).

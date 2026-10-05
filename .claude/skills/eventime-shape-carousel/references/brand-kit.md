@@ -24,7 +24,7 @@ Alasan dipisah: edukasi harus gampang dibaca sambil swipe cepat, sementara carou
 --glass-line: rgba(255,255,255,.55)   border kartu kaca
 ```
 
-Background: `linear-gradient(135deg, #0B233D 0%, #417697 100%)` + grid 54px di atasnya.
+Background: file `assets/bg-grid.jpg` (rekonstruksi dari contoh template user): gradient horizontal #0B233D → #467FA3 dengan glow biru di bagian bawah, plus **grid miring -4.5°** (sel ±72×70 px, garis putih ±6-12% opacity yang memudar ke bawah). Grid sengaja miring, bukan lurus. Regenerasi dengan `scripts/make_background.py`.
 
 ### Warna pilar (hanya Expert Playful dan ikon pilar)
 
@@ -62,10 +62,10 @@ Teks di atas lime/kuning pakai navy `#0B233D`, bukan putih (kontras).
 ## Elemen tetap di semua slide
 
 1. **Grid blueprint** full background.
-2. **Logo Shape Indonesia** di tengah atas (versi putih). Hanya logo Shape, belum pakai logo Eventime (keputusan user). File logo: `assets/logo-shape.png`; kalau belum ada, template pakai wordmark teks sementara. Minta user kirim file aslinya.
-3. **Tiga titik pagination** kiri atas (titik aktif lebih terang).
-4. **Panah next** lingkaran outline putih ±64px di kanan bawah, ada di semua slide kecuali terakhir. Hilang di slide terakhir supaya cue-nya logis.
-5. **Dots pagination** kecil di bawah tengah.
+2. **Logo Shape Indonesia** di tengah atas, 201×70 px di (442, 89), warna biru muda #D0E0E7 dengan tagline putih. File: `assets/logo-shape.png` (PNG transparan dari user). Hanya logo Shape, belum pakai logo Eventime (keputusan user).
+3. **Tiga titik dekoratif** kiri atas: bulatan 31 px, #67A1C4, di x=46/92/139, y=77. Bukan pagination.
+4. **Panah next**: cincin putih 118 px (garis 5 px) berpusat di (912, 1182), panah putih di dalamnya. Ada di semua slide kecuali terakhir (cue swipe yang logis).
+5. Tidak ada dots pagination di bawah (tidak ada di contoh template; IG punya sendiri).
 6. Slide pertama B2C: tag sticker "Tandai teman..." (opsional, kiri bawah).
 
 ## Elemen khas Expert Playful

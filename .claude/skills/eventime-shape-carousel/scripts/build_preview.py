@@ -78,9 +78,11 @@ def main():
     html = TEMPLATE.read_text().replace("__DECK__", json.dumps(deck, ensure_ascii=False).replace("</", "<\\/"))
     out.write_text(html)
     shutil.copytree(HERE.parent / "assets" / "fonts", out.parent / "fonts", dirs_exist_ok=True)
+    shutil.copy(HERE.parent / "assets" / "bg-grid.jpg", out.parent / "bg-grid.jpg")
     if LOGO.exists():
         shutil.copy(LOGO, out.parent / "logo-shape.png")
     print(f"OK  {out} ({len(deck.get('slides', []))} slide)")
     sys.exit(1 if errs else 0)
 
-main()
+if __name__ == "__main__":
+    main()
