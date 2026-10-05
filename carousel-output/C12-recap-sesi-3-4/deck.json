@@ -1,0 +1,33 @@
+{
+  "meta": {"title": "C12 · Nov W4 · Campaign B2B · Recap Sesi 3 & 4 (Health + Longevity)", "style": "base", "segment": "b2b", "pillar": "health"},
+  "slides": [
+    {"pattern": "cover", "icon": "calendar", "kicker": "Shape Expert Network",
+     "title": "Recap\n{{Sesi 3 & 4}}",
+     "sub": "Health dan Longevity.\nTerima kasih sudah hadir.",
+     "asset": "FOTO MOMEN SESI 3 / 4 (screenshot Meet / dokumentasi)", "assetH": 220,
+     "notes": {"visual": "Cover tenang dan formal: ikon kalender, judul besar, sub 2 baris, placeholder foto momen",
+               "element": "Highlight biru di 'Sesi 3 & 4'. Konsisten dengan layout recap C04",
+               "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → sub rise → foto rise",
+               "asset": "Foto momen Sesi 3 atau 4 (screenshot Meet atau dokumentasi asli, bukan stock)"}},
+    {"pattern": "quote", "quote": "[Kutipan singkat non-data dari Sesi 3 (Health)]",
+     "who": "[Nama pembicara Sesi 3]", "role": "Sesi 3 · Health",
+     "asset": "FOTO PEMBICARA SESI 3 (cutout PNG)", "assetH": 190,
+     "notes": {"visual": "Tanda kutip besar samar, kutipan italic di kotak biru, nama di pill putih, jabatan di bawahnya",
+               "element": "Satu kutipan per sesi, tanpa angka klaim",
+               "motion": "Tanda kutip pop → kotak kutipan rise → nama rise → jabatan → foto rise",
+               "asset": "Kutipan asli dari rekaman/notulen Sesi 3 + nama pembicara + foto"}},
+    {"pattern": "quote", "quote": "[Kutipan singkat non-data dari Sesi 4 (Longevity & Biohacking)]",
+     "who": "[Nama pembicara Sesi 4]", "role": "Sesi 4 · Longevity & Biohacking",
+     "asset": "FOTO PEMBICARA SESI 4 (cutout PNG)", "assetH": 190,
+     "notes": {"visual": "Sama seperti slide kutipan sebelumnya", "element": "Satu kutipan per sesi",
+               "motion": "Sama dengan slide kutipan sebelumnya",
+               "asset": "Kutipan asli dari rekaman/notulen Sesi 4 + nama pembicara + foto"}},
+    {"pattern": "logos", "title": "Terima kasih,\nFounding Circle Partners",
+     "logos": ["Fit4Go", "PPYNI", "Bisa Gerak", "Lux Entertainment", "Dreya Communications"],
+     "note": "Follow @shape.indonesia untuk sesi bulan Desember.",
+     "notes": {"visual": "Grid 5 kotak logo (3 + 2), ucapan terima kasih di atas, CTA follow di bawah. Sama persis dengan C04 agar recap terasa satu seri",
+               "element": "Social proof partner terkonfirmasi. CTA follow = ajakan sesi Desember",
+               "motion": "Judul rise → logo pop berurutan → CTA rise",
+               "asset": "5 file logo (PNG transparan): Fit4Go, PPYNI, Bisa Gerak, Lux Entertainment, Dreya Communications"}}
+  ]
+}
