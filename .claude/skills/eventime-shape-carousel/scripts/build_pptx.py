@@ -805,6 +805,8 @@ def pat_quote(ctx, s):
              Pill(ctx, s["who"], "bd", 38, fill="FFFFFF", color=NAVY, padx=26, pady=8, anim="rise", delay=0.9)]
     if s.get("role"):
         comps.append(T(ctx, s["role"], "md", 34, 1.4, anim="rise", delay=1.0))
+    if s.get("asset") or s.get("img"):
+        comps.append(Asset(ctx, s.get("asset", ""), s.get("assetH", 260), delay=1.2))
     stack(comps, 30, TOP, BOT, align="l")
 
 

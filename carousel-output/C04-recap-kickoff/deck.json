@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "C04 · Sep W4 · Campaign B2B · Recap Kickoff (Sesi 1)",
+    "style": "base",
+    "segment": "b2b",
+    "pillar": "mind"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "kicker": "Shape Expert Network · Sesi 1",
+      "icon": "calendar",
+      "title": "Sesi Kickoff\n{{Selesai}}",
+      "sub": "Triangle of Life: Mind, Fitness, Nutrition.\nTerima kasih sudah hadir.",
+      "asset": "FOTO MOMEN SESI 1 (screenshot Meet / dokumentasi)",
+      "assetH": 220,
+      "notes": {
+        "visual": "Cover tenang dan formal: ikon kalender, judul besar, sub 2 baris, placeholder foto momen di bawah",
+        "element": "Highlight biru di 'Selesai'. Tanpa emoji besar atau meme (B2B)",
+        "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → sub rise → foto momen rise",
+        "asset": "Foto momen Sesi 1 (screenshot Meet atau dokumentasi). User yang menyediakan"
+      }
+    },
+    {
+      "pattern": "quote",
+      "quote": "[Kutipan singkat non-data dari Dr. Bayu]",
+      "who": "Dr. I Gusti Ngurah Bayu Darma Putra",
+      "role": "Mind & Resilience",
+      "asset": "HEADSHOT Dr. Bayu (cutout PNG)",
+      "assetH": 190,
+      "notes": {
+        "visual": "Tanda kutip besar samar, kutipan italic di kotak biru, nama di pill putih, jabatan di bawahnya",
+        "element": "Satu kutipan per pembicara, tanpa angka klaim",
+        "motion": "Tanda kutip pop → kotak kutipan rise → nama rise → jabatan → foto rise",
+        "asset": "Kutipan asli Dr. Bayu (dari rekaman/notulen Sesi 1) + headshot"
+      }
+    },
+    {
+      "pattern": "quote",
+      "quote": "[Kutipan singkat non-data dari Ferry]",
+      "who": "Ferry Distira Herlangga",
+      "role": "Fitness & Performance",
+      "asset": "HEADSHOT Ferry (cutout PNG)",
+      "assetH": 190,
+      "notes": {
+        "visual": "Sama seperti slide kutipan sebelumnya",
+        "element": "Satu kutipan per pembicara",
+        "motion": "Sama dengan slide kutipan sebelumnya",
+        "asset": "Kutipan asli Ferry + headshot"
+      }
+    },
+    {
+      "pattern": "quote",
+      "quote": "[Kutipan singkat non-data dari Dr. Anggraini]",
+      "who": "Dr. Ni Gusti Made Anggraini",
+      "role": "Nutrition Specialist",
+      "asset": "HEADSHOT Dr. Anggraini (cutout PNG)",
+      "assetH": 190,
+      "notes": {
+        "visual": "Sama seperti slide kutipan sebelumnya",
+        "element": "Satu kutipan per pembicara",
+        "motion": "Sama dengan slide kutipan sebelumnya",
+        "asset": "Kutipan asli Dr. Anggraini + headshot"
+      }
+    },
+    {
+      "pattern": "logos",
+      "title": "Terima kasih,\nFounding Circle Partners",
+      "logos": [
+        "Fit4Go",
+        "PPYNI",
+        "Bisa Gerak",
+        "Lux Entertainment",
+        "Dreya Communications"
+      ],
+      "note": "Follow @shape.indonesia untuk sesi berikutnya.",
+      "notes": {
+        "visual": "Grid 5 kotak logo rapi (3 + 2) di tengah, ucapan terima kasih di atas, CTA follow di bawah",
+        "element": "Social proof partner terkonfirmasi (prinsip B2B). CTA follow = ajakan sesi berikutnya",
+        "motion": "Judul rise → logo pop berurutan 0.15 detik → CTA rise",
+        "asset": "5 file logo (PNG transparan): Fit4Go, PPYNI, Bisa Gerak, Lux Entertainment, Dreya Communications"
+      }
+    }
+  ]
+}
