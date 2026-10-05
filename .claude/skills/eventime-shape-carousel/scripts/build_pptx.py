@@ -7,11 +7,11 @@ Isi file:
 - Semua teks, kotak, kartu, dan ikon adalah objek native PowerPoint (bisa digeser, diganti, diwarnai).
 - Latar grid miring + logo Shape + 3 titik ada di Slide Master/Layout "Shape Carousel", jadi
   ganti sekali berlaku di semua slide.
-- Highlight kata ({{...}} biru, [[...]] merah) memakai highlight teks PowerPoint (Microsoft 365 / 2019+).
+- Highlight kata ({{...}} biru, [[...]] merah) = shape rounded di belakang teks, posisinya dihitung dari metrik Poppins.
 - Motion = animasi masuk bawaan PowerPoint (Float In, Zoom, Wipe, Fade), jalan otomatis saat slide tampil.
   Ekspor ke video: File > Export > Create a Video.
 - Catatan visual/elemen/motion/aset per slide ada di Speaker Notes.
-- Font: Poppins (instal dari assets/fonts-ttf/). Tanpa Poppins PowerPoint memakai font pengganti.
+- Font: Poppins (paket di carousel-output/_fonts-poppins/). Tanpa Poppins PowerPoint memakai font pengganti.
 """
 import argparse, copy, json, math, re, sys
 from pathlib import Path
@@ -243,6 +243,107 @@ def add_text(ctx, x, y, w, h, text, role, size, color="FFFFFF", align="l", lh=1.
     return tb
 
 
+def has_markup(t):
+    return bool(re.search(r"\{\{.+?\}\}|\[\[.+?\]\]", t, re.S))
+
+
+def _tokenize(para):
+    """-> [[teks, kind, sid, awal_segmen, akhir_segmen]]; ujung segmen diberi NBSP sebagai ruang napas kotak."""
+    toks, sid = [], 0
+    for seg, kind in segments(para):
+        words = seg.split()
+        if not words:
+            continue
+        if kind:
+            sid += 1
+        for i, w in enumerate(words):
+            t = w
+            if kind and i == 0:
+                t = NB + t
+            if kind and i == len(words) - 1:
+                t = t + NB
+            toks.append([t, kind, sid if kind else None, bool(kind) and i == 0, bool(kind) and i == len(words) - 1])
+    return toks
+
+
+def rich_layout(text, role, size, maxw):
+    """Pecah teks ber-highlight jadi baris pasti (bukan wrap otomatis) + posisi kotak highlight per baris."""
+    f = pil_font(role, size)
+    lines = []
+    for para in text.split("\n"):
+        cur = []
+        for t in _tokenize(para):
+            cand = cur + [t]
+            if cur and f.getlength(" ".join(x[0] for x in cand)) > maxw * 0.96:
+                lines.append(cur)
+                cur = [t]
+            else:
+                cur = cand
+        lines.append(cur)
+    out = []
+    for ln in lines:
+        s = " ".join(x[0] for x in ln)
+        pills, i = [], 0
+        while i < len(ln):
+            sid = ln[i][2]
+            if sid is None:
+                i += 1
+                continue
+            j = i
+            while j + 1 < len(ln) and ln[j + 1][2] == sid:
+                j += 1
+            x0 = f.getlength(" ".join(x[0] for x in ln[:i]) + " ") if i > 0 else 0.0
+            x1 = f.getlength(" ".join(x[0] for x in ln[:j + 1]))
+            pills.append((x0, x1, ln[i][1], ln[i][3], ln[j][4]))
+            i = j + 1
+        out.append((s, f.getlength(s), pills))
+    return out
+
+
+HL_H, HL_DY, HL_EDGE = 1.02, 0.03, 0.22   # tinggi kotak (x ukuran font), geser ke bawah, perpanjangan sisi sambungan
+
+
+def add_rich_text(ctx, x, y, w, text, role, size, color="FFFFFF", align="l", lh=1.2, hl=HLBLUE, alpha=None):
+    """Teks dengan {{highlight biru}} / [[merah]]: kotak rounded digambar presisi DI BELAKANG teks.
+    Baris dipecah eksplisit (line break) agar sama persis dengan hitungan; teks tetap bisa diedit."""
+    lay = rich_layout(text, role, size, w)
+    L = size * lh
+    shapes = []
+    for i, (line, lw, pills) in enumerate(lay):
+        off = 0 if align == "l" else ((w - lw) / 2 if align == "c" else w - lw)
+        for (x0, x1, kind, sp, ep) in pills:
+            el = 0 if sp else HL_EDGE * size
+            er = 0 if ep else HL_EDGE * size
+            h = HL_H * size
+            px = x + off + x0 - el
+            py = y + i * L + (L - h) / 2 + HL_DY * size
+            shapes.append(add_box(ctx, px, py, (x1 - x0) + el + er, h, fill=RED if kind == "red" else hl,
+                                  radius=min(h / 2, 0.2 * size), name="Highlight"))
+    tb = ctx.slide.shapes.add_textbox(E(x), E(y), E(w), E(len(lay) * L))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    tf.auto_size = MSO_AUTO_SIZE.NONE
+    tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
+    tf.vertical_anchor = MSO_ANCHOR.TOP
+    p = tf.paragraphs[0]
+    p.alignment = {"l": PP_ALIGN.LEFT, "c": PP_ALIGN.CENTER, "r": PP_ALIGN.RIGHT}[align]
+    p.line_spacing = Pt(L * 0.75)
+    fam, bold, italic, _ = FONTS[role]
+    for i, (line, _, _) in enumerate(lay):
+        if i:
+            p.add_line_break()
+        r = p.add_run()
+        r.text = line
+        r.font.name = fam; r.font.bold = bold; r.font.italic = italic
+        r.font.size = Pt(size * 0.75)
+        r.font.color.rgb = rgb(color)
+        if alpha is not None:
+            set_alpha(r._r.get_or_add_rPr().find(qn("a:solidFill")), alpha)
+    tb.name = "Teks"
+    shapes.append(tb)
+    return shapes
+
+
 def add_shape_text(shp, text, role, size, color, lh=1.1, hl=HLBLUE, align="c"):
     fill_text(shp.text_frame, text, role, size, color, align, lh, hl, anchor="m", wrap=False)
 
@@ -314,15 +415,22 @@ def place_x(x0, w, cw, align):
 
 
 def T(ctx, text, role, size, lh=1.2, color="FFFFFF", hl=HLBLUE, anim=None, delay=0, alpha=None, width=None, maxw=920, align=None, rot=0):
-    """Teks ber-wrap. Tinggi dihitung dari lebar (width bila tetap, selain itu maxw = lebar wadah)."""
-    n, _ = wrap_lines(text, role, size, (width or maxw) * 0.96)
+    """Teks. Tanpa markup: wrap otomatis PowerPoint. Dengan markup: baris pasti + kotak highlight di belakang."""
+    mw = width or maxw
+    rich = has_markup(text)
+    n = len(rich_layout(text, role, size, mw)) if rich else wrap_lines(text, role, size, mw * 0.96)[0]
     h = n * size * lh
 
     def fn(y, x0, w, al):
         ww = width or w
-        tb = add_text(ctx, place_x(x0, w, ww, al), y, ww, h, text, role, size, color, align or al, lh, hl, alpha, rot=rot)
-        ctx.anim(tb, anim, delay)
-        return tb
+        xx, a = place_x(x0, w, ww, al), align or al
+        if rich:
+            shapes = add_rich_text(ctx, xx, y, ww, text, role, size, color, a, lh, hl, alpha)
+        else:
+            shapes = [add_text(ctx, xx, y, ww, h, text, role, size, color, a, lh, hl, alpha, rot=rot)]
+        for sh in shapes:
+            ctx.anim(sh, anim, delay)
+        return shapes[-1]
     return Comp(h, fn)
 
 
