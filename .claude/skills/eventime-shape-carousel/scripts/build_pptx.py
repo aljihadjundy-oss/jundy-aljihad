@@ -249,9 +249,11 @@ def has_markup(t):
 
 def _tokenize(para):
     """-> [[teks, kind, sid, awal_segmen, akhir_segmen, glue]]. glue=True: tempel tanpa spasi (mis. koma setelah highlight)."""
-    toks, sid = [], 0
+    toks, sid, prev_ws = [], 0, True
     for seg, kind in segments(para):
-        lead_glue = bool(toks) and seg[:1] != "" and not seg[:1].isspace()
+        # menempel (tanpa spasi) hanya bila segmen sebelumnya tidak berakhir spasi DAN segmen ini tidak diawali spasi
+        lead_glue = bool(toks) and not prev_ws and seg[:1] != "" and not seg[:1].isspace()
+        prev_ws = seg[-1:].isspace() if seg else prev_ws
         words = seg.split()
         if not words:
             continue
@@ -662,7 +664,11 @@ def pat_cover(ctx, s):
         if sum(c.h for c in comps) + 36 * (len(comps) - 1) <= avail:
             break
     if s.get("ghost"):
-        g = add_text(ctx, 0, 440, W, 340, s["ghost"], "xb", 300, "FFFFFF", "c", 1.0, alpha=7, name="Kata ghost")
+        gs = 300
+        gw = text_width(s["ghost"], "xb", gs)
+        if gw > 1000:
+            gs = int(gs * 1000 / gw)
+        g = add_text(ctx, 0, 440 + (300 - gs) // 2, W, 340, s["ghost"], "xb", gs, "FFFFFF", "c", 1.0, alpha=7, name="Kata ghost")
         ctx.anim(g, "fade", 0.1)
     stack(comps, 36, TOP, BOT, align="c")
 
