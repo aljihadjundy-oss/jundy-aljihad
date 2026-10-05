@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "C15 · Des W3 · Regular B2C · Health — 3 Kebiasaan Akhir Tahun yang Bikin Ngedrop",
+    "style": "base",
+    "segment": "b2c",
+    "pillar": "health"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "icon": "pulse",
+      "ghost": "JANUARI",
+      "kicker": "Health",
+      "titleSize": 80,
+      "title": "3 Kebiasaan\nAkhir Tahun yang\nBikin {{Ngedrop}}\ndi [[Januari]]",
+      "sub": "Cek kebiasaanmu.",
+      "notes": {
+        "visual": "Cover tipografi besar, ikon denyut, ghost word JANUARI samar",
+        "element": "Highlight biru di 'Ngedrop', aksen merah (jatah 1x) di 'Januari'",
+        "motion": "Ikon pop → kicker rise → judul rise, highlight lalu 'Januari' stamp merah → sub rise",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "1",
+      "label": "Kebiasaan #1",
+      "title": "Begadang\nterus-terusan",
+      "body": "Tidur kepotong demi akhir tahun yang seru.",
+      "notes": {
+        "visual": "Numeral besar samar, label pill, judul 2 baris, body 1 kalimat",
+        "element": "Posisi angka dan label konsisten di tiga slide",
+        "motion": "Numeral fade → label pop → judul rise → body rise",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "2",
+      "label": "Kebiasaan #2",
+      "title": "Kurang gerak\nselama libur",
+      "body": "Libur panjang sering berarti rebahan panjang.",
+      "notes": {
+        "visual": "Sama seperti #1",
+        "element": "-",
+        "motion": "Sama dengan #1",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "3",
+      "label": "Kebiasaan #3",
+      "title": "Makan nggak\nteratur",
+      "body": "Jadwal makan berantakan karena acara dan kumpul-kumpul.",
+      "notes": {
+        "visual": "Sama seperti #1",
+        "element": "-",
+        "motion": "Sama dengan #1",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "heart",
+      "title": "Simpan & cek\nkebiasaanmu 📌",
+      "sub": "Kirim ke teman yang akhir tahunnya padat",
+      "handle": "Follow @shape.indonesia",
+      "notes": {
+        "visual": "Penutup tenang",
+        "element": "CTA simpan & share (B2C edukasi)",
+        "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+        "asset": "Tidak ada"
+      }
+    }
+  ]
+}

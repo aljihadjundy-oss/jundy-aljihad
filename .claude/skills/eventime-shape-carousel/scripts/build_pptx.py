@@ -810,14 +810,21 @@ def pat_session(ctx, s):
     if s.get("date"):
         def dt(y, x0, w, al):
             tw = text_width(s["date"], "bd", 64)
-            tot = 104 + 22 + tw
+            tot = 104 + 22 + tw + (44 if s.get("dateRed") else 0)
             xx = x0 + (w - tot) / 2
             c = add_box(ctx, xx, y, 104, 104, fill="FFFFFF", shape=MSO_SHAPE.OVAL, name="Bulatan kalender")
             ic = add_icon(ctx, "calendar", xx + 26, y + 26, 52, NAVY, 2.0)
-            t = add_text(ctx, xx + 126, y, tw + 20, 104, s["date"], "bd", 64, "FFFFFF", "l", 1.2, anchor="m")
-            for sh in (c, ic, t):
+            shapes = [c, ic]
+            if s.get("dateRed"):
+                rb = add_box(ctx, xx + 122, y + 2, tw + 44, 100, fill=RED, radius=26, rot=-3, name="Kotak tanggal (aksen merah)")
+                shapes.append(rb)
+            t = add_text(ctx, xx + 126 + (22 if s.get("dateRed") else 0), y, tw + 20, 104, s["date"], "bd", 64, "FFFFFF", "l", 1.2, anchor="m")
+            shapes.append(t)
+            for sh in shapes:
                 ctx.anim(sh, "rise", 1.0)
         comps.append(Comp(104, dt))
+    if s.get("asset") or s.get("img"):
+        comps.append(Asset(ctx, s.get("asset", ""), s.get("assetH", 220), delay=1.2))
     stack(comps, 36, TOP, BOT, align="c")
 
 

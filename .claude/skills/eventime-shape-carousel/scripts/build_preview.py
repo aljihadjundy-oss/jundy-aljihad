@@ -42,6 +42,8 @@ def check(deck):
         red += len(re.findall(r"\[\[.+?\]\]", blob))
         if p == "speaker" and s.get("date"):
             red += 1  # sticker tanggal = aksen merah
+        if p == "session" and s.get("dateRed"):
+            red += 1  # kotak tanggal merah
         if p == "speaker" and meta.get("style") != "playful":
             errs.append(f"Slide {i}: pattern speaker hanya untuk gaya playful")
         if p == "speaker" and s.get("pillar") not in PILLARS:

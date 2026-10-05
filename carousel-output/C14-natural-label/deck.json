@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "C14 · Des W2 · Regular B2C · Nutrition — Label 'Natural' di Kemasan",
+    "style": "base",
+    "segment": "b2c",
+    "pillar": "nutrition"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "icon": "bowl",
+      "kicker": "Nutrition",
+      "titleSize": 80,
+      "title": "Label {{Natural}}\ndi Kemasan,\nbeneran lebih sehat?",
+      "sub": "Atau cuma strategi marketing?",
+      "notes": {
+        "visual": "Cover tipografi besar, ikon mangkuk di bulatan putih",
+        "element": "Highlight biru di 'Natural'. Pertanyaan = hook",
+        "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → sub rise; panah next fade",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "search",
+      "query": "Natural = lebih sehat?",
+      "body": "Belum tentu. Kata 'natural' di depan kemasan tidak otomatis berarti lebih sehat. Cek [[komposisi]]-nya.",
+      "notes": {
+        "visual": "Search bar mockup berisi pertanyaan, jawaban reflektif singkat di kotak biru di bawahnya",
+        "element": "Search-bar mockup sesuai plan ('Natural = lebih sehat?'). Aksen merah (jatah 1x) di 'komposisi'",
+        "motion": "Search bar rise → kotak jawaban rise, 'komposisi' stamp merah terakhir",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "list",
+      "title": "Yang dicek di belakang kemasan",
+      "items": [
+        "Daftar komposisi",
+        "Kandungan gula",
+        "Takaran saji",
+        "Urutan bahan (terbanyak di awal)"
+      ],
+      "notes": {
+        "visual": "Empat glass card berisi hal praktis yang bisa dicek di label belakang",
+        "element": "Checklist yang muncul satu per satu: pembaca langsung punya cara mengecek",
+        "motion": "Judul rise → tiap baris slide-in dari kiri berurutan",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "bowl",
+      "title": "Simpan biar gak\nketipu label 📌",
+      "sub": "Kirim ke teman yang suka belanja sehat",
+      "handle": "Follow @shape.indonesia",
+      "notes": {
+        "visual": "Penutup tenang: kotak biru + pill handle",
+        "element": "CTA simpan & share (B2C edukasi)",
+        "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+        "asset": "Tidak ada"
+      }
+    }
+  ]
+}
