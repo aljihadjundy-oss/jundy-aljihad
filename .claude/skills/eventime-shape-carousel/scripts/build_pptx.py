@@ -248,9 +248,10 @@ def has_markup(t):
 
 
 def _tokenize(para):
-    """-> [[teks, kind, sid, awal_segmen, akhir_segmen]]; ujung segmen diberi NBSP sebagai ruang napas kotak."""
+    """-> [[teks, kind, sid, awal_segmen, akhir_segmen, glue]]. glue=True: tempel tanpa spasi (mis. koma setelah highlight)."""
     toks, sid = [], 0
     for seg, kind in segments(para):
+        lead_glue = bool(toks) and seg[:1] != "" and not seg[:1].isspace()
         words = seg.split()
         if not words:
             continue
@@ -258,12 +259,24 @@ def _tokenize(para):
             sid += 1
         for i, w in enumerate(words):
             t = w
+            glue = lead_glue and i == 0
             if kind and i == 0:
                 t = NB + t
             if kind and i == len(words) - 1:
                 t = t + NB
-            toks.append([t, kind, sid if kind else None, bool(kind) and i == 0, bool(kind) and i == len(words) - 1])
+            toks.append([t, kind, sid if kind else None, bool(kind) and i == 0, bool(kind) and i == len(words) - 1, glue])
+    # highlight yang diikuti tanda baca: jangan beri ruang napas di ujung kanan
+    for k in range(len(toks) - 1):
+        if toks[k + 1][5] and toks[k][4]:
+            toks[k][0] = toks[k][0].rstrip(NB)
     return toks
+
+
+def _join(tokens):
+    out = ""
+    for i, t in enumerate(tokens):
+        out += ("" if (i == 0 or t[5]) else " ") + t[0]
+    return out
 
 
 def rich_layout(text, role, size, maxw):
@@ -274,15 +287,15 @@ def rich_layout(text, role, size, maxw):
         cur = []
         for t in _tokenize(para):
             cand = cur + [t]
-            if cur and f.getlength(" ".join(x[0] for x in cand)) > maxw * 0.96:
+            if cur and not t[5] and f.getlength(_join(cand)) > maxw * 0.96:
                 lines.append(cur)
-                cur = [t]
+                cur = [t[:5] + [False]]
             else:
                 cur = cand
         lines.append(cur)
     out = []
     for ln in lines:
-        s = " ".join(x[0] for x in ln)
+        s = _join(ln)
         pills, i = [], 0
         while i < len(ln):
             sid = ln[i][2]
@@ -292,8 +305,8 @@ def rich_layout(text, role, size, maxw):
             j = i
             while j + 1 < len(ln) and ln[j + 1][2] == sid:
                 j += 1
-            x0 = f.getlength(" ".join(x[0] for x in ln[:i]) + " ") if i > 0 else 0.0
-            x1 = f.getlength(" ".join(x[0] for x in ln[:j + 1]))
+            x0 = f.getlength(_join(ln[:i]) + (" " if not ln[i][5] else "")) if i > 0 else 0.0
+            x1 = f.getlength(_join(ln[:j + 1]))
             pills.append((x0, x1, ln[i][1], ln[i][3], ln[j][4]))
             i = j + 1
         out.append((s, f.getlength(s), pills))
@@ -632,7 +645,10 @@ def next_arrow(ctx, delay=1.6):
 
 def pat_cover(ctx, s):
     avail = BOT - TOP
-    for tsize in (104, 96, 88, 80, 72):
+    sizes = (104, 96, 88, 80, 72)
+    if s.get("titleSize"):
+        sizes = tuple(z for z in sizes if z <= s["titleSize"]) or (72,)
+    for tsize in sizes:
         comps = []
         if s.get("icon"):
             comps.append(IconC(ctx, s["icon"], delay=0.1))
@@ -676,8 +692,8 @@ def pat_numbered(ctx, s):
 
 def pat_list(ctx, s):
     items = s["items"]
-    title = T(ctx, s["title"], "xb", 76, 1.18, anim="rise", delay=0.1)
-    row_h = 120
+    title = T(ctx, s["title"], "xb", 68, 1.18, anim="rise", delay=0.1)
+    row_h = 112
     rows = []
     for i, t in enumerate(items):
         def mk(t=t, i=i):
