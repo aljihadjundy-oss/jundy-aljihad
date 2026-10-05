@@ -11,7 +11,7 @@ HERE = Path(__file__).resolve().parent
 TEMPLATE = HERE.parent / "assets" / "preview-template.html"
 LOGO = HERE.parent / "assets" / "logo-shape.png"
 PATTERNS = {"cover","claim","numbered","compare","bars","stat","list","search",
-            "session","quote","logos","timeline","speaker","cta"}
+            "session","quote","logos","timeline","speaker","cta","partner"}
 PILLARS = {"mind","fitness","nutrition","health","longevity","aesthetics"}
 
 def texts(node):

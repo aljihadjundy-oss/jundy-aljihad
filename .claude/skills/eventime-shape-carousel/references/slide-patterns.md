@@ -17,6 +17,7 @@ Setiap slide di `deck.json` memilih satu `pattern`. Pola menentukan layout dan m
 | Pengumuman sesi webinar | `session` | Slide paling penting B2B. Opsi `bigLogo` |
 | Kutipan | `quote` | Recap: kutipan singkat non-data dari pembicara |
 | Logo partner | `logos` | Founding Circle spotlight/recap. Kotak logo placeholder sampai file logo ada |
+| Spotlight satu partner | `partner` | Logo besar di tengah + nama + 1 kalimat bidang (hanya PPTX; belum ada di preview HTML) |
 | Rangkaian waktu | `timeline` | Closing: mini timeline sesi 1-7 |
 | Pembicara | `speaker` | **Hanya gaya playful.** Foto cutout + tag kategori + nama + jabatan + quote + sticker tanggal |
 | Penutup + CTA | `cta` | Slide terakhir. Tidak ada panah next di slide ini |
@@ -40,6 +41,7 @@ Semua pola menerima `notes: {visual, element, motion, asset}` yang tampil di pan
 | `quote` | `quote`, `who`, `role` |
 | `logos` | `title`, `logos[]` (nama), `note` |
 | `timeline` | `title`, `steps[{when,what}]` |
+| `partner` | `kicker`, `name`, `logoName`, `desc`, `asset` |
 | `speaker` | `pillar`, `icon`, `cat`, `name`, `role`, `quote`, `date`, `align` (`right`/`left` = sisi teks), `photo` (path PNG cutout) |
 | `cta` | `icon`, `title`, `sub`, `handle`, `asset` |
 

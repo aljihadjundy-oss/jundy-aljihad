@@ -941,6 +941,24 @@ def pat_speaker(ctx, s):
     ctx.anim(cta, "fade", 1.6)
 
 
+def pat_partner(ctx, s):
+    """Spotlight partner: logo besar di tengah, nama, satu kalimat bidang, foto/produk opsional."""
+    lw, lh_ = 640, 300
+    kicker = Pill(ctx, s.get("kicker", "Founding Circle Partner"), "md", 34, fill=None, color="FFFFFF", line="FFFFFF", line_w=3, anim="fade", delay=0.1)
+
+    def logo(y, x0, w, al):
+        xx = x0 + (w - lw) / 2
+        b = add_box(ctx, xx, y, lw, lh_, fill="FFFFFF", line="9BB5C4", line_w=3, dash="dash", radius=48, name="Placeholder logo partner")
+        fill_text(b.text_frame, "LOGO\n" + s.get("logoName", s["name"]), "bd", 34, NAVY, "c", 1.4, HLBLUE, anchor="m")
+        ctx.anim(b, "pop", 0.3)
+    comps = [kicker, Comp(lh_, logo), T(ctx, s["name"], "xb", 72, 1.18, anim="rise", delay=0.7, align="c")]
+    if s.get("desc"):
+        comps.append(T(ctx, s["desc"], "md", 44, 1.4, width=860, anim="rise", delay=1.0, align="c"))
+    if s.get("asset") or s.get("img"):
+        comps.append(Asset(ctx, s.get("asset", ""), s.get("assetH", 200), delay=1.2))
+    stack(comps, 34, TOP, BOT, align="c")
+
+
 def pat_cta(ctx, s):
     comps = []
     if s.get("icon"):
@@ -957,7 +975,7 @@ def pat_cta(ctx, s):
 
 PATTERNS = {"cover": pat_cover, "claim": pat_claim, "numbered": pat_numbered, "list": pat_list, "compare": pat_compare,
             "bars": pat_bars, "stat": pat_stat, "search": pat_search, "session": pat_session, "quote": pat_quote,
-            "logos": pat_logos, "timeline": pat_timeline, "speaker": pat_speaker, "cta": pat_cta}
+            "logos": pat_logos, "partner": pat_partner, "timeline": pat_timeline, "speaker": pat_speaker, "cta": pat_cta}
 
 
 def build(deck, out, anim_on=True):
