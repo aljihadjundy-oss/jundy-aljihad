@@ -66,6 +66,9 @@ Then:
    screenshot, photo, document or before/after would beat a generic graphic, with a filename, what it must show, how it
    will be used, and whether it is *wajib* or *opsional*. Plan each of those parts with a fallback graphic, and render
    only after the assets arrive or the user says to go with the fallback.
+   If the plan uses `behind: true` (text or a scene behind the speaker), run `python3 $S/matte.py proj --range a,b` for those seconds before
+   previewing (needs `pip install mediapipe opencv-python-headless`; Linux also `apt-get install -y libegl1 libgles2`). Prefer `split` or
+   `behind` over a full-screen `iso`, so the speaker's face is never hidden.
 3. **Write the beats** into `proj/project.json` (schema and every type: `references/beats.md`).
 4. **Preview**: `node $S/render.mjs proj --stills 3,9.5,17,...` (one or two stills per beat, mid-beat), then
    `python3 $S/contact.py proj/out/stills 6` and look at the sheet. Check that nothing covers the face, nothing collides with

@@ -225,3 +225,25 @@ export const tag = {
     };
   },
 };
+
+// letterbox — black bars slide in at the top and bottom of the frame, with a small line of text in the bar (ref d: "32bit float /
+// internal recording"). Check that the bars do not cover the face: keep `bar` small on close-ups (default 0.11 of the height).
+//   { "type": "letterbox", "t": 52, "dur": 6, "bar": 0.11, "text": "32bit float\ninternal recording", "textBottom": "" }
+export const letterbox = {
+  defaults: { mode: 'overlay', free: true },
+  build(root, b, ctx) {
+    const { W, H, S } = ctx;
+    const bh = (b.bar ?? 0.11) * H;
+    const mk = top => { const el = h('div', 'abs', root); Object.assign(el.style, { left: '0', width: `${W}px`, height: `${bh}px`, background: b.color ?? '#000', [top ? 'top' : 'bottom']: '0' }); return el; };
+    const tb = mk(true), bb = mk(false);
+    const label = (txt, top) => { if (!txt) return null; const el = h('div', 'abs mono', top ? tb : bb, String(txt).replace(/\n/g, '<br>')); Object.assign(el.style, { left: `${ctx.m}px`, top: '50%', transform: 'translateY(-50%)', color: b.textColor ?? '#fff', fontSize: `${(b.size ?? 30) * S}px`, lineHeight: 1.2, letterSpacing: '.02em' }); return el; };
+    const t1 = label(b.text, true), t2 = label(b.textBottom, false);
+    ctx.cue(0, 'whoosh', { gain: 0.35 });
+    return lt => {
+      const k = E.outCubic(prog(lt, 0, 0.4)) * (1 - E.inCubic(prog(lt, ctx.dur - 0.4, 0.35)));
+      tb.style.transform = `translateY(${(-(1 - k) * bh).toFixed(1)}px)`;
+      bb.style.transform = `translateY(${((1 - k) * bh).toFixed(1)}px)`;
+      [t1, t2].forEach(t => { if (t) t.style.opacity = E.outCubic(prog(lt, 0.35, 0.3)).toFixed(3); });
+    };
+  },
+};

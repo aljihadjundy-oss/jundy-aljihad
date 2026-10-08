@@ -1,6 +1,6 @@
 import { h, E, prog, pose, place } from './engine.js';
 import { buildBackground, buildChrome } from './layers.js';
-import { buildFootage } from './footage.js';
+import { buildFootage, buildPerson } from './footage.js';
 import { buildCaptions } from './captions.js';
 import { headline } from './components.js';
 import { BEATS } from './beats/index.js';
@@ -98,6 +98,11 @@ async function init() {
     return { el, a: b.t, b: b.t + b.dur };
   });
   const footage = footageMeta ? buildFootage(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, pip, split) : null;
+  // behind: true on a beat puts it BETWEEN the background footage and the speaker (needs scripts/matte.py masks), so the speaker
+  // stays in front of the scene or text. The base footage fades out like a full-screen part; the matted speaker stays.
+  const hasBehind = footage && (proj.beats || []).some(b => b.behind);
+  const behindLayer = h('div', 'layer', stage);
+  const person = hasBehind ? buildPerson(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, i => `${PROJ}footage/matte/${String(i).padStart(6, '0')}.jpg`) : null;
   const beatsLayer = h('div', 'layer', stage);
   const fxLayer = h('div', 'layer', stage); // transitions: above captions and chrome (moved to the end below)
   const cues = [];
@@ -106,6 +111,8 @@ async function init() {
     const def = BEATS[b0.type];
     if (!def) throw new Error(`unknown beat type "${b0.type}" (beat ${i})`);
     const b = { ...def.defaults, ...b0 };
+    if (!footage) b.behind = false;
+    if (b.behind) b.mode = 'full';
     if (!footage && b.mode !== 'overlay') b.mode = 'full';
     if (!footage && b.mode === 'overlay' && !def.defaults.free) b.mode = 'full';
     // a beat that reaches the end of the video holds to the last frame: no exit fade, no PiP springing back mid-frame
@@ -115,13 +122,13 @@ async function init() {
 
   for (const it of beats) {
     const { b, def } = it;
-    const layer = h('div', 'layer', def.defaults.onTop ? fxLayer : beatsLayer);
+    const layer = h('div', 'layer', b.behind ? behindLayer : def.defaults.onTop ? fxLayer : beatsLayer);
     if (b.palette && PALETTES[b.palette]) applyPalette(layer.style, PALETTES[b.palette]); // per-part palette for variety
     const t0 = b.mode === 'overlay' ? 0.2 : 0.55;
     const OUT = b.dur - 0.45;
     const ctx = {
       W, H, S, m, mode: b.mode, t0, OUT, dur: b.dur, captionsY, locale: proj.locale || 'id-ID', brand,
-      asset, aspect: src => aspects[src] ?? 1, root: layer, panel: { x: 0, y: 0, w: W, h: split.seam }, seam: split.seam,
+      asset, aspect: src => aspects[src] ?? 1, pip, root: layer, panel: { x: 0, y: 0, w: W, h: split.seam }, seam: split.seam,
       words: allWords, beatT: b.t, hasFootage: !!footage,
       cue: (lt, type, opt = {}) => cues.push({ t: +(b.t + lt).toFixed(3), type, ...opt }),
     };
@@ -202,13 +209,13 @@ async function init() {
   }
 
   // footage state windows (adjacent insert/full beats merge so the PiP does not bounce)
-  const windows = mode => {
-    const iv = beats.filter(x => x.b.mode === mode).map(x => [x.b.t, x.b.t + x.b.dur]).sort((a, b) => a[0] - b[0]);
+  const windows = (mode, behindOnly = false) => {
+    const iv = beats.filter(x => (behindOnly ? x.b.behind : x.b.mode === mode)).map(x => [x.b.t, x.b.t + x.b.dur]).sort((a, b) => a[0] - b[0]);
     const out = [];
     for (const v of iv) { const l = out[out.length - 1]; if (l && v[0] - l[1] < 1.0) l[1] = Math.max(l[1], v[1]); else out.push([...v]); }
     return out;
   };
-  const insertW = footage ? windows('insert') : [], fullW = footage ? windows('full') : [], splitW = footage ? windows('split') : [];
+  const insertW = footage ? windows('insert') : [], fullW = footage ? windows('full') : [], splitW = footage ? windows('split') : [], behindW = footage ? windows(null, true) : [];
   // the chrome (progress bar, badge) steps aside over a screen in split mode and over kinetic typography scenes
   const kinW = beats.filter(x => x.b.type === 'kinetic' && x.b.chrome !== true).map(x => [x.b.t, x.b.t + x.b.dur]);
   const chromeHideSplit = proj.chrome?.hideInSplit !== false;
@@ -260,6 +267,7 @@ async function init() {
     }
     const splitK = kOf(T, splitW);
     if (footage) await footage.update(T, kOf(T, insertW), kOf(T, fullW), splitK, zoomAt(T));
+    if (person) await person.update(T, kOf(T, behindW), zoomAt(T));
     // kinetic scenes already show the spoken words, so captions step aside (kinetic `captions: true` keeps them)
     if (captions) captions.update(T, Math.max(kOf(T, kinCapW), pip.bottom ? kOf(T, insertW) : 0), splitK);
     if (chrome) {

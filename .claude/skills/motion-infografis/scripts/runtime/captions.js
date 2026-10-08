@@ -2,7 +2,7 @@ import { E, prog, h } from './engine.js';
 
 // Word-timed captions. words: [{w, s, e}] in seconds.
 // style: "karaoke" (spoken word highlighted, default) · "plain" (white bold with shadow) · "box" (white on a black box)
-//        · "word" (one word at a time in a grey chip).
+//        · "word" (one word at a time in a grey chip). enter: "smear" = words blur in from the left and out to the right.
 // when: "always" (default) · "split" (only while the footage is in split mode, e.g. when burned-in subtitles get cropped).
 // In split mode the caption line moves to the seam and uses splitStyle (default "box"), left-aligned by default.
 export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
@@ -67,9 +67,18 @@ export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
       const visible = when !== 'split' || inSplit;
       if (idx < 0 || !visible) { el.style.opacity = '0'; return; }
       const p = phrases[idx];
-      const k = E.outBack(prog(T, p.start, 0.22));
-      el.style.opacity = ((1 - hideK) * Math.min(1, k * 1.5)).toFixed(3);
-      el.style.transform = `scale(${(0.9 + 0.1 * k).toFixed(4)})`;
+      if (cfg.enter === 'smear') {
+        // words smear in from the left and out to the right (ref d): a horizontal blur that decays, deterministic in T
+        const a = E.outCubic(prog(T, p.start, 0.28)), x = E.inCubic(prog(T, p.end - 0.22, 0.22));
+        el.style.opacity = ((1 - hideK) * a * (1 - x)).toFixed(3);
+        el.style.filter = `blur(${((1 - a) * 18 + x * 18).toFixed(1)}px)`;
+        el.style.transform = `translateX(${(-(1 - a) * 80 + x * 80).toFixed(1)}px)`;
+      } else {
+        const k = E.outBack(prog(T, p.start, 0.22));
+        el.style.filter = '';
+        el.style.opacity = ((1 - hideK) * Math.min(1, k * 1.5)).toFixed(3);
+        el.style.transform = `scale(${(0.9 + 0.1 * k).toFixed(4)})`;
+      }
       el.style.transformOrigin = el.style.textAlign === 'left' ? '0 50%' : '50% 50%';
       if (mode === 'word' || mode === 'split-word') {
         let a = 0;

@@ -35,7 +35,7 @@
 - `chrome`: `false` hides it. `progressY` (fraction of height, default ≈ 0.11) moves the progress bar, e.g. `0.028` to sit at the very top above a title band. Omit `name` and `logo` for a bare progress bar. `logo` sits on a white rounded badge.
 - `captions`: needs `transcript/words.json`. `y` is the fraction of height where the caption line starts.
   `style`: `karaoke` (spoken word highlighted, default), `plain` (white bold with a shadow), `box` (white on a black box).
-  `style: "word"` shows one spoken word at a time in a grey chip (ref e). `when`: `always` or `split` (only during split beats, e.g. to replace burned-in subtitles that the split crops away).
+  `style: "word"` shows one spoken word at a time in a grey chip (ref e). `enter: "smear"` makes each line blur in from the left and out to the right (ref d). `when`: `always` or `split` (only during split beats, e.g. to replace burned-in subtitles that the split crops away).
   In split mode captions sit on the seam as `splitStyle` (default `box`), `splitAlign` (default `left`), `splitSize` px.
 - `layout.overlayBottom`: optional fraction of height that overlay cards must stay above, for footage that already has
   burned-in subtitles or on-screen text (e.g. `0.75` when the subtitles start at y ≈ 1460 of 1920). With `pos: "bottom"`
@@ -47,6 +47,11 @@
   landscape cut-out of the speaker at the bottom of the frame (`fy` = where the face sits in the source, as a fraction of
   its height) and gives every `insert` beat the whole area above it. Captions step aside during insert beats then.
   The default is the small portrait window at the top right.
+- **`behind: true` on any beat** (kinetic words, `iso`, a `title`, an `image`…) puts it BETWEEN the background footage and the speaker, so the speaker stays in
+  front of the text or scene and the face is never covered (type behind the head, a scene behind the body). It needs a person matte: run
+  `python3 $S/matte.py proj --range a,b` (only the seconds you need; about 18 frames per second of work) once before rendering. The beat is
+  treated as a full-screen part for the background (the footage fades out), while the matted speaker stays on top. Without the masks it falls back to
+  a full-screen part, so always run `matte.py` first.
 - `layout.seam` / `splitFocus` / `splitZoom`: split mode geometry. `seam` is where the top panel ends (fraction of height,
   default 0.5). `splitFocus` is the vertical centre of the face in the footage (fraction of height, default 0.33); the
   bottom panel shows the window around it. `splitZoom` > 1 punches in on that window.
@@ -224,13 +229,26 @@ or `at` per child to land on the spoken word). `size` (px), `gap` optional. Use 
 A free-placed overlay (like `callout`). The text types in, then the arrow draws toward `to`. `curve` (-1..1) bends it, `align`
 `left`/`right`, `color`, `size`, `speed` (characters per second), `at` (start inside the beat).
 
-### iso: isometric build
-`{ "type": "iso", "t": 0, "dur": 12, "palette": "frost", "backdrop": "plain", "grid": 8, "blocks": [ { "id": "base", "kind": "slab", "x": 0, "y": 0, "w": 6, "d": 6, "h": 0.3, "at": 0.5 }, { "id": "core", "kind": "box", "x": 2, "y": 2, "w": 2, "d": 2, "h": 1.8, "z0": 0.3, "at": 2.8, "color": "accent", "label": { "text": "01 · CORE", "sub": "the first piece", "dx": 170, "dy": -130 } }, { "kind": "globe", "x": 3, "y": 3, "z0": 2.1, "r": 0.85, "at": 5.4 } ], "links": [ { "from": "core", "to": "orb", "at": 6.6 } ], "hud": { "tl": "LABS — PROJECT", "tr": "SCENE 01 / 03", "progress": "BUILD PROGRESS" }, "caption": [ { "text": "Everything starts from an |idea|.", "at": 0.8, "until": 4.5 } ] }`
-A full-screen part (the footage steps behind it). Grid units: x runs right-down, y left-down, z up. Kinds: `slab`/`box` (x, y, w, d, h,
-z0), `cyl` (x, y, w, h, z0), `globe` (x, y, z0, r). `color`: `soft` (default), `ink`, `accent`, `accent2`, `glass`. Blocks draw back to front
-(lower `z0` first), rise with a small overshoot at `at`, and labels pin to their top with a leader line. `links` draw a
-dashed arc with a travelling dot between two block ids. `hud: false` hides the corners and counter. `drift` (default 1.07) is the
-slow push-in. Use palette `frost` (light) or `blueprint` (dark).
+### iso: a small 3D scene that builds itself
+`{ "type": "iso", "t": 0, "dur": 12, "palette": "frost", "grid": 8, "orbit": 4, "blocks": [ { "id": "base", "kind": "box", "x": 0, "y": 0, "w": 6, "d": 6, "h": 0.3, "at": 0.5 }, { "id": "core", "kind": "box", "x": 2, "y": 2, "w": 2, "d": 2, "h": 1.8, "z0": 0.3, "at": 2.8, "color": "accent", "label": { "text": "01 · CORE", "sub": "the first piece", "dx": 170, "dy": -130 } }, { "id": "orb", "kind": "globe", "x": 3, "y": 3, "z0": 2.1, "r": 0.85, "at": 5.4 } ], "links": [ { "from": "core", "to": "orb", "at": 6.6 } ], "camera": [ { "t": 0, "yaw": 30, "pitch": 38, "zoom": 1 }, { "t": 11, "yaw": 75, "pitch": 30, "zoom": 1.12 } ], "hud": { "tl": "LABS — PROJECT", "tr": "SCENE 01 / 03", "progress": "BUILD PROGRESS" }, "caption": [ { "text": "Everything starts from an |idea|.", "at": 0.8, "until": 4.5 } ] }`
+A tiny real 3D renderer: an orbiting camera, flat-shaded faces lit from one side, back faces culled, solids sorted far to near.
+- **Where it is drawn (it never has to hide you).** By mode: `"mode": "split"` (the default with footage) fills the top half while the
+  speaker stays full size below; `"behind": true` fills the frame *behind* the speaker (needs `matte.py`, see below); `"mode": "insert"`
+  with `layout.pip` at the bottom fills the area above the speaker's window; `"mode": "full"` takes the whole frame (hides the speaker, keep it short).
+- **Grid units.** x and y on the ground, z up. `kind`: `box` (alias `slab`: x, y, w, d, h, z0), `prism` (x, y = centre, r, h, z0, `sides`: 20 round,
+  6 hex), `pyramid` (x, y = centre, r, h, z0, `sides` 4), `poly` (`points`: [[x, y], …] any footprint, extruded by h: L-shapes, stairs, a plan view),
+  `globe` (x, y = centre, z0, r; rotating wireframe), `cyl` (the old cylinder: x, y = corner, w = diameter). `color`: `soft` (default), `ink`,
+  `accent`, `accent2`, `glass` (outline only), or any css colour.
+- **Camera.** `camera`: keys `{ t, yaw, pitch, zoom, target: [x, y, z] }` with eased moves between them (default: true isometric, yaw 45°, pitch 35°);
+  `orbit` adds a constant spin in degrees per second. `scale` enlarges the scene (default 1, 1.55 when `behind`), `cx` / `cy` move its centre (fractions of the region).
+- **Parts.** Solids rise with a small overshoot at `at`, back to front (lower `z0` first). `label` pins a text box to the top with a leader line (`dx`, `dy` in px).
+  `links` draw a dashed arc with a travelling dot between two ids. `hud` (corner marks, tiny text, counter; `false` hides it), `caption` lines with `|serif|` words.
+  Use palette `frost` (light) or `blueprint` (dark).
+
+### letterbox: black bars with a line of text
+`{ "type": "letterbox", "t": 52, "dur": 6, "bar": 0.11, "text": "32bit float\ninternal recording" }`
+Bars slide in at the top and bottom (ref d). `bar` = height of each bar as a fraction of the frame (check the face on close-ups, keep it small),
+`textBottom`, `size`, `color`, `textColor` optional.
 
 ### kinetic: word-by-word typography scene
 ```json

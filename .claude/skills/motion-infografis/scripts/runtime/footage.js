@@ -55,3 +55,47 @@ export function buildFootage(stage, W, H, meta, frameUrl, pip, split = { seam: H
     },
   };
 }
+
+// The speaker alone (frame × person matte) as its own layer, so a scene or text can sit BEHIND the speaker.
+// Masks come from scripts/matte.py (footage/matte/NNNNNN.jpg, white = person). Visible only while a `behind` beat is on.
+// Composited on a canvas (frame + mask → RGBA) after both images are decoded, so every frame is complete when it is captured.
+export function buildPerson(stage, W, H, meta, frameUrl, maskUrl) {
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  cv.className = 'abs';
+  Object.assign(cv.style, { left: '0', top: '0', width: `${W}px`, height: `${H}px`, opacity: '0', visibility: 'hidden' });
+  stage.appendChild(cv);
+  const g = cv.getContext('2d', { willReadFrequently: true });
+  const tmp = document.createElement('canvas');
+  tmp.width = W; tmp.height = H;
+  const tg = tmp.getContext('2d', { willReadFrequently: true });
+  const load = src => new Promise(res => { const im = new Image(); im.onload = () => im.decode().then(() => res(im), () => res(im)); im.onerror = () => res(null); im.src = src; });
+  let cur = -1;
+  return {
+    async update(T, k, zoom = null) {
+      cv.style.opacity = k.toFixed(3);
+      cv.style.visibility = k > 0.001 ? 'visible' : 'hidden';
+      if (k <= 0.001) return;
+      const idx = clamp(Math.floor(T * meta.fps + 1e-6) + 1, 1, meta.count);
+      if (idx !== cur) {
+        const [im, mk] = await Promise.all([load(frameUrl(idx)), load(maskUrl(idx))]);
+        if (im && mk) {
+          // cover-fit like the footage layer (frames are already canvas-sized, so this is a straight draw)
+          g.clearRect(0, 0, W, H);
+          g.drawImage(im, 0, 0, W, H);
+          const px = g.getImageData(0, 0, W, H);
+          tg.drawImage(mk, 0, 0, W, H);
+          const md = tg.getImageData(0, 0, W, H).data, d = px.data;
+          for (let i = 0; i < d.length; i += 4) d[i + 3] = md[i];
+          g.putImageData(px, 0, 0);
+          cur = idx;
+        }
+      }
+      const z = zoom ? zoom.z : 1;
+      if (Math.abs(z - 1) > 1e-4) {
+        cv.style.transformOrigin = `${((zoom?.fx ?? 0.5) * W).toFixed(1)}px ${((zoom?.fy ?? 0.4) * H).toFixed(1)}px`;
+        cv.style.transform = `scale(${z.toFixed(4)})`;
+      } else cv.style.transform = '';
+    },
+  };
+}

@@ -179,8 +179,11 @@ Measured on two 25–29 s motion pieces without a speaker (a light one and a dar
   "hud": {...}, "caption": [{ "text": "Everything starts from an |idea|.", "at": 0.8, "until": 4.5 }] }`. Use it as a
   full-screen part (8–14 s) when the speaker explains how something is built or how pieces fit together, or as the
   opening of a no-footage explainer. Keep the sentence at the bottom in step with what the voice says.
-- **Do not** use it as decoration over a talking head: it is a `full` part and hides the speaker, so it counts toward the
-  full-screen interlude budget in the rubric (≤ 15 % of the runtime in total, so keep it short or use it in explainers).
+- **Never hide the speaker with it.** The default mode is `split` (the scene fills the top half, you stay full size below); `behind: true` puts
+  the scene behind the matted speaker; only `mode: "full"` hides the speaker, and then it counts toward the full-screen interlude budget
+  in the rubric (≤ 15 % of the runtime in total).
+- **It is a small real 3D renderer** now: an orbiting camera (`camera` keys, `orbit`), flat shading, `box`, `prism`, `pyramid`, `poly` (any
+  extruded footprint) and a rotating wireframe `globe`. Still not a modelling tool: no textures, no free-form meshes.
 
 ## 3.2 S5 Whiteboard on graph paper (ref e)
 Measured on an 83 s marketing explainer (portrait, a speaker in a dark room):
@@ -201,16 +204,20 @@ Measured on a 101 s product review (portrait, warm low-key light): short monospa
 "plug & play") with a thin hand-drawn curved arrow that points at the part of the product being named, typed in over
 0.3–0.6 s; a spec title card top left ("Sennheiser / Profile Wireless 2-Channel"); words sliding in with a horizontal
 smear at the bottom; black letterbox bars with a line of small text in the top bar. The grade is warm and dark.
+- **Built.** The smear is `captions.enter: "smear"` (each line blurs in from the left and out to the right); the bars are the `letterbox` beat.
 - **Recipe.** `{ "type": "tag", "x": 0.56, "y": 0.36, "text": "Modular", "sub": "handheld", "big": "15hr", "to": [0.68, 0.5] }`
   over footage, 2–3 s each, placed beside the detail (never on the face). Use for gadget reviews, UI walk-throughs and any
-  "this part does that" moment. The smear and the letterbox bars are not built in.
+  "this part does that" moment. Add `letterbox` for the black bars with a spec line, and `captions.enter: "smear"` for the sliding words.
 
 ## 3.4 Ring text (ref c, an extension of S2)
 Ref c is a 20 s kinetic collage (red, white, blue and black blocks, huge type, face cut-outs inside letters, type
 that wraps around a circle). The existing S2 `kinetic` covers the word-by-word part. Added: `rings` on a kinetic beat
 puts a keyword around a circle that spins, with the shot (or a sticker) in the middle: `"rings": [{ "text": "PACING",
 "x": 0.5, "y": 0.52, "r": 0.34, "size": 96, "spin": 16 }]`. Not built: type that sits *behind* the speaker (it needs a
-cut-out of the person, which a deterministic renderer cannot get on its own; supply a transparent PNG as a sticker instead).
+cut-out of the person). Now built: `behind: true` on a beat puts it between the background footage and the matted speaker (see `beats.md`).
+The matte is computed once by `matte.py` (a segmentation model, run offline, then plain files), so the render stays deterministic.
+Recipe for ref c's look: `{ "type": "kinetic", "behind": true, "palette": "maroon", "words": [{ "w": "NOBODY", "size": 330, "color": "accent" }] }`
+with the speaker in front; face cut-outs inside letters are not built.
 
 ## 4. Which style when (talking-head founder content)
 | moment in the video | style | beats |
@@ -241,9 +248,10 @@ friendliest way to show a screen without hiding the speaker. If the footage has 
 in split mode, so turn on `captions` with `when: "split"` to replace them on the seam.
 
 ## 5. Limits
-- `iso` draws boxes, plates, cylinders and a wireframe globe in an isometric projection with depth sorting by hand. It is
-  not a 3D engine: no real lighting, no free camera, no complex models. For a richer scene use a `custom` beat.
-- Type behind the speaker, face cut-outs inside letters and smeared caption transitions (refs c, d) are not built.
+- `iso` is a small 3D renderer (orbiting camera, flat shading, back-face culling, depth sort by solid): no textures, no shadows, no free-form
+  meshes, and two solids that interpenetrate can sort wrongly. For a richer scene use a `custom` beat.
+- `behind` depends on the person matte: it follows the speaker well in a talking-head shot, struggles with fast hands in front of the face, and
+  needs `pip install mediapipe` (the model is ~250 KB). Face cut-outs inside letters (ref c) are not built.
 - The top panel takes still images (screenshots) with camera pans and zooms. A screen *recording* as video is not
   supported yet; export 2–4 key screenshots and cut between them with camera moves instead.
 - 3D icon props and collage stickers need PNG files with transparency in `assets/`. Built-in line icons work as simple
