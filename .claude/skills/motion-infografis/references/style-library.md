@@ -65,7 +65,7 @@ Outcome first: every part has a job, and the style is whatever does that job bes
    section change → `transition` + the next part's style; CTA → S0 `cta` or an S1 callout, in the locked palette.
    Added with refs a–e: "how a system or product is built / how the pieces fit" → S4 `iso`; "a method with steps, a mind
    map, a content calendar, numbered chapters" → S5; "a detail of an object that needs naming" (a gadget, a UI part) → S6 `tag`;
-   a repeated keyword that should loop around the shot → S2 `rings`.
+   a repeated keyword that should loop around the shot → S2 `rings`. Never send the key word of a sentence to `behind`; keep it in front.
 3. **Break ties with evidence, then novelty**: prefer the style that shows proof (a screen, a number, a real output)
    over one that only decorates; if still tied, pick the style used least recently. When the proof needs an asset the
    user has not sent, plan the fallback style and put the asset on the wishlist (see SKILL.md, "Proof over decoration").
@@ -180,7 +180,7 @@ Measured on two 25–29 s motion pieces without a speaker (a light one and a dar
   full-screen part (8–14 s) when the speaker explains how something is built or how pieces fit together, or as the
   opening of a no-footage explainer. Keep the sentence at the bottom in step with what the voice says.
 - **Never hide the speaker with it.** The default mode is `split` (the scene fills the top half, you stay full size below); `behind: true` puts
-  the scene behind the matted speaker; only `mode: "full"` hides the speaker, and then it counts toward the full-screen interlude budget
+  the scene behind the matted speaker (decoration only, see the rule in section 3.4); only `mode: "full"` hides the speaker, and then it counts toward the full-screen interlude budget
   in the rubric (≤ 15 % of the runtime in total).
 - **It is a small real 3D renderer** now: an orbiting camera (`camera` keys, `orbit`), flat shading, `box`, `prism`, `pyramid`, `poly` (any
   extruded footprint) and a rotating wireframe `globe`. Still not a modelling tool: no textures, no free-form meshes.
@@ -194,6 +194,10 @@ Measured on an 83 s marketing explainer (portrait, a speaker in a dark room):
   curved line with a dot ("1 Find", "2 Formats"); a mind map (hub "dentistry" with brushing, flossing, cavities above and
   mouth guards, gums, veneers below) whose connectors draw; a phone mockup with a red hand-drawn circle; a database
   poster; grey chips with one word ("Then", "get the picture.").
+- **Only for landscape raw footage.** Ref e's format needs the speaker to be a wide window, which only works when the raw footage is landscape.
+  On portrait raw footage (a close-up filling the frame) the wide window cuts the face badly: do not use it there. For portrait use `split`
+  mode (graphic on top, you full size below) or the default top-right window, and the board parts (`mindmap`, `calendar`, `chapter` arc, graph paper)
+  can still be used in those modes. The runtime ignores `layout.pip` bottom on portrait footage unless `force` is set.
 - **Recipe.** `layout.pip: { "pos": "bottom", "w": 0.88, "h": 0.22, "fy": 0.45 }`, `captions: { "style": "word" }`, and per
   board part `"mode": "insert", "palette": "graph", "backdrop": "grid"` with `mindmap`, `calendar`, `chapter` (`style: "arc"`),
   `stat`, `checklist` or `image`. Captions step aside automatically while a board part is on.
@@ -216,8 +220,11 @@ puts a keyword around a circle that spins, with the shot (or a sticker) in the m
 "x": 0.5, "y": 0.52, "r": 0.34, "size": 96, "spin": 16 }]`. Not built: type that sits *behind* the speaker (it needs a
 cut-out of the person). Now built: `behind: true` on a beat puts it between the background footage and the matted speaker (see `beats.md`).
 The matte is computed once by `matte.py` (a segmentation model, run offline, then plain files), so the render stays deterministic.
-Recipe for ref c's look: `{ "type": "kinetic", "behind": true, "palette": "maroon", "words": [{ "w": "NOBODY", "size": 330, "color": "accent" }] }`
-with the speaker in front; face cut-outs inside letters are not built.
+**Rule (the user's note after trying it): `behind` is for decoration, never for the point.** Text that has to be emphasised must not sit behind the
+speaker: it becomes background, the face and body cover it and the message weakens (tried on "pakai AI cuma buat yang SALAH" and "AI itu
+INFRASTRUKTUR": it looked worse than the plain kinetic). Use `behind` only for texture or secondary material: a mood word that is not the
+point, a scene around the speaker, an echo of a word that was already shown in front. Key words, numbers and claims stay in front
+(`kinetic` full-screen for 1.5–5 s, or over the footage). Face cut-outs inside letters are not built.
 
 ## 4. Which style when (talking-head founder content)
 | moment in the video | style | beats |
@@ -230,9 +237,9 @@ with the speaker in front; face cut-outs inside letters are not built.
 | "look at this" on something in the shot | S3 | `annotate` with boil, tracked `keys` |
 | the CTA | S0 | `cta` in the locked palette, held to the last frame |
 | how a system is built, how the pieces fit | S4 | `iso` (8–14 s, `frost` or `blueprint`), short and sparing |
-| a method, a calendar, a mind map, numbered steps | S5 | `mindmap` `calendar` `chapter` (`arc`) with `layout.pip` at the bottom, `backdrop: "grid"` |
+| a method, a calendar, a mind map, numbered steps | S5 | `mindmap` `calendar` `chapter` (`arc`) with `backdrop: "grid"`; `layout.pip` bottom only if the raw footage is landscape, else `split` |
 | naming a part of a product or a UI detail | S6 | `tag` (2–3 s), beside the detail |
-| a keyword that should loop around the shot | S2 ext | `kinetic` with `rings` |
+| a keyword that should loop around the shot | S2 ext | `kinetic` with `rings` (decorative; the key word stays in front) |
 
 A worked mix for the 2-minute talking head "banyak jasa chaos" (times follow the transcript; beats always sync to speech):
 0:00 S1 uppercase hook "Nambah service bukan growth" + 0:02.5 `zoom` punch on "itu bullshit" → 0:04.7 S1 callout

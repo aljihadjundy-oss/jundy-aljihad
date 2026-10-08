@@ -47,8 +47,8 @@
     },
     {
       "id": 7,
-      "prompt": "video talking head gua 70 detik soal 'cara bikin sistem konten 30 hari'. gua mau kayak referensi papan tulis: wajah gua kecil di bawah, di atas kertas grid ada kalender 30 hari, mind map topik, nomor bab 1 dan 2 di garis lengkung. subtitle satu kata per kotak abu. satu bagian jelasin 'sistem dibangun dari potongan kecil' pakai diagram isometrik. jangan ganti gaya lama, gabungin aja.",
-      "expected_output": "layout.pip bottom + captions style word; board parts with palette graph + backdrop grid (calendar, mindmap, chapter style arc) in insert mode; one iso part (palette frost, <= 14 s) in the full-screen budget; the plan table mixes S5 with earlier styles (no two consecutive parts in the same style) and keeps >= 30 % clean footage; stills checked before render",
+      "prompt": "video talking head gua 70 detik (raw landscape 16:9) soal 'cara bikin sistem konten 30 hari'. gua mau kayak referensi papan tulis: wajah gua kecil di bawah, di atas kertas grid ada kalender 30 hari, mind map topik, nomor bab 1 dan 2 di garis lengkung. subtitle satu kata per kotak abu. satu bagian jelasin 'sistem dibangun dari potongan kecil' pakai diagram isometrik. jangan ganti gaya lama, gabungin aja.",
+      "expected_output": "layout.pip bottom + captions style word; board parts with palette graph + backdrop grid (calendar, mindmap, chapter style arc) in insert mode; one iso part (palette frost, <= 14 s) in the full-screen budget; the plan table mixes S5 with earlier styles (no two consecutive parts in the same style) and keeps >= 30 % clean footage; stills checked before render; and for a PORTRAIT raw video the plan must not use layout.pip bottom (split or the default window instead), and no key word is placed behind the speaker",
       "files": []
     }
   ]

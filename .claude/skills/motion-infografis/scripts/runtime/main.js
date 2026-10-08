@@ -76,7 +76,11 @@ async function init() {
   // layout.pip: { pos: "bottom", w: 0.86, h: 0.2, fy: 0.4, bottom: 0.045 } = a wide landscape window of the speaker at the bottom,
   // the whole area above it is free for graphics (ref e). Default stays the small portrait PiP at the top right.
   const lp = proj.layout?.pip;
-  if (lp?.pos === 'bottom') {
+  // The wide bottom window only works when the RAW footage is landscape. On portrait footage it crops the face badly, so it is ignored
+  // (the default portrait window at the top right stays) unless layout.pip.force is true.
+  const rawLandscape = (footageMeta?.source?.w ?? 1) >= (footageMeta?.source?.h ?? 0);
+  if (lp?.pos === 'bottom' && !rawLandscape && !lp.force) console.warn('layout.pip bottom ignored: the raw footage is portrait and the wide window would cut the face. Use split mode or the default PiP (or set pip.force).');
+  if (lp?.pos === 'bottom' && (rawLandscape || lp.force)) {
     Object.assign(pip, { w: Math.round((lp.w ?? 0.86) * W), h: Math.round((lp.h ?? 0.2) * H), r: Math.round(30 * S), crop: true, fy: lp.fy ?? 0.4, bottom: true });
     pip.x = Math.round((W - pip.w) / 2);
     pip.y = Math.round(H - pip.h - (lp.bottom ?? 0.045) * H);

@@ -43,11 +43,15 @@
 - `layout.overlayTop`: fraction of height where overlay titles and insert/full headers start (default about 0.135). Lower it
   (e.g. `0.07`) for a tight close-up whose hair starts near the top, so a title sits in the band above the head instead of on the forehead.
   The PiP moves up with it. Free-placed beats (`callout`, `annotate`) are not affected: give them their own `y`.
-- `layout.pip`: `{ "pos": "bottom", "w": 0.88, "h": 0.22, "fy": 0.45, "bottom": 0.045 }` turns the `insert` window into a wide
+- `layout.pip`: **only for landscape raw footage.** On portrait raw footage the wide window cuts the face badly, so the runtime ignores it
+  (with a console warning) unless `"force": true`; use `split` mode or the default top-right window there. `{ "pos": "bottom", "w": 0.88, "h": 0.22, "fy": 0.45, "bottom": 0.045 }` turns the `insert` window into a wide
   landscape cut-out of the speaker at the bottom of the frame (`fy` = where the face sits in the source, as a fraction of
   its height) and gives every `insert` beat the whole area above it. Captions step aside during insert beats then.
   The default is the small portrait window at the top right.
-- **`behind: true` on any beat** (kinetic words, `iso`, a `title`, an `image`…) puts it BETWEEN the background footage and the speaker, so the speaker stays in
+- **`behind: true` is for decoration, never for the point.** Whatever sits behind the speaker is read as background: do not put the key word, a number or the
+  claim of the sentence there (the speaker covers it and the message gets weaker). Use it for texture and secondary material (a big mood word that
+  is not the point, a scene around the speaker, an echo of a word already shown in front). For text that must be emphasised, use a `kinetic`
+  scene in front, short full-screen, or on top of the footage. `behind: true` on any beat (kinetic words, `iso`, a `title`, an `image`…) puts it BETWEEN the background footage and the speaker, so the speaker stays in
   front of the text or scene and the face is never covered (type behind the head, a scene behind the body). It needs a person matte: run
   `python3 $S/matte.py proj --range a,b` (only the seconds you need; about 18 frames per second of work) once before rendering. The beat is
   treated as a full-screen part for the background (the footage fades out), while the matted speaker stays on top. Without the masks it falls back to
