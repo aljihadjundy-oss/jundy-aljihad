@@ -123,7 +123,7 @@ async function init() {
   for (const it of beats) {
     const { b, def } = it;
     const layer = h('div', 'layer', b.behind ? behindLayer : def.defaults.onTop ? fxLayer : beatsLayer);
-    if (b.palette && PALETTES[b.palette]) applyPalette(layer.style, PALETTES[b.palette]); // per-part palette for variety
+    if (b.palette && PALETTES[b.palette]) { applyPalette(layer.style, PALETTES[b.palette]); layer.style.color = 'var(--ink)'; } // per-part palette for variety (text colour follows it)
     const t0 = b.mode === 'overlay' ? 0.2 : 0.55;
     const OUT = b.dur - 0.45;
     const ctx = {
