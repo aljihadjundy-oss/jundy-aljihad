@@ -1,0 +1,8 @@
+{
+  "canvas": { "w": 1080, "h": 1920, "fps": 30 },
+  "footage": false,
+  "entry": "src/index.html",
+  "duration": 30,
+  "audio": { "voice": false, "pad": true, "sfx": 1.0, "target_lufs": -16 },
+  "beats": []
+}
