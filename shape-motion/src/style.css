@@ -1,0 +1,22 @@
+@font-face { font-family: "Mont"; font-weight: 600; src: url("/fonts/montserrat/files/montserrat-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Mont"; font-weight: 800; src: url("/fonts/montserrat/files/montserrat-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Mont"; font-weight: 900; src: url("/fonts/montserrat/files/montserrat-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex"; font-weight: 400; src: url("/fonts/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex"; font-weight: 500; src: url("/fonts/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Serif"; font-weight: 400; font-style: italic; src: url("/fonts/instrument-serif/files/instrument-serif-latin-400-italic.woff2") format("woff2"); }
+
+/* Shape palette: deck blues (#082838 #183858 #284868 #386888 #487898) + white, ice = lightened sky for glow on dark */
+:root {
+  --bg: #050E1A; --deep: #082838; --navy: #183858; --steel: #284868; --blue: #386888; --sky: #487898;
+  --ice: #8CC8EA; --white: #F6FAFD; --mute: rgba(246, 250, 253, 0.55);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--white);
+  font-family: "Mont", "Liberation Sans", Arial, sans-serif; -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; font-variant-numeric: tabular-nums; }
+#stage { position: absolute; inset: 0; overflow: hidden; }
+.layer { position: absolute; inset: 0; }
+.abs { position: absolute; }
+.mono { font-family: "Plex", "Liberation Mono", monospace; font-weight: 500; text-transform: uppercase; }
+.serif { font-family: "Serif", Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+.hl { font-weight: 900; letter-spacing: -0.02em; line-height: 1; }
+.ice { color: var(--ice); }
