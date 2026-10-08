@@ -31,13 +31,24 @@ export function buildFootage(stage, W, H, meta, frameUrl, pip, split = { seam: H
       } else img.style.transform = '';
       const k = E.inOutCubic(insertK);
       const sc = lerp(1, pip.w / W, k);
-      const ty = lerp(0, pip.y, k) + sk * (split.seam - fy0);
-      wrap.style.transform = `translate3d(${lerp(0, pip.x, k).toFixed(2)}px,${ty.toFixed(2)}px,0) scale(${sc.toFixed(4)})`;
+      let ty = lerp(0, pip.y, k) + sk * (split.seam - fy0);
       wrap.style.clipPath = sk > 0.001 ? `inset(${(sk * fy0).toFixed(1)}px 0 ${(sk * (H - fy0 - PH)).toFixed(1)}px 0)` : 'none';
-      wrap.style.borderRadius = `${(k * pip.r / sc).toFixed(1)}px`;
-      wrap.style.boxShadow = k > 0.01 ? `0 ${40 / sc}px ${80 / sc}px -${30 / sc}px rgba(0,0,0,${0.65 * k})` : 'none';
-      edge.style.boxShadow = k > 0.01 ? `inset 0 0 0 ${(3 / sc).toFixed(1)}px rgba(255,255,255,${0.25 * k})` : 'none';
-      edge.style.borderRadius = wrap.style.borderRadius;
+      if (pip.crop && k > 0.001) {
+        // wide PiP (layout.pip): a landscape window cut out of the scaled frame, centred on the face (pip.fy)
+        const s1 = pip.w / W, fh = H * s1;
+        const off = clamp((pip.fy ?? 0.4) * fh - pip.h / 2, 0, Math.max(0, fh - pip.h));
+        ty = k * (pip.y - off);
+        wrap.style.clipPath = `inset(${(k * off / s1).toFixed(1)}px 0px ${(k * (fh - off - pip.h) / s1).toFixed(1)}px 0px round ${(k * pip.r / sc).toFixed(1)}px)`;
+        wrap.style.borderRadius = '0';
+        wrap.style.boxShadow = 'none';
+        edge.style.boxShadow = 'none';
+      } else {
+        wrap.style.borderRadius = `${(k * pip.r / sc).toFixed(1)}px`;
+        wrap.style.boxShadow = k > 0.01 ? `0 ${40 / sc}px ${80 / sc}px -${30 / sc}px rgba(0,0,0,${0.65 * k})` : 'none';
+        edge.style.boxShadow = k > 0.01 ? `inset 0 0 0 ${(3 / sc).toFixed(1)}px rgba(255,255,255,${0.25 * k})` : 'none';
+        edge.style.borderRadius = wrap.style.borderRadius;
+      }
+      wrap.style.transform = `translate3d(${lerp(0, pip.x, k).toFixed(2)}px,${ty.toFixed(2)}px,0) scale(${sc.toFixed(4)})`;
       const f = E.inOutCubic(fullK);
       wrap.style.opacity = (1 - f).toFixed(3);
       wrap.style.visibility = f > 0.999 ? 'hidden' : 'visible';

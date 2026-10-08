@@ -179,3 +179,49 @@ export const transition = {
     };
   },
 };
+
+// tag — a small monospace label with a hand-drawn curved arrow pointing at something in the shot (ref d: "Modular ↘", "handheld 15hr").
+// The text types itself in, then the arrow draws. x, y = where the text starts (fractions of the canvas), `to` = [x, y] the arrow points at.
+//   { "type": "tag", "t": 6, "dur": 3, "x": 0.58, "y": 0.4, "text": "Modular", "to": [0.62, 0.52], "sub": "handheld", "big": "15hr" }
+// sub: tiny line above · big: larger value line · curve: -1..1 bend of the arrow · align: left (default) | right · color: css colour.
+export const tag = {
+  defaults: { mode: 'overlay', free: true },
+  build(root, b, ctx) {
+    const { W, H, S } = ctx;
+    const size = (b.size ?? 38) * S, col = b.color ?? '#FFFFFF';
+    const right = b.align === 'right';
+    const el = h('div', 'abs mono', root);
+    Object.assign(el.style, { left: `${(b.x ?? 0.5) * W}px`, top: `${(b.y ?? 0.4) * H}px`, color: col, whiteSpace: 'nowrap', lineHeight: 1.12, textShadow: '0 2px 10px rgba(0,0,0,.65), 0 0 2px rgba(0,0,0,.5)', textAlign: right ? 'right' : 'left', transform: right ? 'translateX(-100%)' : 'none' });
+    const sub = b.sub ? h('div', null, el, b.sub) : null; if (sub) Object.assign(sub.style, { fontSize: `${size * 0.52}px`, opacity: 0.8, letterSpacing: '.04em', marginBottom: `${4 * S}px` });
+    const main = h('div', null, el); Object.assign(main.style, { fontSize: `${size}px`, fontWeight: b.bold === false ? 400 : 700, letterSpacing: '-.01em' });
+    const big = b.big ? h('div', null, el, b.big) : null; if (big) Object.assign(big.style, { fontSize: `${size * 1.5}px`, fontWeight: 700, marginTop: `${2 * S}px` });
+    const chars = String(b.text ?? '');
+    let arrow = null, head = null;
+    if (b.to) {
+      const svg = s('svg', { width: W, height: H, class: 'layer' }, root);
+      const x0 = (b.x ?? 0.5) * W, y0 = (b.y ?? 0.4) * H;
+      const w = (chars.length * 0.62 + 0.4) * size, hh = size * (1.2 + (b.sub ? 0.7 : 0) + (b.big ? 1.7 : 0));
+      const fx = right ? x0 - w * 0.5 : x0 + w * 0.5, fy = y0 + hh + 10 * S;     // leave from under the text
+      const tx = b.to[0] * W, ty = b.to[1] * H, bend = (b.curve ?? 0.35) * Math.hypot(tx - fx, ty - fy);
+      const mx = (fx + tx) / 2 + (ty - fy) / Math.hypot(tx - fx, ty - fy || 1) * bend * -1, my = (fy + ty) / 2 + (tx - fx) / Math.hypot(tx - fx, ty - fy || 1) * bend;
+      arrow = s('path', { d: `M${fx} ${fy} Q${mx} ${my} ${tx} ${ty}`, pathLength: 1, fill: 'none', stroke: col, 'stroke-width': 3 * S, 'stroke-linecap': 'round', style: 'filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))' }, svg);
+      const a = Math.atan2(ty - my, tx - mx), hl = 20 * S;
+      head = s('path', { d: `M${tx - hl * Math.cos(a - 0.5)} ${ty - hl * Math.sin(a - 0.5)} L${tx} ${ty} L${tx - hl * Math.cos(a + 0.5)} ${ty - hl * Math.sin(a + 0.5)}`, pathLength: 1, fill: 'none', stroke: col, 'stroke-width': 3 * S, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', style: 'filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))' }, svg);
+    }
+    const at = b.at ?? 0.1, cps = b.speed ?? 22, typeDur = chars.length / cps;
+    ctx.cue(at, 'tick', { gain: 0.4 });
+    return lt => {
+      const out = E.inCubic(prog(lt, ctx.dur - 0.35, 0.3));
+      const n = Math.floor(clamp((lt - at) * cps, 0, chars.length));
+      main.textContent = chars.slice(0, n) + (n < chars.length && lt >= at ? '▍' : '');
+      el.style.opacity = (lt >= at ? 1 - out : 0).toFixed(3);
+      if (sub) sub.style.opacity = (0.8 * E.outCubic(prog(lt, at, 0.3))).toFixed(3);
+      if (big) big.style.opacity = E.outCubic(prog(lt, at + typeDur * 0.6, 0.3)).toFixed(3);
+      if (arrow) {
+        const k = E.outCubic(prog(lt, at + typeDur + 0.05, 0.45));
+        draw(arrow, k); draw(head, prog(lt, at + typeDur + 0.4, 0.2));
+        arrow.setAttribute('opacity', (1 - out).toFixed(2)); head.setAttribute('opacity', (1 - out).toFixed(2));
+      }
+    };
+  },
+};

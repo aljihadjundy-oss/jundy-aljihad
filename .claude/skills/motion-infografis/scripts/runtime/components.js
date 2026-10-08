@@ -46,7 +46,7 @@ export function headline(parent, text, { x = 0, y = 0, w, size = 80, color = 'va
   if (flow) { if (w) el.style.width = `${w}px`; } else place(el, x, y, w);
   Object.assign(el.style, { fontSize: `${size}px`, color, textAlign: align, lineHeight: lh, fontWeight: weight });
   const words = [];
-  const ACC = { '*': 'acc-1', '_': 'acc-2', '~': 'acc-3', '^': 'acc-g' };
+  const ACC = { '*': 'acc-1', '_': 'acc-2', '~': 'acc-3', '^': 'acc-g', '|': 'acc-s' };
   let acc = '';
   String(text).split('\n').forEach((line, li) => {
     if (li) h('br', null, el);
@@ -54,7 +54,7 @@ export function headline(parent, text, { x = 0, y = 0, w, size = 80, color = 'va
       let word = tok;
       while (word && ACC[word[0]]) { acc = acc === ACC[word[0]] ? '' : ACC[word[0]]; word = word.slice(1); }
       const cls = acc;
-      const m = word.match(/^(.*?)([*_~^])([.,:;!?—)"']*)$/);
+      const m = word.match(/^(.*?)([*_~^|])([.,:;!?—)"']*)$/);
       if (m) { word = m[1] + m[3]; acc = ''; }
       if (wi) el.appendChild(document.createTextNode(' '));
       const wrap = h('span', 'w', el);

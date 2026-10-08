@@ -44,6 +44,12 @@
       "prompt": "ini video founder gua 2 menit, subtitle udah nempel. tambahin motion, decide sendiri tiap part pake style apa jun, jangan monoton, dan awalnya harus langsung nahan orang biar gak scroll",
       "expected_output": "plan table with a style column (S0–S3 mixed, ≥ 3 styles, no two consecutive graphic parts in the same style unless one idea), a designed visual in the first 0.5 s, key message on screen by 3 s, ≥ 3 visual events in the first 10 s, no 5-second bucket without a visual event; locked jundy palette as base with at most 1–2 parts in a library palette; the agent does not ask the user to pick styles or colours",
       "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "video talking head gua 70 detik soal 'cara bikin sistem konten 30 hari'. gua mau kayak referensi papan tulis: wajah gua kecil di bawah, di atas kertas grid ada kalender 30 hari, mind map topik, nomor bab 1 dan 2 di garis lengkung. subtitle satu kata per kotak abu. satu bagian jelasin 'sistem dibangun dari potongan kecil' pakai diagram isometrik. jangan ganti gaya lama, gabungin aja.",
+      "expected_output": "layout.pip bottom + captions style word; board parts with palette graph + backdrop grid (calendar, mindmap, chapter style arc) in insert mode; one iso part (palette frost, <= 14 s) in the full-screen budget; the plan table mixes S5 with earlier styles (no two consecutive parts in the same style) and keeps >= 30 % clean footage; stills checked before render",
+      "files": []
     }
   ]
 }

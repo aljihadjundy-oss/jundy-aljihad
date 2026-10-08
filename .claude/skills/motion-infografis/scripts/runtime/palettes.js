@@ -14,6 +14,13 @@ export const PALETTES = {
     pos: '#3F7D3A', neg: '#B3261E', glass: 'rgba(239, 230, 216, 0.9)', glow: ['#D9C7A8', '#E8B9A0'] },
   ink: { bg: '#111111', surface: '#1B1B1B', ink: '#F4F1EA', accent: '#F2C94C', accent2: '#F2C94C', accent3: '#EB5757',
     pos: '#6FCF97', neg: '#EB5757', glass: 'rgba(17, 17, 17, 0.86)', glow: ['#2B2B2B', '#3A3320'] },
+  // blueprint / isometric references (ref a light, ref b dark) and the graph-paper whiteboard reference (ref e)
+  frost: { bg: '#EEF1F7', surface: '#FFFFFF', ink: '#0B1220', accent: '#2B3FD6', accent2: '#FF5A36', accent3: '#6B7CFF',
+    pos: '#1F9D63', neg: '#D92D20', glass: 'rgba(255, 255, 255, 0.92)', glow: ['#DDE4F5', '#EEF1F7'] },
+  blueprint: { bg: '#03050D', surface: '#0A1230', ink: '#E8EEFF', accent: '#4C6BFF', accent2: '#9DB4FF', accent3: '#2A3E9C',
+    pos: '#34D399', neg: '#FB7185', glass: 'rgba(10, 18, 48, 0.88)', glow: ['#102A7A', '#0A1230'] },
+  graph: { bg: '#EDEDEA', surface: '#FFFFFF', ink: '#0F0F0F', accent: '#D32F2F', accent2: '#D32F2F', accent3: '#555555',
+    pos: '#2E7D32', neg: '#D32F2F', glass: 'rgba(237, 237, 234, 0.94)', glow: ['#E0E0DC', '#EDEDEA'] },
 };
 export const TOKENS = ['bg', 'surface', 'ink', 'accent', 'accent2', 'accent3', 'pos', 'neg', 'glass'];
 

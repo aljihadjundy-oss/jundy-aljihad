@@ -1,4 +1,4 @@
-import { E, prog, lerp, pose, h, place } from '../engine.js';
+import { E, prog, lerp, pose, h, s, draw, place } from '../engine.js';
 import { headline, icon } from '../components.js';
 import { div, appear, tone } from './util.js';
 
@@ -72,6 +72,28 @@ export const chapter = {
   defaults: { mode: 'full', pos: 'center', glass: false },
   build(box, b, ctx) {
     const S = ctx.S;
+    // style "arc" (ref e): a big arc with a dot on it, a large italic number and a light label ("1  Find", "2  Formats")
+    if (b.style === 'arc') {
+      const Wz = ctx.zone.w, Hh = (b.height ?? 520) * S, R = Hh * 0.95, bulge = R - Math.sqrt(R * R - (Hh / 2) ** 2), x0 = 40 * S;
+      box.style.height = `${Hh}px`;
+      const svg = s('svg', { width: Wz, height: Hh, viewBox: `0 0 ${Wz} ${Hh}` }, box);
+      svg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible';
+      const arc = s('path', { d: `M${x0} 0 A${R} ${R} 0 0 1 ${x0} ${Hh}`, pathLength: 1, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 5 * S, 'stroke-linecap': 'round' }, svg);
+      const dx = x0 + bulge, dy = Hh / 2;
+      const dot = s('circle', { cx: dx, cy: dy, r: 15 * S, fill: 'var(--ink)' }, svg);
+      const num = div(box, { position: 'absolute', left: `${dx + 38 * S}px`, top: `${dy - 120 * S}px`, fontSize: `${(b.size ?? 230) * S}px`, fontWeight: '800', fontStyle: 'italic', lineHeight: 1, letterSpacing: '-0.05em',
+        background: 'linear-gradient(180deg, var(--ink) 20%, color-mix(in srgb, var(--ink) 10%, transparent) 95%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', padding: `0 ${14 * S}px 0 0` }, String(b.num ?? ''));
+      const lab = div(box, { position: 'absolute', left: `${dx + 38 * S + (String(b.num ?? '').length * 128 + 40) * S * ((b.size ?? 230) / 230)}px`, top: `${dy + 6 * S}px`, fontSize: `${(b.labelSize ?? 72) * S}px`, fontWeight: '800', color: 'color-mix(in srgb, var(--ink) 38%, transparent)', whiteSpace: 'nowrap' }, b.name ?? '');
+      ctx.cue(ctx.t0, 'whoosh', { gain: 0.6 });
+      return lt => {
+        draw(arc, E.inOutCubic(prog(lt, ctx.t0, 0.9)));
+        arc.setAttribute('opacity', (1 - E.inCubic(prog(lt, ctx.OUT, 0.4))).toFixed(2));
+        dot.setAttribute('r', (15 * S * Math.max(0.01, E.outBack(prog(lt, ctx.t0 + 0.7, 0.4)))).toFixed(2));
+        dot.setAttribute('opacity', (E.outCubic(prog(lt, ctx.t0 + 0.7, 0.2)) * (1 - E.inCubic(prog(lt, ctx.OUT, 0.4)))).toFixed(2));
+        appear(num, lt, ctx.t0 + 0.8, ctx.OUT, { dx: -40, dy: 0 });
+        appear(lab, lt, ctx.t0 + 1.0, ctx.OUT, { dx: -30, dy: 0 });
+      };
+    }
     const k = div(box, { marginBottom: `${16 * S}px` }, b.num ? `Bagian ${b.num}` : (b.kicker || ''), 'kicker');
     const hl = headline(box, b.name, { flow: true, size: (b.size ?? 100) * S, w: ctx.zone.w });
     const bar = div(box, { marginTop: `${34 * S}px`, height: `${8 * S}px`, width: `${220 * S}px`, borderRadius: '4px', background: 'linear-gradient(90deg,var(--accent),var(--accent2))', transformOrigin: '0 50%' });

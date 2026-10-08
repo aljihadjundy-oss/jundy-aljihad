@@ -1,7 +1,8 @@
 import { E, prog, h } from './engine.js';
 
 // Word-timed captions. words: [{w, s, e}] in seconds.
-// style: "karaoke" (spoken word highlighted, default) · "plain" (white bold with shadow) · "box" (white on a black box).
+// style: "karaoke" (spoken word highlighted, default) · "plain" (white bold with shadow) · "box" (white on a black box)
+//        · "word" (one word at a time in a grey chip).
 // when: "always" (default) · "split" (only while the footage is in split mode, e.g. when burned-in subtitles get cropped).
 // In split mode the caption line moves to the seam and uses splitStyle (default "box"), left-aligned by default.
 export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
@@ -70,6 +71,11 @@ export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
       el.style.opacity = ((1 - hideK) * Math.min(1, k * 1.5)).toFixed(3);
       el.style.transform = `scale(${(0.9 + 0.1 * k).toFixed(4)})`;
       el.style.transformOrigin = el.style.textAlign === 'left' ? '0 50%' : '50% 50%';
+      if (mode === 'word' || mode === 'split-word') {
+        let a = 0;
+        p.forEach((w, i) => { if (T >= w.s - 0.02) a = i; });
+        spans.forEach((sp, i) => { sp.style.display = i === a ? '' : 'none'; });
+      }
       const karaoke = mode === 'karaoke';
       p.forEach((w, i) => spans[i].classList.toggle('on', karaoke && T >= w.s && T < (p[i + 1] ? p[i + 1].s : p.end)));
     },

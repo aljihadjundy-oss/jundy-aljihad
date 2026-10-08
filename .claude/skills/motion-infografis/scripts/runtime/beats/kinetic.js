@@ -1,4 +1,4 @@
-import { E, prog, lerp, pose, h } from '../engine.js';
+import { E, prog, lerp, pose, h, s } from '../engine.js';
 import { icon } from '../components.js';
 import { PALETTES as LIB } from '../palettes.js';
 
@@ -64,6 +64,23 @@ export const kinetic = {
       return { el, sk, i };
     });
 
+    // rings: text set around a circle that slowly spins (ref c: "PACING" looping around the top-down shot)
+    //   "rings": [ { "text": "PACING", "x": 0.5, "y": 0.5, "r": 0.34, "size": 120, "spin": 14, "at": 0.2, "color": "ink" } ]
+    const rings = (b.rings || []).map((rg, i) => {
+      const r = (rg.r ?? 0.34) * W, cx = (rg.x ?? 0.5) * W, cy = (rg.y ?? 0.5) * H;
+      const svg = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'layer' }, root);
+      const id = `ringpath${ctx.beatT}_${i}`.replace(/\./g, '_');
+      const defs = s('defs', {}, svg);
+      s('path', { id, d: `M${cx - r} ${cy} a${r} ${r} 0 1 1 ${2 * r} 0 a${r} ${r} 0 1 1 ${-2 * r} 0` }, defs);
+      const g = s('g', {}, svg);
+      const txt = s('text', { 'font-size': (rg.size ?? 110) * S, 'font-weight': 800, fill: rg.color === 'accent' ? pal.accent : rg.color && rg.color !== 'ink' ? rg.color : pal.ink, 'letter-spacing': '0.04em', textLength: 2 * Math.PI * r, lengthAdjust: 'spacing', style: `font-family:var(--font),Arial,sans-serif;text-transform:uppercase${over ? ';paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:' + 3 * S + 'px' : ''}` }, g);
+      const tp = s('textPath', { href: `#${id}` }, txt);
+      const unit = String(rg.text ?? '').toUpperCase() + ' ';
+      tp.textContent = unit.repeat(rg.count ?? 3);
+      if (b.sfx !== false) ctx.cue(rg.at ?? 0.2, 'whoosh', { gain: 0.4 });
+      return { g, cx, cy, rg };
+    });
+
     const exitAt = b.dur - (b.exit === 'fade' ? 0.35 : 0);
     return lt => {
       const gone = lt >= exitAt;
@@ -74,6 +91,11 @@ export const kinetic = {
         const k = prog(lt, it.at, it.pop ?? 0.14);
         const shown = lt >= it.at;
         pose(el, { s: shown ? lerp(1.22, 1, E.outCubic(k)) : 1, r: rot, o: shown ? 1 : 0 });
+      });
+      rings.forEach(({ g, cx, cy, rg }) => {
+        const k = E.outExpo(prog(lt, rg.at ?? 0.2, 0.8));
+        g.setAttribute('transform', `rotate(${((rg.spin ?? 14) * lt).toFixed(2)} ${cx} ${cy}) translate(${cx} ${cy}) scale(${lerp(0.7, 1, k).toFixed(4)}) translate(${-cx} ${-cy})`);
+        g.setAttribute('opacity', Math.min(1, k * 1.5).toFixed(3));
       });
       stickers.forEach(({ el, sk, i }) => {
         const k = E.outBack(prog(lt, sk.at ?? 0.2, 0.4));

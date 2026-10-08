@@ -88,3 +88,11 @@ html, body { margin: 0; overflow: hidden; background: var(--bg); color: var(--in
 .chapter b { display: block; font-size: 32px; color: var(--ink); letter-spacing: 0.02em; }
 .pbar { position: absolute; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.18); overflow: hidden; }
 .pbar i { position: absolute; inset: 0; transform-origin: 0 50%; background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2)); }
+
+/* serif-italic accent word inside a headline: |word| */
+.hl .acc-s { font-family: "SerifFont", "DejaVu Serif", Georgia, serif; font-style: italic; font-weight: 400; color: var(--accent); letter-spacing: -0.01em; }
+/* one-word-at-a-time caption chip (ref e) */
+.cap-word .cb { display: inline-block; background: rgba(60, 60, 60, 0.8); padding: 0.14em 0.46em 0.18em; border-radius: 0.32em; backdrop-filter: blur(6px); }
+.cap-word .cw { margin: 0; padding: 0; color: #fff; text-shadow: none; }
+/* monospace labels (tag, iso HUD, mindmap) */
+.mono { font-family: "MonoFont", "DejaVu Sans Mono", Menlo, monospace; }

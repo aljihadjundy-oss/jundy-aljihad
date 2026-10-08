@@ -8,7 +8,7 @@ mkdir -p "$CACHE"
 cd "$CACHE"
 [ -f package.json ] || echo '{ "name": "motion-infografis-cache", "private": true }' > package.json
 PKGS="playwright-core"
-for f in plus-jakarta-sans dm-serif-display "$@"; do PKGS="$PKGS @fontsource/$f"; done
+for f in plus-jakarta-sans dm-serif-display space-mono "$@"; do PKGS="$PKGS @fontsource/$f"; done
 npm install --silent --no-audit --no-fund $PKGS
 echo "node deps ok → $CACHE"
 

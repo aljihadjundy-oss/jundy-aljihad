@@ -35,7 +35,7 @@
 - `chrome`: `false` hides it. `progressY` (fraction of height, default ≈ 0.11) moves the progress bar, e.g. `0.028` to sit at the very top above a title band. Omit `name` and `logo` for a bare progress bar. `logo` sits on a white rounded badge.
 - `captions`: needs `transcript/words.json`. `y` is the fraction of height where the caption line starts.
   `style`: `karaoke` (spoken word highlighted, default), `plain` (white bold with a shadow), `box` (white on a black box).
-  `when`: `always` or `split` (only during split beats, e.g. to replace burned-in subtitles that the split crops away).
+  `style: "word"` shows one spoken word at a time in a grey chip (ref e). `when`: `always` or `split` (only during split beats, e.g. to replace burned-in subtitles that the split crops away).
   In split mode captions sit on the seam as `splitStyle` (default `box`), `splitAlign` (default `left`), `splitSize` px.
 - `layout.overlayBottom`: optional fraction of height that overlay cards must stay above, for footage that already has
   burned-in subtitles or on-screen text (e.g. `0.75` when the subtitles start at y ≈ 1460 of 1920). With `pos: "bottom"`
@@ -43,6 +43,10 @@
 - `layout.overlayTop`: fraction of height where overlay titles and insert/full headers start (default about 0.135). Lower it
   (e.g. `0.07`) for a tight close-up whose hair starts near the top, so a title sits in the band above the head instead of on the forehead.
   The PiP moves up with it. Free-placed beats (`callout`, `annotate`) are not affected: give them their own `y`.
+- `layout.pip`: `{ "pos": "bottom", "w": 0.88, "h": 0.22, "fy": 0.45, "bottom": 0.045 }` turns the `insert` window into a wide
+  landscape cut-out of the speaker at the bottom of the frame (`fy` = where the face sits in the source, as a fraction of
+  its height) and gives every `insert` beat the whole area above it. Captions step aside during insert beats then.
+  The default is the small portrait window at the top right.
 - `layout.seam` / `splitFocus` / `splitZoom`: split mode geometry. `seam` is where the top panel ends (fraction of height,
   default 0.5). `splitFocus` is the vertical centre of the face in the footage (fraction of height, default 0.33); the
   bottom panel shows the window around it. `splitZoom` > 1 punches in on that window.
@@ -78,6 +82,7 @@ shrunk automatically and the renderer prints a warning. Stat numbers shrink to f
 | `glass` | overlay card background on/off |
 | `scale` | content size multiplier |
 | `align` | `"top"` to pin insert/full content to the top of its zone instead of centring |
+| `backdrop` | `grid` / `dots` / `plain`: paints this part's own background in its palette under the footage window and fades it with the beat (graph paper for a whiteboard part; use with `palette`) |
 | `palette` | colour just this beat with a library palette (`navy`, `maroon`, `paper`, `ink`, `jundy`) for variety |
 
 ## 4. Beat types
@@ -200,6 +205,33 @@ the whole beat). Use it on the key word of a sentence, 0.6–1.5 s long. It does
 `style`: `leak` (warm light leak), `flash` (white), `dip` (black); `strength` 0..1. Centre it on the cut (t = cut − dur/2).
 It sits above captions and the chrome. Use it on a change of layout (face → screen), not on every cut.
 
+### chapter style "arc"
+`{ "type": "chapter", "mode": "insert", "style": "arc", "num": 2, "name": "Formats", "palette": "graph", "backdrop": "grid" }`
+A big arc draws, a dot lands on it, a large italic number and a light label slide in ("2  Formats"). `size` (number
+px, default 230), `labelSize`, `height` optional. The top-right chapter label still updates as usual.
+
+### mindmap: hub with boxes that draw themselves
+`{ "type": "mindmap", "mode": "insert", "hub": "dentistry", "up": ["brushing", "flossing", "cavities"], "down": [{ "label": "gums", "at": 3.2 }, "veneers"] }`
+Boxes above (`up`) and below (`down`) the hub, orthogonal connectors that draw, boxes that pop in one by one (`every`,
+or `at` per child to land on the spoken word). `size` (px), `gap` optional. Use with palette `graph`.
+
+### calendar: month grid that fills in
+`{ "type": "calendar", "mode": "insert", "days": 30, "startDay": 3, "cells": { "6": "Chewing video" }, "circles": [6, 7], "circleAt": 2.4 }`
+`startDay` = weekday of the 1st (0 = Sunday), `cells` = labels per day, `circles` = days that get a hand-drawn red circle.
+
+### tag: monospace label with a curved arrow
+`{ "type": "tag", "t": 6, "dur": 3, "x": 0.56, "y": 0.36, "text": "Modular", "sub": "handheld", "big": "15hr", "to": [0.68, 0.5] }`
+A free-placed overlay (like `callout`). The text types in, then the arrow draws toward `to`. `curve` (-1..1) bends it, `align`
+`left`/`right`, `color`, `size`, `speed` (characters per second), `at` (start inside the beat).
+
+### iso: isometric build
+`{ "type": "iso", "t": 0, "dur": 12, "palette": "frost", "backdrop": "plain", "grid": 8, "blocks": [ { "id": "base", "kind": "slab", "x": 0, "y": 0, "w": 6, "d": 6, "h": 0.3, "at": 0.5 }, { "id": "core", "kind": "box", "x": 2, "y": 2, "w": 2, "d": 2, "h": 1.8, "z0": 0.3, "at": 2.8, "color": "accent", "label": { "text": "01 · CORE", "sub": "the first piece", "dx": 170, "dy": -130 } }, { "kind": "globe", "x": 3, "y": 3, "z0": 2.1, "r": 0.85, "at": 5.4 } ], "links": [ { "from": "core", "to": "orb", "at": 6.6 } ], "hud": { "tl": "LABS — PROJECT", "tr": "SCENE 01 / 03", "progress": "BUILD PROGRESS" }, "caption": [ { "text": "Everything starts from an |idea|.", "at": 0.8, "until": 4.5 } ] }`
+A full-screen part (the footage steps behind it). Grid units: x runs right-down, y left-down, z up. Kinds: `slab`/`box` (x, y, w, d, h,
+z0), `cyl` (x, y, w, h, z0), `globe` (x, y, z0, r). `color`: `soft` (default), `ink`, `accent`, `accent2`, `glass`. Blocks draw back to front
+(lower `z0` first), rise with a small overshoot at `at`, and labels pin to their top with a leader line. `links` draw a
+dashed arc with a travelling dot between two block ids. `hud: false` hides the corners and counter. `drift` (default 1.07) is the
+slow push-in. Use palette `frost` (light) or `blueprint` (dark).
+
 ### kinetic: word-by-word typography scene
 ```json
 { "type": "kinetic", "t": 14.1, "dur": 4.6, "palette": "maroon",
@@ -214,14 +246,14 @@ overrides) and build lines in place (`br: true` starts a new line). Per word: `s
 (`brand` default = the project palette, or any library palette: `maroon`, `paper`, `ink`, `navy`, `jundy`), `bg` / `ink` overrides (`bg: "none"` to type over the footage with
 `mode: "overlay"`), `y` (vertical centre, default 0.5), `wordGap`, `lineGap`, `every` (spacing for words with no match),
 `exit` (`cut` default, or `fade`), `sfx` (false to mute the per-word ticks). Captions step aside during a kinetic beat
-because it already shows the words (`captions: true` keeps them). `stickers`: PNG cut-outs (`src`) with a
+because it already shows the words (`captions: true` keeps them). `rings`: `[{ "text": "PACING", "x": 0.5, "y": 0.52, "r": 0.34, "size": 96, "spin": 16, "at": 0.1 }]` sets a keyword around a spinning circle. `stickers`: PNG cut-outs (`src`) with a
 white paper edge, or a line `icon`; `at`, `x`, `y` (centre), `w` (fraction of width), `rot`, `outline: false` for
 logos or cards that should keep their own edge (a soft shadow only).
 The default mode is `full`, so the footage fades out behind it. Keep one phrase per beat (1.5–5 s) and cut to the next.
 
 ## 5. Text markup
 In `title`, `text` and quotes: `*accent words*` (violet in `jundy`), `_accent2 words_` (orange), `~negative words~`,
-`^gradient words^` (violet → pink → orange, the site's text gradient); markers can span several words; `\n` for a line break.
+`^gradient words^` (violet → pink → orange, the site's text gradient), `|serif words|` (serif italic in the accent colour, ref a/b); markers can span several words; `\n` for a line break.
 Keep headlines ≤ ~7 words. Wrapping is automatic.
 
 ## 6. Complete example (footage mode, 43 s talking head)

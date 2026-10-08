@@ -42,9 +42,11 @@ async function init() {
   const css = [400, 500, 600, 700, 800].map(w => `@font-face{font-family:"BrandFont";font-weight:${w};src:url("/fonts/${brand.font}/files/${brand.font}-latin-${w}-normal.woff2") format("woff2");}`).join('')
     // display serif for kinetic / annotate words (installed by setup.sh; falls back to a system serif)
     + ['normal', 'italic'].map(st => `@font-face{font-family:"SerifFont";font-weight:400;font-style:${st};src:url("/fonts/${brand.serif ?? 'dm-serif-display'}/files/${brand.serif ?? 'dm-serif-display'}-latin-400-${st}.woff2") format("woff2");}`).join('');
-  h('style', null, document.head, css);
+  const mono = brand.mono ?? 'space-mono';
+  const css2 = css + [400, 700].map(w => `@font-face{font-family:"MonoFont";font-weight:${w};src:url("/fonts/${mono}/files/${mono}-latin-${w}-normal.woff2") format("woff2");}`).join('');
+  h('style', null, document.head, css2);
   const probe = h('div', 'abs', document.body, [400, 500, 600, 700, 800].map(w => `<span style="font-weight:${w}">a</span>`).join('')
-    + '<span style="font-family:SerifFont">a</span><span style="font-family:SerifFont;font-style:italic">a</span>');
+    + '<span style="font-family:SerifFont">a</span><span style="font-family:SerifFont;font-style:italic">a</span><span class="mono">a</span><span class="mono" style="font-weight:700">a</span>');
   probe.style.opacity = '0';
 
   const footageMeta = proj.footage ? await getJSON(PROJ + 'footage/footage.json') : null;
@@ -71,10 +73,30 @@ async function init() {
   const overlayBottom = proj.layout?.overlayBottom != null ? Math.min(bottom, Math.round(proj.layout.overlayBottom * H)) : bottom;
   const pip = { w: Math.round(0.3 * W), h: Math.round(0.3 * H), x: 0, y: top, r: Math.round(34 * S) };
   pip.x = W - m - pip.w;
+  // layout.pip: { pos: "bottom", w: 0.86, h: 0.2, fy: 0.4, bottom: 0.045 } = a wide landscape window of the speaker at the bottom,
+  // the whole area above it is free for graphics (ref e). Default stays the small portrait PiP at the top right.
+  const lp = proj.layout?.pip;
+  if (lp?.pos === 'bottom') {
+    Object.assign(pip, { w: Math.round((lp.w ?? 0.86) * W), h: Math.round((lp.h ?? 0.2) * H), r: Math.round(30 * S), crop: true, fy: lp.fy ?? 0.4, bottom: true });
+    pip.x = Math.round((W - pip.w) / 2);
+    pip.y = Math.round(H - pip.h - (lp.bottom ?? 0.045) * H);
+  }
   // split mode: top panel for a screen/graphic, bottom panel shows the face window of the footage
   const split = { seam: Math.round((proj.layout?.seam ?? 0.5) * H), focus: proj.layout?.splitFocus ?? 0.33, zoom: proj.layout?.splitZoom ?? 1 };
 
   const bg = buildBackground(stage, W, H, brand);
+  // beat.backdrop: "grid" | "dots" | "plain" paints this part's own background (in the beat's palette) under the footage / PiP,
+  // e.g. graph paper behind a whiteboard-style part (ref e). It fades in and out with the beat.
+  const rgba = (hex, a) => { const n = parseInt(hex.replace('#', '').padStart(6, '0'), 16); return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`; };
+  const bdrops = (proj.beats || []).filter(b => b.backdrop).map(b => {
+    const pal = PALETTES[b.palette] ?? brand;
+    const el = h('div', 'layer', stage);
+    const line = rgba(pal.ink, 0.09), dot = rgba(pal.ink, 0.22), u = Math.round(54 * S);
+    el.style.background = b.backdrop === 'grid' ? `linear-gradient(${line} 2px, transparent 2px) 0 0 / ${u}px ${u}px, linear-gradient(90deg, ${line} 2px, transparent 2px) 0 0 / ${u}px ${u}px, ${pal.bg}`
+      : b.backdrop === 'dots' ? `radial-gradient(circle, ${dot} 2.5px, transparent 3px) 0 0 / ${u}px ${u}px, ${pal.bg}` : pal.bg;
+    el.style.opacity = '0';
+    return { el, a: b.t, b: b.t + b.dur };
+  });
   const footage = footageMeta ? buildFootage(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, pip, split) : null;
   const beatsLayer = h('div', 'layer', stage);
   const fxLayer = h('div', 'layer', stage); // transitions: above captions and chrome (moved to the end below)
@@ -129,7 +151,7 @@ async function init() {
         };
       }
     } else {
-      const headW = b.mode === 'insert' ? W - 2 * m - pip.w - 28 * S : W - 2 * m;
+      const headW = b.mode === 'insert' && !pip.bottom ? W - 2 * m - pip.w - 28 * S : W - 2 * m;
       if (hasHead) {
         head = h('div', 'abs', layer);
         place(head, m, top + 10 * S, headW);
@@ -142,8 +164,8 @@ async function init() {
         };
         headH = head.offsetHeight;
       }
-      const mainTop = b.mode === 'insert' ? Math.max(pip.y + pip.h + 40 * S, hasHead ? top + headH + 48 * S : 0) : (hasHead ? top + headH + (b.mode === 'split' ? 36 : 56) * S : top);
-      const zoneBottom = b.mode === 'split' ? split.seam - Math.round(48 * S) : bottom;
+      const mainTop = b.mode === 'insert' && !pip.bottom ? Math.max(pip.y + pip.h + 40 * S, hasHead ? top + headH + 48 * S : 0) : (hasHead ? top + headH + (b.mode === 'split' ? 36 : 56) * S : top);
+      const zoneBottom = b.mode === 'split' ? split.seam - Math.round(48 * S) : b.mode === 'insert' && pip.bottom ? pip.y - Math.round(44 * S) : bottom;
       zone = { x: m, y: mainTop, w: W - 2 * m, h: zoneBottom - mainTop };
       ctx.zone = zone;
       place(box, zone.x, zone.y, zone.w);
@@ -223,6 +245,7 @@ async function init() {
 
   window.seek = async T => {
     bg.update(T);
+    bdrops.forEach(d => { d.el.style.opacity = kOf(T, [[d.a, d.b]]).toFixed(3); });
     for (const it of beats) {
       const lt = T - it.b.t;
       const vis = lt >= -0.2 && lt <= it.b.dur + 0.1;
@@ -238,7 +261,7 @@ async function init() {
     const splitK = kOf(T, splitW);
     if (footage) await footage.update(T, kOf(T, insertW), kOf(T, fullW), splitK, zoomAt(T));
     // kinetic scenes already show the spoken words, so captions step aside (kinetic `captions: true` keeps them)
-    if (captions) captions.update(T, kOf(T, kinCapW), splitK);
+    if (captions) captions.update(T, Math.max(kOf(T, kinCapW), pip.bottom ? kOf(T, insertW) : 0), splitK);
     if (chrome) {
       const ch = [...chapters].reverse().find(c => T >= c.start) || null;
       chrome.update(T, ch, Math.max(chromeHideSplit ? splitK : 0, kOf(T, kinW)));

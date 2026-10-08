@@ -10,6 +10,10 @@ the motion plan. The numbers below were measured on the references (time in seco
 1. S1 Tutorial split-screen (ref A): screen on top, speaker below
 2. S2 Kinetic collage typography (ref B): voice-over words that build on a solid colour
 3. S3 Tracked hand-drawn annotation (ref C): red marks that follow things in the shot
+3.1 S4 Blueprint / isometric build (refs a, b): a diagram that builds itself, block by block
+3.2 S5 Whiteboard on graph paper (ref e): mind map, calendar, numbered chapters, the speaker as a small window
+3.3 S6 Spec tags (ref d): mono labels with curved arrows on a product shot
+3.4 Ring text (ref c, an extension of S2)
 4. Which style when, for talking-head founder content
 5. Limits
 
@@ -31,6 +35,9 @@ the motion plan. The numbers below were measured on the references (time in seco
 | S1 | Tutorial split-screen | ref A | screen on top, face below, boxed seam captions, blue callouts, red UI boxes, uppercase hook, punch-in, light leak | `image` (split) `callout` `annotate` (boil false) `zoom` `transition` `title` (upper) |
 | S2 | Kinetic collage typography | ref B | words land as spoken on a solid colour, mixed type, stamps, paper stickers, hard cuts | `kinetic` |
 | S3 | Tracked hand-drawn annotation | ref C | boiling red marks on objects, tracked, cycling words | `annotate` |
+| S4 | Blueprint / isometric build | refs a, b | isometric blocks that rise one by one, leader-line labels, HUD corners, a build-progress counter, serif-italic accent words, a wireframe globe | `iso` `title`/captions with `\|serif\|` |
+| S5 | Whiteboard on graph paper | ref e | graph-paper backdrop, big black type, mind map and calendar that draw themselves, numbered chapters on an arc, the speaker as a wide window at the bottom, one-word grey caption chips | `mindmap` `calendar` `chapter` (`arc`) `layout.pip` `backdrop` captions `word` |
+| S6 | Spec tags | ref d | small monospace labels typed in with a hand-drawn curved arrow pointing at a detail of a product shot | `tag` |
 
 Accents that work inside any style: `zoom` punch on the key word, `transition` leak on a layout change, `callout` for
 one claim, `^gradient^` headline words in the locked palette.
@@ -43,6 +50,9 @@ one claim, `^gradient^` headline words in the locked palette.
 | `maroon` | bg #4E1A26, ink #EFDCCB, accent #F2B45A | S2 / ref B | a kinetic interlude |
 | `paper` | bg #EFE6D8, ink #1F1B18, accent #C23B22 | S2 variant | a light kinetic or quote card |
 | `ink` | bg #111111, ink #F4F1EA, accent #F2C94C | S2 variant | a stark kinetic punchline |
+| `frost` | bg #EEF1F7, surface #FFFFFF, ink #0B1220, accent #2B3FD6, accent2 #FF5A36 | S4 / refs a | the light isometric explainer |
+| `blueprint` | bg #03050D, surface #0A1230, ink #E8EEFF, accent #4C6BFF, accent2 #9DB4FF | S4 / ref b | the dark isometric explainer |
+| `graph` | bg #EDEDEA, surface #FFFFFF, ink #0F0F0F, accent and accent2 #D32F2F | S5 / ref e | whiteboard parts on graph paper |
 
 Project-wide: `brand.palette` (default `jundy`). Per part: `"palette": "maroon"` on a beat colours just that beat.
 
@@ -53,6 +63,9 @@ Outcome first: every part has a job, and the style is whatever does that job bes
 2. **Map job → style**: hook → S1 (uppercase title + `zoom` punch) or S2 (one kinetic hook screen); structure → S0;
    proof → S1 split; punchline, idiom, words said fast → S2; "look at this" → S3 (or an S1 red box on a screen);
    section change → `transition` + the next part's style; CTA → S0 `cta` or an S1 callout, in the locked palette.
+   Added with refs a–e: "how a system or product is built / how the pieces fit" → S4 `iso`; "a method with steps, a mind
+   map, a content calendar, numbered chapters" → S5; "a detail of an object that needs naming" (a gadget, a UI part) → S6 `tag`;
+   a repeated keyword that should loop around the shot → S2 `rings`.
 3. **Break ties with evidence, then novelty**: prefer the style that shows proof (a screen, a number, a real output)
    over one that only decorates; if still tied, pick the style used least recently. When the proof needs an asset the
    user has not sent, plan the fallback style and put the asset on the wishlist (see SKILL.md, "Proof over decoration").
@@ -150,6 +163,55 @@ Recipe:
 ```
 Calibrate positions on stills (`render.mjs --stills`), then add `keys` where the object moves.
 
+## 3.1 S4 Blueprint / isometric build (refs a and b)
+Measured on two 25–29 s motion pieces without a speaker (a light one and a dark one, both a "Labs" project introduction):
+- **Structure.** A flat plate appears at 0:00–0:02, a small glowing point marks the centre, then plates stack (0:04–0:09),
+  blocks and a wireframe globe rise one by one (0:09–0:15), floating labels with leader lines pin to them, dashed links
+  with a travelling dot join the parts (0:13–0:17), and the whole city of blocks pulls back (0:18–0:23) before the title
+  lands. A counter in a corner runs 000 → 100 % ("BUILD PROGRESS") for the whole piece.
+- **Type.** A small sentence at the bottom left that changes with each phase, with one accent word in serif italic
+  ("Everything starts from an *idea*.", "Piece by piece, it takes *shape*.", "From one idea to a living *system*.").
+  Tiny monospace HUD text in the corners ("LABS — PROJECT INTRODUCTION", "SCENE 01 / 03"). The dark version adds a big
+  "Labs." title with a glitch-in and a 3D bar chart whose columns carry numbers (07, 03, 12).
+- **Colour.** Light: near-white background, white blocks, one saturated blue core. Dark: near-black navy, wireframes and
+  one electric-blue core.
+- **Recipe.** `{ "type": "iso", "palette": "frost" | "blueprint", "backdrop": "plain", "blocks": [...], "links": [...],
+  "hud": {...}, "caption": [{ "text": "Everything starts from an |idea|.", "at": 0.8, "until": 4.5 }] }`. Use it as a
+  full-screen part (8–14 s) when the speaker explains how something is built or how pieces fit together, or as the
+  opening of a no-footage explainer. Keep the sentence at the bottom in step with what the voice says.
+- **Do not** use it as decoration over a talking head: it is a `full` part and hides the speaker, so it counts toward the
+  full-screen interlude budget in the rubric (≤ 15 % of the runtime in total, so keep it short or use it in explainers).
+
+## 3.2 S5 Whiteboard on graph paper (ref e)
+Measured on an 83 s marketing explainer (portrait, a speaker in a dark room):
+- **Layout.** Light graph-paper backdrop over the whole frame, the speaker shrinks to a wide rounded window at the bottom
+  (about 88 % wide, 22 % high) and the whole area above is the board. Between board parts the speaker takes the full frame
+  with one-word grey caption chips in the centre, then shrinks back. Each board part is 3–8 s.
+- **Board parts.** A calendar ("30 days of content") whose days fill in; a plain grid ("6/5 method"); a big number on a
+  curved line with a dot ("1 Find", "2 Formats"); a mind map (hub "dentistry" with brushing, flossing, cavities above and
+  mouth guards, gums, veneers below) whose connectors draw; a phone mockup with a red hand-drawn circle; a database
+  poster; grey chips with one word ("Then", "get the picture.").
+- **Recipe.** `layout.pip: { "pos": "bottom", "w": 0.88, "h": 0.22, "fy": 0.45 }`, `captions: { "style": "word" }`, and per
+  board part `"mode": "insert", "palette": "graph", "backdrop": "grid"` with `mindmap`, `calendar`, `chapter` (`style: "arc"`),
+  `stat`, `checklist` or `image`. Captions step aside automatically while a board part is on.
+- **Why it works.** The speaker never disappears (retention), and the board gives a method a visible shape.
+
+## 3.3 S6 Spec tags (ref d)
+Measured on a 101 s product review (portrait, warm low-key light): short monospace lines ("Modular", "handheld", "15hr",
+"plug & play") with a thin hand-drawn curved arrow that points at the part of the product being named, typed in over
+0.3–0.6 s; a spec title card top left ("Sennheiser / Profile Wireless 2-Channel"); words sliding in with a horizontal
+smear at the bottom; black letterbox bars with a line of small text in the top bar. The grade is warm and dark.
+- **Recipe.** `{ "type": "tag", "x": 0.56, "y": 0.36, "text": "Modular", "sub": "handheld", "big": "15hr", "to": [0.68, 0.5] }`
+  over footage, 2–3 s each, placed beside the detail (never on the face). Use for gadget reviews, UI walk-throughs and any
+  "this part does that" moment. The smear and the letterbox bars are not built in.
+
+## 3.4 Ring text (ref c, an extension of S2)
+Ref c is a 20 s kinetic collage (red, white, blue and black blocks, huge type, face cut-outs inside letters, type
+that wraps around a circle). The existing S2 `kinetic` covers the word-by-word part. Added: `rings` on a kinetic beat
+puts a keyword around a circle that spins, with the shot (or a sticker) in the middle: `"rings": [{ "text": "PACING",
+"x": 0.5, "y": 0.52, "r": 0.34, "size": 96, "spin": 16 }]`. Not built: type that sits *behind* the speaker (it needs a
+cut-out of the person, which a deterministic renderer cannot get on its own; supply a transparent PNG as a sticker instead).
+
 ## 4. Which style when (talking-head founder content)
 | moment in the video | style | beats |
 |---|---|---|
@@ -160,6 +222,10 @@ Calibrate positions on stills (`render.mjs --stills`), then add `keys` where the
 | a punchline, an idiom, a list of words said fast | S2 | `kinetic` 2–5 s, `palette` brand (locked) or a library palette for variety |
 | "look at this" on something in the shot | S3 | `annotate` with boil, tracked `keys` |
 | the CTA | S0 | `cta` in the locked palette, held to the last frame |
+| how a system is built, how the pieces fit | S4 | `iso` (8–14 s, `frost` or `blueprint`), short and sparing |
+| a method, a calendar, a mind map, numbered steps | S5 | `mindmap` `calendar` `chapter` (`arc`) with `layout.pip` at the bottom, `backdrop: "grid"` |
+| naming a part of a product or a UI detail | S6 | `tag` (2–3 s), beside the detail |
+| a keyword that should loop around the shot | S2 ext | `kinetic` with `rings` |
 
 A worked mix for the 2-minute talking head "banyak jasa chaos" (times follow the transcript; beats always sync to speech):
 0:00 S1 uppercase hook "Nambah service bukan growth" + 0:02.5 `zoom` punch on "itu bullshit" → 0:04.7 S1 callout
@@ -175,6 +241,9 @@ friendliest way to show a screen without hiding the speaker. If the footage has 
 in split mode, so turn on `captions` with `when: "split"` to replace them on the seam.
 
 ## 5. Limits
+- `iso` draws boxes, plates, cylinders and a wireframe globe in an isometric projection with depth sorting by hand. It is
+  not a 3D engine: no real lighting, no free camera, no complex models. For a richer scene use a `custom` beat.
+- Type behind the speaker, face cut-outs inside letters and smeared caption transitions (refs c, d) are not built.
 - The top panel takes still images (screenshots) with camera pans and zooms. A screen *recording* as video is not
   supported yet; export 2–4 key screenshots and cut between them with camera moves instead.
 - 3D icon props and collage stickers need PNG files with transparency in `assets/`. Built-in line icons work as simple
