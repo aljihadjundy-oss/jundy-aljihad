@@ -15,6 +15,7 @@ const eslintConfig = defineConfig([
     "workers/**",
     // standalone video project, not part of the website build
     "siaga-sumatra-motion/**",
+    "shape-motion/**",
   ]),
 ]);
 

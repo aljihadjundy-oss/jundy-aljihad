@@ -26,6 +26,8 @@ const PROJECT = path.resolve(args.find(a => !a.startsWith('--')) || '.');
 const opt = (name, def) => { const i = args.indexOf(`--${name}`); if (i < 0) return def; const v = args[i + 1]; return v === undefined || v.startsWith('--') ? true : v; };
 const WORKERS = +opt('workers', Math.max(1, Math.min(4, os.cpus().length - 1)));
 const CRF = String(opt('crf', 17));
+const proj = JSON.parse(fs.readFileSync(path.join(PROJECT, 'project.json'), 'utf8'));
+const ENTRY = proj.entry || null;
 const OUT = path.join(PROJECT, 'out');
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -46,7 +48,8 @@ function serve() {
   const server = http.createServer((req, res) => {
     const u = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     let file = null;
-    if (u === '/' || u === '/index.html') file = path.join(RUNTIME, 'index.html');
+    // project.json "entry": a project may ship its own page (own scenes/layout) and reuse /rt/engine.js
+    if (u === '/' || u === '/index.html') file = ENTRY ? path.join(PROJECT, ENTRY) : path.join(RUNTIME, 'index.html');
     for (const [pre, dir] of ROUTES) if (u.startsWith(pre)) { const f = path.join(dir, u.slice(pre.length)); if (f.startsWith(dir)) file = f; }
     if (!file || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); res.end(); return; }
     res.writeHead(200, { 'content-type': MIME[path.extname(file).toLowerCase()] || 'application/octet-stream' });
@@ -80,7 +83,6 @@ async function renderRange(page, fps, f0, f1, file, tick) {
   await new Promise((res, rej) => ff.on('close', c => (c === 0 ? res() : rej(new Error(`ffmpeg exited ${c}`)))));
 }
 
-const proj = JSON.parse(fs.readFileSync(path.join(PROJECT, 'project.json'), 'utf8'));
 const W = proj.canvas?.w ?? 1080, H = proj.canvas?.h ?? 1920, FPS = proj.canvas?.fps ?? 30;
 const exe = findChrome();
 if (!exe) { console.error('No Chrome/Chromium found. Set CHROME_PATH.'); process.exit(1); }
@@ -89,7 +91,7 @@ const url = `http://127.0.0.1:${server.address().port}/`;
 const browser = await chromium.launch({ executablePath: exe, args: ['--force-color-profile=srgb', '--disable-lcd-text', '--allow-file-access-from-files'] });
 try {
   const page = await openPage(browser, url, W, H);
-  const meta = await page.evaluate(() => ({ duration: window.__duration, fps: window.__fps, cues: window.__cues, beats: window.__beats, hasFootage: window.__hasFootage }));
+  const meta = await page.evaluate(() => ({ duration: window.__duration, fps: window.__fps, cues: window.__cues, beats: window.__beats, hasFootage: window.__hasFootage, extra: window.__extra || null }));
   fs.writeFileSync(path.join(OUT, 'meta.json'), JSON.stringify(meta, null, 2));
   console.log(`duration ${meta.duration.toFixed(2)}s · ${meta.beats.length} beats · ${meta.cues.length} cues · footage: ${meta.hasFootage ? 'yes' : 'no'}`);
   if (opt('meta', false)) {
@@ -126,7 +128,9 @@ try {
     if (opt('no-audio', false)) fs.renameSync(silent, final);
     else {
       const wav = path.join(OUT, 'mix.wav');
-      run(process.platform === 'win32' ? 'python' : 'python3', [path.join(HERE, 'mix_audio.py'), PROJECT, wav, String(a), String(b)]);
+      // project.json audio.script: a project-specific synth (same args) replaces the generic mixer
+      const mixer = proj.audio?.script ? path.join(PROJECT, proj.audio.script) : path.join(HERE, 'mix_audio.py');
+      run(process.platform === 'win32' ? 'python' : 'python3', [mixer, PROJECT, wav, String(a), String(b)]);
       run('ffmpeg', ['-y', '-loglevel', 'error', '-i', silent, '-i', wav, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', final]);
       fs.rmSync(silent);
     }
