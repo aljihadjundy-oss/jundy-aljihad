@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "title": "C07 · Okt W3 · Regular B2C · Fitness — 15 Menit di Rumah vs 1 Jam Niat ke Gym",
+    "style": "base",
+    "segment": "b2c",
+    "pillar": "fitness"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "icon": "dumbbell",
+      "ghost": "15'",
+      "kicker": "Fitness",
+      "title": "15 Menit di Rumah\n{{>}} 1 Jam [[Niat]]\nke Gym",
+      "sub": "Yang penting gerak dulu.",
+      "notes": {
+        "visual": "Cover tipografi besar: simbol > sebagai inti perbandingan, ikon dumbbell di bulatan putih, ghost '15'' samar",
+        "element": "Highlight biru di '>' dan satu-satunya aksen merah di kata 'Niat' (punchline: niat tanpa gerak)",
+        "motion": "Ikon pop → kicker rise → judul rise, '>' lalu 'Niat' stamp merah menyusul → sub rise; panah next fade",
+        "asset": "Tidak ada"
+      },
+      "titleSize": 88
+    },
+    {
+      "pattern": "compare",
+      "title": "Mana yang beneran jalan?",
+      "left": {
+        "label": "Niat",
+        "title": "1 jam ke gym",
+        "body": "Rencananya bagus, tapi sering berhenti di niat."
+      },
+      "right": {
+        "label": "Jalan",
+        "title": "15 menit di rumah",
+        "body": "Pendek, dekat, gampang dimulai."
+      },
+      "foot": "Kecil tapi {{konsisten}}, lebih baik dari sempurna tapi nggak jalan.",
+      "notes": {
+        "visual": "Dua kartu berdampingan: kiri kaca polos (niat), kanan lebih terang (jalan). Ini adegan inti dari plan: 2 box berdampingan sebagai perbandingan visual",
+        "element": "Perbandingan 2 kolom, tanpa angka klaim",
+        "motion": "Judul rise → kartu kiri slide dari kiri → kartu kanan slide dari kanan → penutup rise",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "list",
+      "title": "15 menit bisa buat apa?",
+      "items": [
+        "Jalan cepat keliling komplek",
+        "Naik-turun tangga",
+        "Squat & plank sambil masak",
+        "Peregangan sebelum tidur",
+        "Gerak ringan sambil nonton"
+      ],
+      "notes": {
+        "visual": "Lima glass card berisi ide gerakan ringan yang realistis dilakukan di rumah",
+        "element": "Checklist yang muncul satu per satu: pembaca langsung punya opsi untuk dicoba hari ini",
+        "motion": "Judul rise → tiap baris slide-in dari kiri berurutan 0.25 detik",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "dumbbell",
+      "title": "Simpan biar inget\ngerak 15 menit 📌",
+      "sub": "Kirim ke teman yang masih\nniat-niat aja ke gym",
+      "handle": "Follow @shape.indonesia",
+      "notes": {
+        "visual": "Penutup tenang: kotak biru + pill handle lime, tanpa panah next",
+        "element": "CTA simpan & share (B2C edukasi, bukan daftar webinar)",
+        "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+        "asset": "Tidak ada"
+      }
+    }
+  ]
+}

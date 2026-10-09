@@ -1,0 +1,15 @@
+{
+  "meta": {"title": "C06 · Okt W2 · Campaign B2B · Sesi 2 Preventive & Consumer Health", "style": "base", "segment": "b2b", "pillar": "health"},
+  "slides": [
+    {"pattern": "cover", "kicker": "Shape Expert Network · Sesi 2", "title": "Preventive Health:\n{{Peluang Bisnis Wellness}}", "icon": "pulse",
+     "notes": {"visual": "Cover formal tanpa emoji besar atau meme, ikon denyut di bulatan putih", "element": "Highlight box pada frasa kunci", "motion": "Ikon pop, headline rise, highlight biru wipe", "asset": "-"}},
+    {"pattern": "bars", "title": "Konsumen bergeser: dari reaktif ke preventif",
+     "items": [{"label": "Reaktif — obati setelah sakit", "value": 35, "text": "dulu"}, {"label": "Preventif — cegah sebelum sakit", "value": 82, "text": "arah baru"}],
+     "caption": "Ini peluang buat gym & klinik.",
+     "notes": {"visual": "Dua bar ilustratif (BUKAN data statistik, tidak ada angka klaim)", "element": "Chart batang animasi sebagai ilustrasi arah tren", "motion": "Bar tumbuh dari kiri berurutan", "asset": "-"}},
+    {"pattern": "session", "kicker": "Shape Expert Network", "title": "Sesi 2", "bigLogo": true, "sub": "Preventive & Consumer Health", "date": "Segera hadir",
+     "notes": {"visual": "Slide terpenting B2B: logo dan nama sesi paling jelas", "element": "Ikon kalender + status 'Segera hadir'", "motion": "Judul rise, kotak sub rise, tanggal rise", "asset": "Logo Shape asli (assets/logo-shape.png)"}},
+    {"pattern": "cta", "icon": "link", "title": "Cek LinkedIn Events di bio", "sub": "Khusus 200+ profesional terpilih", "handle": "@shape.indonesia",
+     "notes": {"visual": "Penutup tenang", "element": "Kata 'terpilih' sengaja untuk efek eksklusif", "motion": "Pill pulse", "asset": "Ikon LinkedIn kecil (opsional)"}}
+  ]
+}

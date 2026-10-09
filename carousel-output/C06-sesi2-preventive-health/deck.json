@@ -1,0 +1,32 @@
+{
+  "meta": {"title": "C06 · Okt W2 · Campaign B2B · Sesi 2 Preventive & Consumer Health", "style": "base", "segment": "b2b", "pillar": "health"},
+  "slides": [
+    {"pattern": "cover", "icon": "pulse", "kicker": "Shape Expert Network · Sesi 2",
+     "title": "Preventive Health:\n{{Peluang Bisnis Wellness}}",
+     "asset": "FOTO PROFESIONAL GENERIK (klinik / gym / konsultasi), opsional", "assetH": 220,
+     "notes": {"visual": "Cover formal: ikon denyut, kicker sesi, judul besar dengan frasa kunci di highlight biru, placeholder foto profesional di bawah",
+               "element": "Tanpa emoji besar, tanpa meme. Highlight biru di 'Peluang Bisnis Wellness'",
+               "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → foto rise",
+               "asset": "Foto profesional generik (opsional). Kalau tidak ada, hapus kotak placeholder, layout tetap rapi"}},
+    {"pattern": "compare", "title": "Konsumen mulai bergeser",
+     "left": {"label": "Dulu", "title": "Reaktif", "body": "Baru bertindak setelah ada keluhan."},
+     "right": {"label": "Sekarang", "title": "Preventif", "body": "Menjaga sebelum ada keluhan."},
+     "foot": "{{Ini peluang buat gym & klinik.}}",
+     "notes": {"visual": "Dua kartu berdampingan: kiri kaca polos (reaktif), kanan lebih terang (preventif). Judul di atas, penutup di bawah",
+               "element": "Perbandingan 2 kolom tanpa angka (tidak ada data yang dikarang). Kalimat penutup di highlight biru sebagai pesan bisnisnya",
+               "motion": "Judul rise → kartu kiri slide dari kiri → kartu kanan slide dari kanan → penutup rise",
+               "asset": "Tidak ada"}},
+    {"pattern": "session", "bigLogo": true, "kicker": "Shape Expert Network", "title": "Sesi 2",
+     "sub": "Preventive & Consumer Health", "date": "Segera hadir",
+     "notes": {"visual": "Slide terpenting untuk B2B: logo Shape besar di tengah, nama sesi paling jelas",
+               "element": "Status 'Segera hadir' dengan ikon kalender. Ganti dengan tanggal + jam begitu jadwal Sesi 2 final",
+               "motion": "Logo pop → kicker fade → 'Sesi 2' rise → kotak topik rise → tanggal rise",
+               "asset": "Tidak ada. Butuh tanggal & jam Sesi 2 dari user"}},
+    {"pattern": "cta", "icon": "link", "title": "Cek LinkedIn Events di bio",
+     "sub": "Khusus 200+ profesional terpilih", "handle": "@shape.indonesia",
+     "notes": {"visual": "Penutup tenang: ikon tautan, kotak biru, pill handle",
+               "element": "'terpilih' sengaja dipakai untuk efek eksklusif (scarcity). Satu-satunya angka adalah proof titik 200+",
+               "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+               "asset": "Ikon LinkedIn kecil (opsional)"}}
+  ]
+}

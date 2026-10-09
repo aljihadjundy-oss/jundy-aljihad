@@ -1,0 +1,30 @@
+{
+  "meta": {"title": "C10 · Nov W2 · Campaign B2B · Sesi 4 Longevity & Biohacking", "style": "base", "segment": "b2b", "pillar": "longevity"},
+  "slides": [
+    {"pattern": "cover", "icon": "moon", "kicker": "Shape Expert Network · Sesi 4", "titleSize": 80,
+     "title": "Recovery & Biohacking:\n{{Peluang Bisnis Wellness}}",
+     "asset": "FOTO PERALATAN RECOVERY GENERIK tanpa merek (foam roller, massage ball, resistance band)", "assetH": 220,
+     "notes": {"visual": "Cover formal: ikon bulan (pemulihan), kicker sesi, judul besar dengan frasa kunci di highlight biru, placeholder foto alat recovery generik",
+               "element": "Tanpa kucing/meme/emoji besar (B2B). Highlight biru di 'Peluang Bisnis Wellness'",
+               "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → foto rise",
+               "asset": "Foto peralatan recovery generik (opsional; prompt GPT ada di design-plan.md)"}},
+    {"pattern": "list", "title": "Sesi ini buat siapa?",
+     "items": ["Pemilik bisnis wellness", "Praktisi recovery & biohacking", "Pengelola gym, studio, atau klinik"],
+     "notes": {"visual": "Tiga glass card berisi sasaran sesi, satu per baris",
+               "element": "Angle bisnis, bukan gaya hidup pribadi: menyebut siapa yang relevan agar audiens B2B mengenali dirinya",
+               "motion": "Judul rise → tiap baris slide-in dari kiri berurutan 0.25 detik",
+               "asset": "Tidak ada"}},
+    {"pattern": "session", "bigLogo": true, "kicker": "Shape Expert Network", "title": "Sesi 4",
+     "sub": "Longevity & Biohacking", "date": "Segera hadir",
+     "notes": {"visual": "Slide terpenting B2B: logo Shape besar, nama sesi paling jelas",
+               "element": "Status 'Segera hadir'. Ganti dengan tanggal + jam begitu jadwal Sesi 4 final",
+               "motion": "Logo pop → kicker fade → 'Sesi 4' rise → kotak topik rise → tanggal rise",
+               "asset": "Tidak ada. Butuh tanggal & jam Sesi 4 dari user"}},
+    {"pattern": "cta", "icon": "link", "title": "Cek LinkedIn Events di bio",
+     "sub": "Khusus 200+ profesional terpilih", "handle": "@shape.indonesia",
+     "notes": {"visual": "Penutup tenang: ikon tautan, kotak biru, pill handle",
+               "element": "'terpilih' untuk efek eksklusif (scarcity). Satu-satunya angka: proof titik 200+",
+               "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+               "asset": "Ikon LinkedIn kecil (opsional)"}}
+  ]
+}

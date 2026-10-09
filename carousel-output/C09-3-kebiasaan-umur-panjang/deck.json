@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "C09 · Nov W1 · Regular B2C · Longevity & Biohacking — 3 Kebiasaan Simpel Umur Panjang Aktif",
+    "style": "base",
+    "segment": "b2c",
+    "pillar": "longevity"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "icon": "spark",
+      "ghost": "AKTIF",
+      "kicker": "Longevity & Biohacking",
+      "titleSize": 80,
+      "title": "3 Kebiasaan Simpel\nUmur Panjang {{Aktif}}",
+      "sub": "Nomor 1 gratis.",
+      "notes": {
+        "visual": "Cover tipografi besar, ikon percik di bulatan putih, ghost word AKTIF samar",
+        "element": "Highlight biru di 'Aktif'. Sub 'Nomor 1 gratis' = janji kecil yang memancing swipe",
+        "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → sub rise; panah next fade",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "1",
+      "label": "Kebiasaan #1",
+      "title": "Tidur cukup\n& teratur",
+      "body": "[[Gratis]], tapi sering jadi yang pertama dikorbankan.",
+      "notes": {
+        "visual": "Numeral besar samar, label pill, judul 2 baris, body 1 kalimat",
+        "element": "Satu-satunya aksen merah di kata 'Gratis' (menjawab hook 'nomor 1 gratis')",
+        "motion": "Numeral fade → label pop → judul rise → body rise, 'Gratis' stamp merah terakhir",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "2",
+      "label": "Kebiasaan #2",
+      "title": "Gerak kecil\ntiap hari",
+      "body": "Jalan kaki sebentar tetap hitungan gerak.",
+      "notes": {
+        "visual": "Sama seperti #1 (posisi angka dan label konsisten)",
+        "element": "-",
+        "motion": "Sama dengan #1",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "3",
+      "label": "Kebiasaan #3",
+      "title": "Tetap terhubung\ndengan orang",
+      "body": "Ngobrol dan ketemu teman ikut menjaga kepala tetap ringan.",
+      "notes": {
+        "visual": "Sama seperti #1",
+        "element": "-",
+        "motion": "Sama dengan #1",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "heart",
+      "title": "Simpan biar inget\nkebiasaan ini 📌",
+      "sub": "Kirim ke teman yang pengen panjang umur (dan tetap aktif)",
+      "handle": "Follow @shape.indonesia",
+      "notes": {
+        "visual": "Penutup tenang: kotak biru + pill handle lime, tanpa panah next",
+        "element": "CTA simpan & share (B2C edukasi)",
+        "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+        "asset": "Tidak ada"
+      }
+    }
+  ]
+}

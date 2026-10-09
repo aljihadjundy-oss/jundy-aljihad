@@ -1,0 +1,14 @@
+FONT POPPINS UNTUK FILE PPTX CAROUSEL
+=====================================
+File PPTX memakai font Poppins. Instal sekali, berlaku untuk semua carousel.
+
+WINDOWS : pilih semua file .ttf di folder ini > klik kanan > "Install" (atau "Install for all users").
+MAC     : pilih semua file .ttf > klik kanan > Open > "Install Font" di Font Book.
+SESUDAH : TUTUP PowerPoint sampai benar-benar keluar, lalu buka lagi file PPTX-nya.
+
+TANPA INSTALL (alternatif): upload PPTX ke Google Slides. Poppins font bawaan Google, jadi tampil benar
+tanpa instal apa pun. Catatan: animasi bisa berubah di Google Slides, jadi edit teks di sana
+boleh, tapi cek ulang animasinya sebelum dipakai.
+
+Cek berhasil: di PowerPoint, klik teks judul, nama font harus "Poppins ExtraBold". Kalau tampil
+font lain (Calibri/Arial), font belum terpasang.
