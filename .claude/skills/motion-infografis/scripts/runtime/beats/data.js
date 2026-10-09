@@ -103,7 +103,7 @@ export const compare = {
     const sides = [[b.left, b.leftTone ?? 'neg', 'x'], [b.right, b.rightTone ?? 'pos', 'check']].map(([side, tn, ic], si) => {
       const col = div(grid, { borderRadius: `${24 * S}px`, padding: `${24 * S}px`, background: 'rgba(255,255,255,.06)', border: `2px solid ${tone(tn)}` });
       const head = div(col, { display: 'inline-block', fontSize: `${24 * S}px`, fontWeight: '800', letterSpacing: '.1em', textTransform: 'uppercase', padding: `${6 * S}px ${14 * S}px`,
-        borderRadius: '999px', background: tone(tn), color: '#0A1E36', marginBottom: `${18 * S}px` }, side.title);
+        borderRadius: '999px', background: tone(tn), color: 'var(--bg)', marginBottom: `${18 * S}px` }, side.title);
       const rows = (side.items || []).map(t => {
         const r = div(col, { display: 'flex', gap: `${12 * S}px`, alignItems: 'flex-start', marginTop: `${14 * S}px`, fontSize: `${26 * S}px`, fontWeight: '600', lineHeight: '1.3' });
         div(r, { marginTop: `${2 * S}px` }, icon(ic, 30 * S, tone(tn)));
@@ -112,10 +112,11 @@ export const compare = {
       });
       return { col, head, rows, si };
     });
-    sides.forEach(sd => ctx.cue(ctx.t0 + sd.si * 0.9, 'pop'));
+    const at = (si) => ctx.t0 + (si ? (b.rightAt ?? 0.9) : 0); // rightAt: seconds the right column waits
+    sides.forEach(sd => ctx.cue(at(sd.si), 'pop'));
     return lt => {
       sides.forEach(({ col, head, rows, si }) => {
-        const t = ctx.t0 + si * 0.9;
+        const t = at(si);
         appear(col, lt, t, ctx.OUT, { dy: 50 });
         rows.forEach((r, i) => appear(r, lt, t + 0.3 + i * 0.18, ctx.OUT, { dx: -20, dy: 0 }));
       });

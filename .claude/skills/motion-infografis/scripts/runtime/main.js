@@ -1,9 +1,10 @@
 import { h, E, prog, pose, place } from './engine.js';
 import { buildBackground, buildChrome } from './layers.js';
-import { buildFootage } from './footage.js';
+import { buildFootage, buildPerson } from './footage.js';
 import { buildCaptions } from './captions.js';
 import { headline } from './components.js';
 import { BEATS } from './beats/index.js';
+import { PALETTES, applyPalette } from './palettes.js';
 
 const PROJ = '/p/';
 const asset = src => (/^(https?:|data:|\/)/.test(src) ? src : PROJ + src);
@@ -34,17 +35,24 @@ async function init() {
   Object.assign(stage.style, { width: `${W}px`, height: `${H}px` });
 
   // brand → CSS tokens + font
-  const brand = { bg: '#0A1E36', surface: '#12355B', ink: '#FFFFFF', accent: '#3FB6C4', accent2: '#E0A100', pos: '#5DBB63', neg: '#F06A5F', font: 'plus-jakarta-sans', ...(proj.brand || {}) };
+  // locked default palette "jundy" (the user's site); brand.palette picks another library palette, brand keys override
+  const brand = { ...(PALETTES[proj.brand?.palette] ?? PALETTES.jundy), font: 'plus-jakarta-sans', ...(proj.brand || {}) };
   const root = document.documentElement.style;
-  for (const k of ['bg', 'surface', 'ink', 'accent', 'accent2', 'pos', 'neg']) root.setProperty(`--${k}`, brand[k]);
-  const css = [400, 500, 600, 700, 800].map(w => `@font-face{font-family:"BrandFont";font-weight:${w};src:url("/fonts/${brand.font}/files/${brand.font}-latin-${w}-normal.woff2") format("woff2");}`).join('');
-  h('style', null, document.head, css);
-  const probe = h('div', 'abs', document.body, [400, 500, 600, 700, 800].map(w => `<span style="font-weight:${w}">a</span>`).join(''));
+  applyPalette(root, brand);
+  const css = [400, 500, 600, 700, 800].map(w => `@font-face{font-family:"BrandFont";font-weight:${w};src:url("/fonts/${brand.font}/files/${brand.font}-latin-${w}-normal.woff2") format("woff2");}`).join('')
+    // display serif for kinetic / annotate words (installed by setup.sh; falls back to a system serif)
+    + ['normal', 'italic'].map(st => `@font-face{font-family:"SerifFont";font-weight:400;font-style:${st};src:url("/fonts/${brand.serif ?? 'dm-serif-display'}/files/${brand.serif ?? 'dm-serif-display'}-latin-400-${st}.woff2") format("woff2");}`).join('');
+  const mono = brand.mono ?? 'space-mono';
+  const css2 = css + [400, 700].map(w => `@font-face{font-family:"MonoFont";font-weight:${w};src:url("/fonts/${mono}/files/${mono}-latin-${w}-normal.woff2") format("woff2");}`).join('');
+  h('style', null, document.head, css2);
+  const probe = h('div', 'abs', document.body, [400, 500, 600, 700, 800].map(w => `<span style="font-weight:${w}">a</span>`).join('')
+    + '<span style="font-family:SerifFont">a</span><span style="font-family:SerifFont;font-style:italic">a</span><span class="mono">a</span><span class="mono" style="font-weight:700">a</span>');
   probe.style.opacity = '0';
 
   const footageMeta = proj.footage ? await getJSON(PROJ + 'footage/footage.json') : null;
   const capCfg = { enabled: true, ...(proj.captions || {}) };
-  const words = footageMeta && capCfg.enabled ? await getJSON(PROJ + (capCfg.words || 'transcript/words.json')) : null;
+  const allWords = await getJSON(PROJ + (capCfg.words || 'transcript/words.json')); // also used by kinetic beats
+  const words = footageMeta && capCfg.enabled ? allWords : null;
 
   const aspects = {};
   const srcs = new Set((proj.beats || []).filter(b => b.src).map(b => b.src));
@@ -57,34 +65,75 @@ async function init() {
 
   // zones (all numbers scale with S so 4:5 / 16:9 canvases stay proportional)
   const m = Math.round(72 * S);
-  const top = Math.round(Math.max(0.135 * H, 250 * S));
+  // overlay titles / insert headers start here; layout.overlayTop raises it for tight close-ups where the hair starts near the top
+  const top = proj.layout?.overlayTop != null ? Math.round(proj.layout.overlayTop * H) : Math.round(Math.max(0.135 * H, 250 * S));
   const captionsY = Math.round((capCfg.y ?? 0.775) * H);
-  const bottom = words ? captionsY - Math.round(28 * S) : Math.round(0.82 * H);
+  const bottom = words && capCfg.when !== 'split' ? captionsY - Math.round(28 * S) : Math.round(0.82 * H);
+  // footage that already carries text (burned-in subtitles): overlay cards stay above this line
+  const overlayBottom = proj.layout?.overlayBottom != null ? Math.min(bottom, Math.round(proj.layout.overlayBottom * H)) : bottom;
   const pip = { w: Math.round(0.3 * W), h: Math.round(0.3 * H), x: 0, y: top, r: Math.round(34 * S) };
   pip.x = W - m - pip.w;
+  // layout.pip: { pos: "bottom", w: 0.86, h: 0.2, fy: 0.4, bottom: 0.045 } = a wide landscape window of the speaker at the bottom,
+  // the whole area above it is free for graphics (ref e). Default stays the small portrait PiP at the top right.
+  const lp = proj.layout?.pip;
+  // The wide bottom window only works when the RAW footage is landscape. On portrait footage it crops the face badly, so it is ignored
+  // (the default portrait window at the top right stays) unless layout.pip.force is true.
+  const rawLandscape = (footageMeta?.source?.w ?? 1) >= (footageMeta?.source?.h ?? 0);
+  if (lp?.pos === 'bottom' && !rawLandscape && !lp.force) console.warn('layout.pip bottom ignored: the raw footage is portrait and the wide window would cut the face. Use split mode or the default PiP (or set pip.force).');
+  if (lp?.pos === 'bottom' && (rawLandscape || lp.force)) {
+    Object.assign(pip, { w: Math.round((lp.w ?? 0.86) * W), h: Math.round((lp.h ?? 0.2) * H), r: Math.round(30 * S), crop: true, fy: lp.fy ?? 0.4, bottom: true });
+    pip.x = Math.round((W - pip.w) / 2);
+    pip.y = Math.round(H - pip.h - (lp.bottom ?? 0.045) * H);
+  }
+  // split mode: top panel for a screen/graphic, bottom panel shows the face window of the footage
+  const split = { seam: Math.round((proj.layout?.seam ?? 0.5) * H), focus: proj.layout?.splitFocus ?? 0.33, zoom: proj.layout?.splitZoom ?? 1 };
 
   const bg = buildBackground(stage, W, H, brand);
-  const footage = footageMeta ? buildFootage(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, pip) : null;
+  // beat.backdrop: "grid" | "dots" | "plain" paints this part's own background (in the beat's palette) under the footage / PiP,
+  // e.g. graph paper behind a whiteboard-style part (ref e). It fades in and out with the beat.
+  const rgba = (hex, a) => { const n = parseInt(hex.replace('#', '').padStart(6, '0'), 16); return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`; };
+  const bdrops = (proj.beats || []).filter(b => b.backdrop).map(b => {
+    const pal = PALETTES[b.palette] ?? brand;
+    const el = h('div', 'layer', stage);
+    const line = rgba(pal.ink, 0.09), dot = rgba(pal.ink, 0.22), u = Math.round(54 * S);
+    el.style.background = b.backdrop === 'grid' ? `linear-gradient(${line} 2px, transparent 2px) 0 0 / ${u}px ${u}px, linear-gradient(90deg, ${line} 2px, transparent 2px) 0 0 / ${u}px ${u}px, ${pal.bg}`
+      : b.backdrop === 'dots' ? `radial-gradient(circle, ${dot} 2.5px, transparent 3px) 0 0 / ${u}px ${u}px, ${pal.bg}` : pal.bg;
+    el.style.opacity = '0';
+    return { el, a: b.t, b: b.t + b.dur };
+  });
+  const footage = footageMeta ? buildFootage(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, pip, split) : null;
+  // behind: true on a beat puts it BETWEEN the background footage and the speaker (needs scripts/matte.py masks), so the speaker
+  // stays in front of the scene or text. The base footage fades out like a full-screen part; the matted speaker stays.
+  const hasBehind = footage && (proj.beats || []).some(b => b.behind);
+  const behindLayer = h('div', 'layer', stage);
+  const person = hasBehind ? buildPerson(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, i => `${PROJ}footage/matte/${String(i).padStart(6, '0')}.jpg`) : null;
   const beatsLayer = h('div', 'layer', stage);
+  const fxLayer = h('div', 'layer', stage); // transitions: above captions and chrome (moved to the end below)
   const cues = [];
 
   const beats = (proj.beats || []).map((b0, i) => {
     const def = BEATS[b0.type];
     if (!def) throw new Error(`unknown beat type "${b0.type}" (beat ${i})`);
     const b = { ...def.defaults, ...b0 };
+    if (!footage) b.behind = false;
+    if (b.behind) b.mode = 'full';
     if (!footage && b.mode !== 'overlay') b.mode = 'full';
     if (!footage && b.mode === 'overlay' && !def.defaults.free) b.mode = 'full';
+    // a beat that reaches the end of the video holds to the last frame: no exit fade, no PiP springing back mid-frame
+    if (b.t + b.dur >= total - 0.3) b.dur = total - b.t + 60;
     return { b, def, i };
   });
 
   for (const it of beats) {
     const { b, def } = it;
-    const layer = h('div', 'layer', beatsLayer);
+    const layer = h('div', 'layer', b.behind ? behindLayer : def.defaults.onTop ? fxLayer : beatsLayer);
+    if (b.palette && PALETTES[b.palette]) { applyPalette(layer.style, PALETTES[b.palette]); layer.style.color = 'var(--ink)'; } // per-part palette for variety (text colour follows it)
     const t0 = b.mode === 'overlay' ? 0.2 : 0.55;
     const OUT = b.dur - 0.45;
     const ctx = {
       W, H, S, m, mode: b.mode, t0, OUT, dur: b.dur, captionsY, locale: proj.locale || 'id-ID', brand,
-      asset, aspect: src => aspects[src] ?? 1,
+      asset, aspect: src => aspects[src] ?? 1, pip, root: layer, panel: { x: 0, y: 0, w: W, h: split.seam }, seam: split.seam,
+      words: allWords, beatT: b.t, hasFootage: !!footage,
       cue: (lt, type, opt = {}) => cues.push({ t: +(b.t + lt).toFixed(3), type, ...opt }),
     };
     // header (kicker + title) for data beats
@@ -98,7 +147,7 @@ async function init() {
     }
     let zone;
     if (b.mode === 'overlay') {
-      zone = { x: m, y: top, w: W - 2 * m, h: bottom - top };
+      zone = { x: m, y: top, w: W - 2 * m, h: overlayBottom - top };
       if (b.glass !== false) { box.className = 'glass'; box.style.padding = `${32 * S}px`; }
       place(box, zone.x, 0, zone.w);
       ctx.zone = { ...zone, w: zone.w - (b.glass !== false ? 64 * S : 0) };
@@ -113,7 +162,7 @@ async function init() {
         };
       }
     } else {
-      const headW = b.mode === 'insert' ? W - 2 * m - pip.w - 28 * S : W - 2 * m;
+      const headW = b.mode === 'insert' && !pip.bottom ? W - 2 * m - pip.w - 28 * S : W - 2 * m;
       if (hasHead) {
         head = h('div', 'abs', layer);
         place(head, m, top + 10 * S, headW);
@@ -126,8 +175,9 @@ async function init() {
         };
         headH = head.offsetHeight;
       }
-      const mainTop = b.mode === 'insert' ? Math.max(pip.y + pip.h + 40 * S, hasHead ? top + headH + 48 * S : 0) : (hasHead ? top + headH + 56 * S : top);
-      zone = { x: m, y: mainTop, w: W - 2 * m, h: bottom - mainTop };
+      const mainTop = b.mode === 'insert' && !pip.bottom ? Math.max(pip.y + pip.h + 40 * S, hasHead ? top + headH + 48 * S : 0) : (hasHead ? top + headH + (b.mode === 'split' ? 36 : 56) * S : top);
+      const zoneBottom = b.mode === 'split' ? split.seam - Math.round(48 * S) : b.mode === 'insert' && pip.bottom ? pip.y - Math.round(44 * S) : bottom;
+      zone = { x: m, y: mainTop, w: W - 2 * m, h: zoneBottom - mainTop };
       ctx.zone = zone;
       place(box, zone.x, zone.y, zone.w);
     }
@@ -153,7 +203,7 @@ async function init() {
     cues.push(...pend);
     // vertical placement once the content has a size
     if (b.mode === 'overlay') {
-      const y = b.pos === 'top' ? top : b.pos === 'center' ? Math.round((top + bottom) / 2 - bh / 2) : bottom - bh;
+      const y = b.pos === 'top' ? top : b.pos === 'center' ? Math.round((top + overlayBottom) / 2 - bh / 2) : overlayBottom - bh;
       box.style.top = `${y}px`;
     } else if (b.align !== 'top') {
       box.style.top = `${Math.round(zone.y + Math.max(0, (zone.h - bh) / 2))}px`;
@@ -163,23 +213,50 @@ async function init() {
   }
 
   // footage state windows (adjacent insert/full beats merge so the PiP does not bounce)
-  const windows = mode => {
-    const iv = beats.filter(x => x.b.mode === mode).map(x => [x.b.t, x.b.t + x.b.dur]).sort((a, b) => a[0] - b[0]);
+  const windows = (mode, behindOnly = false) => {
+    const iv = beats.filter(x => (behindOnly ? x.b.behind : x.b.mode === mode)).map(x => [x.b.t, x.b.t + x.b.dur]).sort((a, b) => a[0] - b[0]);
     const out = [];
     for (const v of iv) { const l = out[out.length - 1]; if (l && v[0] - l[1] < 1.0) l[1] = Math.max(l[1], v[1]); else out.push([...v]); }
     return out;
   };
-  const insertW = footage ? windows('insert') : [], fullW = footage ? windows('full') : [];
+  const insertW = footage ? windows('insert') : [], fullW = footage ? windows('full') : [], splitW = footage ? windows('split') : [], behindW = footage ? windows(null, true) : [];
+  // the chrome (progress bar, badge) steps aside over a screen in split mode and over kinetic typography scenes
+  const kinW = beats.filter(x => x.b.type === 'kinetic' && x.b.chrome !== true).map(x => [x.b.t, x.b.t + x.b.dur]);
+  const chromeHideSplit = proj.chrome?.hideInSplit !== false;
+  const kinCapW = beats.filter(x => x.b.type === 'kinetic' && x.b.captions !== true).map(x => [x.b.t + 0.1, x.b.t + x.b.dur + 0.1]);
   const kOf = (T, ws) => Math.max(0, ...ws.map(([a, b]) => prog(T, a - 0.15, 0.6) * (1 - prog(T, b - 0.35, 0.6))));
   insertW.forEach(([a, b]) => { cues.push({ t: a - 0.1, type: 'whoosh', gain: 0.7 }); cues.push({ t: b - 0.3, type: 'swoosh', gain: 0.5 }); });
   fullW.forEach(([a, b]) => { cues.push({ t: a - 0.1, type: 'whoosh', gain: 0.8 }); cues.push({ t: b - 0.3, type: 'swoosh', gain: 0.5 }); });
+  splitW.forEach(([a, b]) => { cues.push({ t: a - 0.1, type: 'whoosh', gain: 0.6 }); cues.push({ t: b - 0.3, type: 'swoosh', gain: 0.45 }); });
+  // zoom beats: punch-in ("cut"), eased push ("smooth") or a slow drift ("slow") on the full-frame footage
+  const zoomBeats = beats.filter(x => x.b.type === 'zoom').map(x => x.b);
+  const zoomAt = T => {
+    let best = null, bk = 0;
+    for (const z of zoomBeats) {
+      const lt = T - z.t;
+      if (lt < 0 || lt > z.dur) continue;
+      const ease = z.ease ?? 'cut';
+      let k;
+      if (ease === 'slow') k = E.inOutCubic(prog(lt, 0, z.dur));
+      else {
+        const din = z.in ?? (ease === 'cut' ? 0 : 0.45), dout = z.out ?? (ease === 'cut' ? 0 : 0.45);
+        const a = din ? E.outCubic(prog(lt, 0, din)) : 1;
+        const x = dout ? E.inOutCubic(prog(lt, z.dur - dout, dout)) : 0;
+        k = a * (1 - x);
+      }
+      if (k >= bk) { bk = k; best = { z: 1 + ((z.z ?? 1.18) - 1) * k, fx: z.fx ?? 0.5, fy: z.fy ?? 0.38 }; }
+    }
+    return best;
+  };
 
-  const captions = words ? buildCaptions(stage, W, H, words, capCfg) : null;
+  const captions = words ? buildCaptions(stage, W, H, words, capCfg, splitW.length ? split : null) : null;
   const chrome = proj.chrome !== false ? buildChrome(stage, W, H, proj.chrome || {}, asset, total) : null;
+  stage.appendChild(fxLayer);
   const chapters = beats.filter(x => x.b.type === 'chapter').map(x => ({ num: x.b.num, name: x.b.label ?? x.b.name, start: x.b.t }));
 
   window.seek = async T => {
     bg.update(T);
+    bdrops.forEach(d => { d.el.style.opacity = kOf(T, [[d.a, d.b]]).toFixed(3); });
     for (const it of beats) {
       const lt = T - it.b.t;
       const vis = lt >= -0.2 && lt <= it.b.dur + 0.1;
@@ -192,11 +269,14 @@ async function init() {
       }
       it.update(lt);
     }
-    if (footage) await footage.update(T, kOf(T, insertW), kOf(T, fullW));
-    if (captions) captions.update(T);
+    const splitK = kOf(T, splitW);
+    if (footage) await footage.update(T, kOf(T, insertW), kOf(T, fullW), splitK, zoomAt(T));
+    if (person) await person.update(T, kOf(T, behindW), zoomAt(T));
+    // kinetic scenes already show the spoken words, so captions step aside (kinetic `captions: true` keeps them)
+    if (captions) captions.update(T, Math.max(kOf(T, kinCapW), pip.bottom ? kOf(T, insertW) : 0), splitK);
     if (chrome) {
       const ch = [...chapters].reverse().find(c => T >= c.start) || null;
-      chrome.update(T, ch);
+      chrome.update(T, ch, Math.max(chromeHideSplit ? splitK : 0, kOf(T, kinW)));
     }
   };
   window.__duration = total;

@@ -21,7 +21,8 @@ function hexToRgba(hex, a) {
 export function buildBackground(stage, W, H, brand) {
   const bg = h('div', 'layer', stage);
   bg.style.background = 'var(--bg)';
-  const glows = [[brand.surface || '#1D5FD1', 0.55, 1.4 * W], [brand.accent || '#1B7F8C', 0.3, 1.2 * W]].map(([c, a, size]) => {
+  const [g1, g2] = brand.glow ?? [brand.surface || '#1D5FD1', brand.accent || '#1B7F8C'];
+  const glows = [[g1, 0.55, 1.4 * W], [g2, 0.3, 1.2 * W]].map(([c, a, size]) => {
     const g = h('div', 'abs', bg);
     Object.assign(g.style, { width: `${size}px`, height: `${size}px`, borderRadius: '50%', background: `radial-gradient(circle, ${hexToRgba(c, a)} 0%, rgba(0,0,0,0) 68%)` });
     return g;
@@ -69,12 +70,12 @@ export function buildChrome(stage, W, H, cfg, assetUrl, total) {
   let fill = null;
   if (cfg.progress !== false) {
     const pbar = h('div', 'pbar', root);
-    Object.assign(pbar.style, { left: `${m}px`, top: `${top + 96}px`, width: `${W - 2 * m}px` });
+    Object.assign(pbar.style, { left: `${m}px`, top: `${cfg.progressY != null ? Math.round(cfg.progressY * H) : top + 96}px`, width: `${W - 2 * m}px` }); // progressY: fraction of height, to lift the bar clear of a title band
     fill = h('i', null, pbar);
   }
   let last = '';
   return {
-    update(T, chapterInfo) {
+    update(T, chapterInfo, hideK = 0) {
       if (fill) fill.style.transform = `scaleX(${clamp(T / total).toFixed(4)})`;
       const label = chapterInfo ? `${chapterInfo.num ? `${chapterInfo.num}` : ''}<b>${chapterInfo.name}</b>` : '';
       if (label !== last) { chap.innerHTML = label; last = label; }
@@ -82,7 +83,7 @@ export function buildChrome(stage, W, H, cfg, assetUrl, total) {
       chap.style.opacity = k.toFixed(3);
       chap.style.transform = `translate3d(0,${((1 - k) * 16).toFixed(1)}px,0)`;
       const vis = E.outExpo(prog(T, cfg.showAt ?? 0.4, 0.8));
-      root.style.opacity = vis.toFixed(3);
+      root.style.opacity = (vis * (1 - hideK)).toFixed(3);
     },
   };
 }

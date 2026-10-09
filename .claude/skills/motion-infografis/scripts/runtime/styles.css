@@ -1,15 +1,16 @@
 /* Brand tokens are overwritten at runtime from project.json → brand. */
 :root {
-  --bg: #0A1E36;
-  --surface: #12355B;
-  --ink: #FFFFFF;
+  --bg: #06050A;
+  --surface: #0B0A12;
+  --ink: #F5F3FF;
   --ink-soft: rgba(255, 255, 255, 0.74);
   --ink-mute: rgba(255, 255, 255, 0.52);
-  --accent: #3FB6C4;
-  --accent2: #E0A100;
-  --pos: #5DBB63;
-  --neg: #F06A5F;
-  --glass: rgba(10, 30, 54, 0.84);
+  --accent: #A78BFA;
+  --accent2: #FB923C;
+  --accent3: #F472B6;
+  --pos: #34D399;
+  --neg: #FB7185;
+  --glass: rgba(11, 10, 18, 0.84);
   --font: "BrandFont";
 }
 
@@ -29,6 +30,8 @@ html, body { margin: 0; overflow: hidden; background: var(--bg); color: var(--in
 .acc-1 { color: var(--accent); }
 .acc-2 { color: var(--accent2); }
 .acc-3 { color: var(--neg); }
+.acc-g { background: linear-gradient(120deg, var(--accent), var(--accent3), var(--accent2)); -webkit-background-clip: text; background-clip: text;
+  color: transparent; text-shadow: none; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.35)) drop-shadow(0 0 16px rgba(0, 0, 0, 0.45)); }
 
 /* glass card used over footage */
 .glass { position: absolute; border-radius: 30px; background: var(--glass);
@@ -50,7 +53,30 @@ html, body { margin: 0; overflow: hidden; background: var(--bg); color: var(--in
 .cap { position: absolute; left: 0; width: 100%; text-align: center; font-weight: 800; letter-spacing: -0.01em; line-height: 1.18; }
 .cap .cw { display: inline-block; margin: 0 0.13em; padding: 0.02em 0.12em; border-radius: 0.2em;
   color: #fff; text-shadow: 0 3px 0 rgba(0, 0, 0, 0.55), 0 0 18px rgba(0, 0, 0, 0.55); }
-.cap .cw.on { color: #0A1E36; background: var(--accent2); text-shadow: none; }
+.cap .cw.on { color: var(--bg); background: var(--accent2); text-shadow: none; }
+.cap-plain .cw { font-weight: 700; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6), 0 0 14px rgba(0, 0, 0, 0.6); }
+.cap-box .cb { display: inline-block; background: #0B0B0B; padding: 0.12em 0.3em 0.16em; border-radius: 0.12em;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6); }
+.cap-box .cw { margin: 0 0.08em; padding: 0; font-weight: 700; text-shadow: none; }
+
+/* callout label (solid box, e.g. blue highlight over a screen) */
+.callout { position: absolute; display: inline-flex; align-items: center; gap: 0.35em; white-space: nowrap; font-weight: 700;
+  line-height: 1.15; padding: 0.2em 0.45em 0.24em; border-radius: 0.16em; box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.7); }
+
+/* kinetic typography */
+.kin { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.kin .row { display: flex; align-items: baseline; justify-content: center; white-space: nowrap; }
+.kin .kw { display: inline-block; line-height: 0.95; }
+.kin .kw.serif { font-family: "SerifFont", "DejaVu Serif", Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+.kin .kw.light { font-weight: 400; }
+.kin.over .kw:not(.stamp) { text-shadow: 0 3px 0 rgba(0, 0, 0, 0.55), 0 0 22px rgba(0, 0, 0, 0.6); }
+.kin .kw.outline { color: transparent !important; -webkit-text-stroke: 0.035em var(--kink); }
+.kin .kw.stamp { padding: 0.04em 0.12em 0.02em; border-radius: 0.06em; letter-spacing: 0.02em; text-transform: uppercase; }
+.kin .kw.vert { writing-mode: vertical-rl; transform-origin: 50% 50%; letter-spacing: 0.04em; text-transform: uppercase; }
+.sticker { position: absolute; }
+.sticker.plain img { filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.45)) !important; }
+.sticker img { display: block; width: 100%; height: auto;
+  filter: drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff) drop-shadow(0 5px 0 #fff) drop-shadow(0 -5px 0 #fff) drop-shadow(0 16px 18px rgba(0, 0, 0, 0.35)); }
 
 /* chrome */
 .brand { position: absolute; display: flex; align-items: center; gap: 16px; }
@@ -61,4 +87,12 @@ html, body { margin: 0; overflow: hidden; background: var(--bg); color: var(--in
 .chapter { position: absolute; text-align: right; font-size: 21px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); text-shadow: 0 2px 10px rgba(0,0,0,.4); }
 .chapter b { display: block; font-size: 32px; color: var(--ink); letter-spacing: 0.02em; }
 .pbar { position: absolute; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.18); overflow: hidden; }
-.pbar i { position: absolute; inset: 0; transform-origin: 0 50%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.pbar i { position: absolute; inset: 0; transform-origin: 0 50%; background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2)); }
+
+/* serif-italic accent word inside a headline: |word| */
+.hl .acc-s { font-family: "SerifFont", "DejaVu Serif", Georgia, serif; font-style: italic; font-weight: 400; color: var(--accent); letter-spacing: -0.01em; }
+/* one-word-at-a-time caption chip (ref e) */
+.cap-word .cb { display: inline-block; background: rgba(60, 60, 60, 0.8); padding: 0.14em 0.46em 0.18em; border-radius: 0.32em; backdrop-filter: blur(6px); }
+.cap-word .cw { margin: 0; padding: 0; color: #fff; text-shadow: none; }
+/* monospace labels (tag, iso HUD, mindmap) */
+.mono { font-family: "MonoFont", "DejaVu Sans Mono", Menlo, monospace; }

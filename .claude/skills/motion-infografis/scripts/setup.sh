@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # One-time setup (safe to re-run). Installs playwright-core + fonts into a cache dir and checks ffmpeg / python / Chrome.
-#   bash setup.sh                      → default font (plus-jakarta-sans)
+#   bash setup.sh                      → default fonts (plus-jakarta-sans + dm-serif-display for kinetic/annotate serif words)
 #   bash setup.sh inter montserrat     → extra @fontsource packages
 set -e
 CACHE="${MOTION_CACHE:-$HOME/.cache/motion-infografis}"
@@ -8,7 +8,7 @@ mkdir -p "$CACHE"
 cd "$CACHE"
 [ -f package.json ] || echo '{ "name": "motion-infografis-cache", "private": true }' > package.json
 PKGS="playwright-core"
-for f in plus-jakarta-sans "$@"; do PKGS="$PKGS @fontsource/$f"; done
+for f in plus-jakarta-sans dm-serif-display space-mono "$@"; do PKGS="$PKGS @fontsource/$f"; done
 npm install --silent --no-audit --no-fund $PKGS
 echo "node deps ok → $CACHE"
 

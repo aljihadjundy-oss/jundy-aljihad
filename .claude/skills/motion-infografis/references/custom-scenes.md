@@ -40,6 +40,8 @@ export default {
 | `cue(lt, type, {gain})` | schedule a sound: `whoosh`, `swoosh`, `soft`, `pop`, `tick` |
 | `asset(path)`, `aspect(path)` | URL for a project file; h/w ratio of preloaded images (only images used by `image` beats or the chrome logo are preloaded; load others yourself and await `img.decode()`) |
 | `captionsY`, `brand`, `locale` | caption line y, brand colours, number locale |
+| `root`, `panel`, `seam` | the beat's own full-canvas layer (for free placement), the split top panel `{x, y, w, h}`, the seam y |
+| `words`, `beatT`, `hasFootage` | transcript words `[{w, s, e}]` (clip time) or null, the beat start in clip time, whether footage exists |
 
 ## Rules that keep custom scenes deterministic
 - The update function must depend only on `lt`. No `Date.now()`, no CSS transitions or animations, no `requestAnimationFrame`, no unseeded randomness (use `rng(seed)` from engine.js).
@@ -56,12 +58,3 @@ export default {
 
 The SIAGA SUMATRA project (`siaga-sumatra-motion/src/scenes/*.js`) has larger examples: a geoBoundaries map with camera zoom,
 names that fly into card titles, a formula assembled term by term, and checkmarks drawn onto a screenshot.
-
-## Whole-film projects with their own page (`entry`)
-When the film is mostly bespoke scenes (maps, isometric builds, radar, a HUD), skip the beat framework: set
-`"entry": "src/index.html"` in `project.json`. `render.mjs` then serves that page at `/` instead of the built-in runtime and still
-exposes `/rt/engine.js` (easing + helpers), `/p/…` (the project) and `/fonts/…` (installed @fontsource packages). The page only has to provide
-`window.__ready` (a promise), `window.seek(t)` (may be async), `window.__duration`, `window.__fps`, `window.__cues` (`[{t, type, …}]`),
-and optionally `window.__beats` / `window.__extra` (copied into `out/meta.json`).
-Set `"audio": {"script": "tools/my_audio.py"}` to replace the generic mixer with a project-specific synth (called as `script <project> <out.wav> [start end]`).
-Worked example: the Shape Indonesia sponsor film (9 scenes, dot-matrix map, isometric builds, custom sound design).

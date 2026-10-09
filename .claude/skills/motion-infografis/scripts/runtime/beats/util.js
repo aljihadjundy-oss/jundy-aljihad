@@ -28,10 +28,11 @@ export function tone(key, fallback = 'var(--accent)') {
 }
 
 // start times for n sequential items that must all land before the beat ends
-export function sequence(n, t0, OUT, every) {
+// Item times: evenly spaced from t0, or pinned per item with `at` (seconds from the beat start) to land on a spoken word.
+export function sequence(n, t0, OUT, every, items = []) {
   const room = Math.max(0.5, OUT - t0 - 1.2);
   const step = every ?? clamp(room / Math.max(1, n), 0.35, 1.6);
-  return Array.from({ length: n }, (_, i) => t0 + i * step);
+  return Array.from({ length: n }, (_, i) => (typeof items[i] === 'object' && items[i]?.at != null ? items[i].at : t0 + i * step));
 }
 
 export const text = (v) => (typeof v === 'string' ? { title: v } : v);
