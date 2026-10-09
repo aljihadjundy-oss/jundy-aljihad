@@ -21,7 +21,30 @@ Two modes, one engine:
 - **From-scratch mode**: no footage. The same beats play on the motion backdrop, with a quiet synthesized ambient pad.
   For bespoke visuals (maps, custom diagrams), write a `custom` beat module (see `references/custom-scenes.md`).
 
-## 1. Intake: confirm before doing anything heavy
+## 0. Default workflow: autonomous (the user's standing order)
+When the user hands over material, **you decide and you execute; do not ask and do not wait for approval.** The user said: "claude akan
+decide dan menilai bahan ini cocoknya untuk style yang mana, terus langsung eksekusi. Aset full gua gaperlu cari, lu generate motionnya
+aja berdasarkan referensi video yang pernah gua kirim." This replaces the earlier plan-then-"eksekusi" gate and the asset wishlist.
+1. **Inspect and classify.** `python3 $S/inspect.py raw.mp4` (format), then read the transcript (content). Pick the type in
+   `references/content-types.md` (T1–T8) and say so. The type fixes layout, allowed styles and bans.
+2. **Plan silently, then self-check.** Write the plan table (time, style, beat, text, why) and run the retention check
+   (`retention.md`) and the rubric yourself. The table goes in the final reply, not in a gate.
+3. **Generate every visual yourself.** The user supplies the footage only. Build illustrations, diagrams, UI mock-ups, charts, 3D scenes and
+   typographic scenes with the engine (S0–S6 beats, `custom` beats for bespoke scenes, `iso` for systems), following the measured styles of
+   the reference samples. Use the user's own assets if they happen to be in the folder, but never ask for them.
+   Guardrails for generated visuals: they are *illustrations*, so no fake screenshots of a real product, no real brand logos or people's faces
+   drawn as if real, no invented statistics, sources, quotes or testimonials. A number appears only if the speaker says it (then it comes from the
+   transcript) and a source line only if the speaker names one. A part that would need proof the user has not given is shown as a diagram of the
+   idea (what it is, how it works), not as fake evidence.
+4. **Preview yourself.** Render stills (1–2 per beat), build the contact sheet and *look at it*: face clear, nothing over captions, readable at
+   phone size, styles rotate, portrait raw has no wide bottom window, no `behind` on key text. Fix and re-render stills until it is clean.
+5. **Render, verify, deliver** in the same turn: full render, loudness −14 LUFS, 1080x1920/30 fps, last-frame check, compressed copy ≤ 28 MB.
+6. **Report in the reply:** the type and why, the style per part (the plan table), what you generated, anything you left out on purpose (an
+   unsourced claim, a part where you chose a diagram over proof), and a one-line offer for tweaks. No questions beforehand.
+Exceptions: if the user says "preview dulu" / "tunggu aku", show the plan and stills and wait. If the file cannot be read or has no usable
+audio and no transcript can be made, say that and stop. Nothing is ever committed to git except skill code and docs (repo is public).
+
+## 1. Intake: infer, don't interrogate
 
 Collect, and ask only for what you cannot infer:
 - **Video file** (path). Has it already been cut? This skill does not cut. If the user wants cuts, do those first.
@@ -29,12 +52,12 @@ Collect, and ask only for what you cannot infer:
   suggest running the skill in Claude Code on their own machine, where local paths just work.
 - **Transcript source**: an SRT/VTT they already have (CapCut, Descript, YouTube) is best. Otherwise auto-transcribe
   if `faster-whisper` works in this environment. Failing that, ask for an SRT or for key moments with timestamps.
-- **Content type**: classify the video before planning (founder talking head portrait, landscape talking head, tutorial, presentation, podcast, voice-over, product, system motion piece) and read the matching row in `references/content-types.md`. It decides the layout, the allowed styles and the bans; state it on top of the plan table (`Type: T1 · raw: portrait`) and set `contentType` in project.json. New samples from the user are filed there.
+- **Content type**: classify the video before planning (`python3 $S/inspect.py raw.mp4` gives the format half) (founder talking head portrait, landscape talking head, tutorial, presentation, podcast, voice-over, product, system motion piece) and read the matching row in `references/content-types.md`. It decides the layout, the allowed styles and the bans; state it on top of the plan table (`Type: T1 · raw: portrait`) and set `contentType` in project.json. New samples from the user are filed there.
 - **Canvas**: default 1080×1920 at 30 fps. Other sizes work (layout scales with the short side), but 9:16 is the tuned one.
 - **Brand**: the `jundy` palette is locked as the default for this user; do not ask about colours. Other palettes
   from the library can colour single parts for variety (see `references/style-library.md`). Logo/badge only if given.
 - **Numbers and claims** they want shown, with their source. On-screen facts must come from the transcript or from
-  material the user supplied. Never invent statistics. If a number sounds important but has no source, ask.
+  material the user supplied. Never invent statistics. If a number sounds important but has no source, leave it out and say so in the report (autonomous mode: no questions).
 - **Captions** on or off (default on when there is speech).
 
 ## 2. Setup (once per machine)
@@ -60,13 +83,10 @@ Then:
 2. **Draft a motion plan** as a short table: time, part (hook / body / re-hook / CTA), **style** (S0, S1, … chosen by
    you with the rubric in `references/style-library.md`, never asked of the user), beat type, mode, on-screen text or
    data, and why. Run the 5-second-bucket check from `references/retention.md` on it (a visual in the first 0.5 s, the
-   key message on screen by 3 s, ≥ 3 visual events in the first 10 s, no bucket without a visual event). Show it to the
-   user and **wait for approval** before the full render. This user explicitly prefers approval gates, and a full
-   render costs minutes. Stills are cheap, so offer a few preview frames with the plan.
-   Add an **asset wishlist** under the table (see "Proof over decoration" in section 5): every part where a real
-   screenshot, photo, document or before/after would beat a generic graphic, with a filename, what it must show, how it
-   will be used, and whether it is *wajib* or *opsional*. Plan each of those parts with a fallback graphic, and render
-   only after the assets arrive or the user says to go with the fallback.
+   key message on screen by 3 s, ≥ 3 visual events in the first 10 s, no bucket without a visual event). Do **not** wait for approval (section 0): self-check
+   the plan, preview stills yourself, and show the table in the final reply.
+   The old asset wishlist is retired: generate the proof visuals yourself as illustrations (section 0, guardrails), and only use files the
+   user already put in the folder.
    If the plan uses `behind: true` (text or a scene behind the speaker), run `python3 $S/matte.py proj --range a,b` for those seconds before
    previewing (needs `pip install mediapipe opencv-python-headless`; Linux also `apt-get install -y libegl1 libgles2`). Prefer `split` or
    `behind` over a full-screen `iso`, so the speaker's face is never hidden. Two rules from the user: `behind` is for decoration only, never
@@ -117,13 +137,12 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
   and `top` is safe if the head sits low. If the footage already has burned-in subtitles, set `layout.overlayBottom`
   just above them and use `pos: "bottom"`, so cards land between the chin and the subtitles. Check stills.
 - **Chapters**: for videos with numbered sections, a `chapter` beat per section updates the top-right chapter label.
-- **Proof over decoration (asset wishlist).** The user asked for this to be standing practice. Whenever the speaker
-  talks about something that exists (an output, a document, a tool, a result, a rubric, a source article, a
-  before/after, a place or a class), a real asset on screen is stronger than a checklist or a kinetic word: show it in
-  `split` (S1) or as an `image` card (S0), and mark it with `annotate`/`callout`/`rings`. Propose these proactively in
-  every plan, as a list the user can fill: `assets/<name>.png`, what it shows, where it goes (timecode, style), *wajib*
-  or *opsional*. Remind them to blur private details (names, client data, faces of others) before sending. Keep the
-  anti-monotony rules: alternate split (S1) and image card (S0) when several proof parts sit close together.
+- **Proof over decoration (self-generated).** When the speaker talks about something that exists (an output, a document, a tool, a result,
+  a before/after), show it as a clear *illustration you build* (a drawn UI card, a diagram, a mock document with the speaker's own words, a
+  before/after built from what was said) in `split` (S1) or as an `image`/`custom` card (S0), and mark it with `annotate`/`callout`/`rings`.
+  The user no longer supplies assets or a wishlist (standing order). Never fake evidence: no real logos, no fabricated screenshots of real
+  products, no numbers or quotes that were not said. If the user did put real assets in the project folder, use them (blur private details).
+  Keep the anti-monotony rules: alternate split (S1) and image card (S0) when several proof parts sit close together.
 - **Combine styles, part by part; you decide.** Read `references/style-library.md` before every plan. Give each part
   the style that does its job (hook, structure, proof, punchline, "look at this", CTA), rotate so no two consecutive
   graphic parts share a style unless they are one idea, and use at least 3 styles in a 60 s video. The user wants the

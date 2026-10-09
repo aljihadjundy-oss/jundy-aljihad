@@ -69,7 +69,7 @@ Outcome first: every part has a job, and the style is whatever does that job bes
    a repeated keyword that should loop around the shot → S2 `rings`. Never send the key word of a sentence to `behind`; keep it in front.
 3. **Break ties with evidence, then novelty**: prefer the style that shows proof (a screen, a number, a real output)
    over one that only decorates; if still tied, pick the style used least recently. When the proof needs an asset the
-   user has not sent, plan the fallback style and put the asset on the wishlist (see SKILL.md, "Proof over decoration").
+   user has not sent, build the proof yourself as an illustration (see SKILL.md section 0 and "Proof over decoration"); the wishlist is retired.
 4. **Anti-monotony checks**: no two consecutive graphic parts in the same style unless they are one continuous idea;
    a 60 s video uses at least 3 styles and a 2-minute video at least 3–4; no single style takes more than half of the
    graphic time; at most 1–2 parts in a non-base palette.
