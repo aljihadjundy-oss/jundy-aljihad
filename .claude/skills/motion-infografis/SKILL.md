@@ -39,6 +39,7 @@ aja berdasarkan referensi video yang pernah gua kirim." This replaces the earlie
 4. **Preview yourself.** Render stills (1–2 per beat), build the contact sheet and *look at it*: face clear, nothing over captions, readable at
    phone size, styles rotate, portrait raw has no wide bottom window, no `behind` on key text. Fix and re-render stills until it is clean.
 5. **Render, verify, deliver** in the same turn: full render, loudness −14 LUFS, 1080x1920/30 fps, last-frame check, compressed copy ≤ 28 MB.
+   **Send the finished video straight into the chat with `SendUserFile` (`display: "attach"`, the ≤ 28 MB copy), every time, as the user's standing order ("video langsung kasih ke gua ke chat ini"). Never just leave a path in the scratchpad.**
 6. **Report in the reply:** the type and why, the style per part (the plan table), what you generated, anything you left out on purpose (an
    unsourced claim, a part where you chose a diagram over proof), and a one-line offer for tweaks. No questions beforehand.
 Exceptions: if the user says "preview dulu" / "tunggu aku", show the plan and stills and wait. If the file cannot be read or has no usable
