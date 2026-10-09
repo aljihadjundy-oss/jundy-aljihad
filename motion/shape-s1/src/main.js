@@ -1,5 +1,7 @@
 import { E, prog, clamp, lerp } from '/rt/engine.js';
 
+let __res; window.__ready = new Promise(r => { __res = r; });
+window.__duration = 10; window.__fps = 30; window.__beats = [];
 const W = 1080, H = 1350, DUR = 10;
 const NS = 'http://www.w3.org/2000/svg';
 const stage = document.getElementById('stage');
@@ -16,16 +18,8 @@ const photos = proj.photos || [];
 
 // ------------------------------------------------------------ background
 const root = el('abs', '', `left:0;top:0;width:${W}px;height:${H}px;overflow:hidden`);
-const bg = el('abs', '', `left:0;top:0;width:${W}px;height:${H}px;background:
-  linear-gradient(to bottom, rgba(6,64,104,0) 62%, rgba(6,66,108,.96) 100%),
-  linear-gradient(105deg, #0d2442 0%, #18416a 30%, #2f6a94 60%, #4a86ae 100%)`, root);
-const gridSvg = sv('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}` }, root);
-const gridG = sv('g', { stroke: 'rgba(160,210,245,.17)', 'stroke-width': 1.4 }, gridSvg);
-const vlines = [], hlines = [];
-for (let i = -1; i < 22; i++) { const x = i * 52; vlines.push(sv('line', { x1: x, y1: -40, x2: x + 22, y2: H + 40 }, gridG)); }
-for (let j = -1; j < 28; j++) { const y = j * 52; hlines.push(sv('line', { x1: -40, y1: y, x2: W + 40, y2: y + 10 }, gridG)); }
-const vig = el('abs', '', `left:0;top:0;width:${W}px;height:${H}px;background:radial-gradient(ellipse at 15% 40%, rgba(5,18,38,.55), rgba(5,18,38,0) 60%)`, root);
-const glow = el('abs', '', `width:700px;height:700px;border-radius:50%;background:radial-gradient(circle, rgba(120,190,240,.32), rgba(120,190,240,0) 65%)`, root);
+const bg = el('abs', '', `left:-30px;top:-30px;width:${W + 60}px;height:${H + 60}px;background:url(/p/assets/bg_clean.jpg) center/cover no-repeat;will-change:transform`, root);
+const glow = el('abs', '', `width:700px;height:700px;border-radius:50%;background:radial-gradient(circle, rgba(140,205,255,.28), rgba(140,205,255,0) 65%)`, root);
 
 // ------------------------------------------------------------ helpers
 let measure;
@@ -46,7 +40,7 @@ const setT = (n, { x = 0, y = 0, s = 1, o = 1, r = 0 }) => {
 
 // ------------------------------------------------------------ chrome: dots + logo
 const dots = [62, 108, 154].map(x => { const d = el('abs', '', `left:${x}px;top:92px;width:30px;height:30px;border-radius:50%;background:#6aa8d3;transform:translate(-50%,-50%)`); return d; });
-const logo = el('abs', '', `left:543px;top:124px;width:214px;height:80px;background:url(/p/assets/logo.png) center/contain no-repeat;transform:translate(-50%,-50%)`);
+const logo = el('abs', '', `left:542px;top:124px;width:204px;height:71px;background:url(/p/assets/logo_clean.png) center/contain no-repeat;transform:translate(-50%,-50%)`);
 
 // ------------------------------------------------------------ pillars
 const PIL = [
@@ -88,12 +82,15 @@ const frClip = el('abs', '', `left:${FR.x}px;top:${FR.y}px;width:${FR.w}px;heigh
 const phEls = [];
 for (const p of photos) {
   const d = el('abs', '', `left:0;top:0;width:${FR.w}px;height:${FR.h}px;overflow:hidden`, frClip);
-  const img = new Image(); img.src = '/p/' + p.src; await img.decode();
-  const [x0, y0, x1, y1] = p.crop || [0, 0, 1, 1];
-  const cw = (x1 - x0) * img.naturalWidth, ch = (y1 - y0) * img.naturalHeight;
-  const sc = Math.max(FR.w / cw, FR.h / ch);
-  const im = el('abs', '', `left:0;top:0;width:${img.naturalWidth * sc}px;height:${img.naturalHeight * sc}px;background:url(/p/${p.src}) 0 0/100% 100% no-repeat;transform-origin:0 0`, d);
-  phEls.push({ d, im, cx: ((x0 + x1) / 2) * img.naturalWidth * sc, cy: ((y0 + y1) / 2) * img.naturalHeight * sc });
+  const tiles = [];
+  for (const tl of p.tiles) {
+    const [rx, ry, rw, rh] = tl.rect;
+    const box = el('abs', '', `left:${rx}px;top:${ry}px;width:${rw}px;height:${rh}px;overflow:hidden;border-radius:${rx > 0 ? 26 : 0}px`, d);
+    const img = new Image(); img.src = '/p/' + tl.src; await img.decode();
+    const im = el('abs', '', `left:0;top:0;width:${img.naturalWidth}px;height:${img.naturalHeight}px;background:url(/p/${tl.src}) 0 0/100% 100% no-repeat;transform-origin:0 0`, box);
+    tiles.push({ box, im, tl, rw, rh });
+  }
+  phEls.push({ d, tiles });
 }
 const phLabel = el('abs c', 'ASET<br><span style="font-weight:400">FOTO MOMEN SESI 1</span>', `left:${FR.x + FR.w / 2}px;top:${FR.y + FR.h / 2}px;font-size:30px;font-weight:600;line-height:1.4;letter-spacing:.02em;transform:translate(-50%,-50%)`);
 const frameBorder = sv('rect', { x: FR.x, y: FR.y, width: FR.w, height: FR.h, rx: 40, fill: 'none', stroke: '#fff', 'stroke-width': 3, 'stroke-dasharray': '16 14' }, frSvg);
@@ -124,11 +121,9 @@ function update(t) {
   stage.style.transform = `translate(${shx.toFixed(2)}px,${shy.toFixed(2)}px)`;
 
   // bg
-  const gk = ph(t, 0, 1.4, E.inOutCubic);
-  gridSvg.style.clipPath = `inset(0 ${((1 - gk) * 100).toFixed(2)}% 0 0)`;
-  const dr = (t * 6) % 52;
-  vlines.forEach((l, i) => { const x = i * 52 - 52 + dr * 0 + Math.sin(t * 0.6 + i * 0.5) * 3; l.setAttribute('x1', x - 1); l.setAttribute('x2', x + 22); });
-  hlines.forEach((l, j) => { const y = j * 52 - 52 + Math.cos(t * 0.5 + j * 0.4) * 3; l.setAttribute('y1', y); l.setAttribute('y2', y + 10); });
+  const gk = ph(t, 0, 1.3, E.inOutCubic);
+  bg.style.clipPath = `inset(0 ${((1 - gk) * 100).toFixed(2)}% 0 0)`;
+  bg.style.transform = `translate(${(Math.sin(t * 0.4) * 10).toFixed(2)}px,${(Math.cos(t * 0.33) * 8).toFixed(2)}px) scale(${(1 + 0.012 * t / 10 + 0.006 * Math.sin(t * 0.7)).toFixed(4)})`;
   glow.style.left = (760 + Math.sin(t * 0.5) * 80 - 350) + 'px'; glow.style.top = (330 + Math.cos(t * 0.4) * 60 - 350) + 'px';
 
   // chrome
@@ -174,7 +169,17 @@ function update(t) {
       p.d.style.opacity = kin * (1 - kout); p.d.style.visibility = p.d.style.opacity > 0.002 ? 'visible' : 'hidden';
       p.d.style.zIndex = i;
       const z = 1 + 0.06 * clamp((t - a) / (PD + 0.4));
-      p.im.style.transform = `translate(${FR.w / 2}px,${FR.h / 2}px) scale(${z.toFixed(4)}) translate(${-p.cx}px,${-p.cy}px)`;
+      const u = clamp((t - a) / (PD + 0.3));
+      p.tiles.forEach((T, ti) => {
+        const [x0, y0, x1, y1] = T.tl.crop, cw = x1 - x0, ch = y1 - y0;
+        const sc = Math.max(T.rw / cw, T.rh / ch) * z;
+        const ovx = cw * sc - T.rw, ovy = ch * sc - T.rh;
+        const [pa, pb] = T.tl.pan || [0.5, 0.5], pp = lerp(pa, pb, u);
+        const ox = x0 * sc + ovx * (ovx > ovy ? pp : 0.5), oy = y0 * sc + ovy * (ovy >= ovx ? pp : 0.5);
+        T.im.style.transform = `translate(${(-ox).toFixed(1)}px,${(-oy).toFixed(1)}px) scale(${sc.toFixed(4)})`;
+        const kt = ph(t, a - 0.02 + ti * 0.1, 0.45, E.outCubic);
+        T.box.style.opacity = kt.toFixed(3);
+      });
       p.d.style.transform = `translateX(${(kin < 1 ? (1 - kin) * 50 : 0).toFixed(1)}px)`;
     });
   } else {
@@ -189,11 +194,7 @@ function update(t) {
   arrow.setAttribute('transform', `translate(${nud.toFixed(2)},0)`);
 }
 
-window.__duration = DUR; window.__fps = 30; window.__cues = cues; window.__beats = [];
-window.__ready = (async () => {
-  await Promise.all([400, 500, 600, 700].map(w => document.fonts.load(`${w} 40px Pop`)));
-  await document.fonts.ready;
-  for (const n of [T1, T2, L1, L2, pillT, ...PIL.map(p => p.lb)]) { /* refit after fonts */ }
-  update(0);
-})();
+window.__cues = cues;
 window.seek = t => { update(t); };
+update(0);
+__res();

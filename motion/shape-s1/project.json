@@ -1,9 +1,209 @@
 {
-  "canvas": { "w": 1080, "h": 1350, "fps": 30 },
+  "canvas": {
+    "w": 1080,
+    "h": 1350,
+    "fps": 30
+  },
   "footage": false,
   "entry": "src/index.html",
   "duration": 10,
-  "audio": { "voice": false, "pad": true, "sfx": 1.0, "target_lufs": -16 },
-  "photos": [],
+  "audio": {
+    "voice": false,
+    "pad": true,
+    "sfx": 1.0,
+    "target_lufs": -16
+  },
+  "photos": [
+    {
+      "tiles": [
+        {
+          "src": "assets/photo1.jpg",
+          "crop": [
+            3,
+            124,
+            918,
+            579
+          ],
+          "rect": [
+            0,
+            0,
+            654,
+            303
+          ],
+          "pan": [
+            0.1,
+            0.6
+          ]
+        },
+        {
+          "src": "assets/photo1.jpg",
+          "crop": [
+            993,
+            265,
+            1159,
+            437
+          ],
+          "rect": [
+            670,
+            0,
+            250,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "tiles": [
+        {
+          "src": "assets/photo2.jpg",
+          "crop": [
+            155,
+            173,
+            905,
+            596
+          ],
+          "rect": [
+            0,
+            0,
+            654,
+            303
+          ],
+          "pan": [
+            0.2,
+            0.8
+          ]
+        },
+        {
+          "src": "assets/photo2.jpg",
+          "crop": [
+            1027,
+            300,
+            1124,
+            459
+          ],
+          "rect": [
+            670,
+            0,
+            250,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "tiles": [
+        {
+          "src": "assets/photo3.jpg",
+          "crop": [
+            5,
+            85,
+            920,
+            605
+          ],
+          "rect": [
+            0,
+            0,
+            654,
+            303
+          ],
+          "pan": [
+            0.0,
+            0.9
+          ]
+        },
+        {
+          "src": "assets/photo3.jpg",
+          "crop": [
+            1029,
+            300,
+            1125,
+            431
+          ],
+          "rect": [
+            670,
+            0,
+            250,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "tiles": [
+        {
+          "src": "assets/photo4.jpg",
+          "crop": [
+            88,
+            120,
+            837,
+            638
+          ],
+          "rect": [
+            0,
+            0,
+            654,
+            303
+          ],
+          "pan": [
+            0.1,
+            0.8
+          ]
+        },
+        {
+          "src": "assets/photo4.jpg",
+          "crop": [
+            995,
+            293,
+            1160,
+            466
+          ],
+          "rect": [
+            670,
+            0,
+            250,
+            303
+          ]
+        }
+      ]
+    },
+    {
+      "tiles": [
+        {
+          "src": "assets/photo5.jpg",
+          "crop": [
+            88,
+            88,
+            837,
+            606
+          ],
+          "rect": [
+            0,
+            0,
+            654,
+            303
+          ],
+          "pan": [
+            0.1,
+            0.8
+          ]
+        },
+        {
+          "src": "assets/photo5.jpg",
+          "crop": [
+            995,
+            260,
+            1160,
+            432
+          ],
+          "rect": [
+            670,
+            0,
+            250,
+            303
+          ]
+        }
+      ]
+    }
+  ],
   "beats": []
 }
