@@ -17,6 +17,7 @@
   "footage": true,
   "duration": 43.33,
   "locale": "id-ID",
+  "contentType": "T1",
   "brand": { "bg": "#0A1E36", "surface": "#12355B", "ink": "#FFFFFF", "accent": "#3FB6C4", "accent2": "#E0A100",
              "pos": "#5DBB63", "neg": "#F06A5F", "font": "plus-jakarta-sans" },
   "chrome": { "name": "SIAGA SUMATRA", "sub": "KABUPATEN AGAM", "logo": "assets/logo.png", "progress": true },
@@ -50,7 +51,7 @@
   The default is the small portrait window at the top right.
 - **`behind: true` is for decoration, never for the point.** Whatever sits behind the speaker is read as background: do not put the key word, a number or the
   claim of the sentence there (the speaker covers it and the message gets weaker). Use it for texture and secondary material (a big mood word that
-  is not the point, a scene around the speaker, an echo of a word already shown in front). For text that must be emphasised, use a `kinetic`
+  is not the point, a scene around the speaker, an echo of a word already shown in front). For text that must be emphasised on portrait footage, use `kinetic` with `mode: "overlay"` and `bg: "none"` (words typed straight over the footage, placed in the top zone, face stays visible); a plain kinetic beat is a full-screen takeover that hides the face. Otherwise use a `kinetic`
   scene in front, short full-screen, or on top of the footage. `behind: true` on any beat (kinetic words, `iso`, a `title`, an `image`…) puts it BETWEEN the background footage and the speaker, so the speaker stays in
   front of the text or scene and the face is never covered (type behind the head, a scene behind the body). It needs a person matte: run
   `python3 $S/matte.py proj --range a,b` (only the seconds you need; about 18 frames per second of work) once before rendering. The beat is

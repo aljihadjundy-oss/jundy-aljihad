@@ -29,6 +29,7 @@ Collect, and ask only for what you cannot infer:
   suggest running the skill in Claude Code on their own machine, where local paths just work.
 - **Transcript source**: an SRT/VTT they already have (CapCut, Descript, YouTube) is best. Otherwise auto-transcribe
   if `faster-whisper` works in this environment. Failing that, ask for an SRT or for key moments with timestamps.
+- **Content type**: classify the video before planning (founder talking head portrait, landscape talking head, tutorial, presentation, podcast, voice-over, product, system motion piece) and read the matching row in `references/content-types.md`. It decides the layout, the allowed styles and the bans; state it on top of the plan table (`Type: T1 · raw: portrait`) and set `contentType` in project.json. New samples from the user are filed there.
 - **Canvas**: default 1080×1920 at 30 fps. Other sizes work (layout scales with the short side), but 9:16 is the tuned one.
 - **Brand**: the `jundy` palette is locked as the default for this user; do not ask about colours. Other palettes
   from the library can colour single parts for variety (see `references/style-library.md`). Logo/badge only if given.
@@ -148,6 +149,7 @@ Motion should explain, not decorate. Guidelines, with the reasoning:
 - `references/motion-language.md`: easing, stagger, typography, colour and sound rules behind the look. Read it before
   changing styles or writing custom scenes.
 - `references/custom-scenes.md`: engine API and a template for `custom` beat modules.
+- `references/content-types.md`: which styles belong to which kind of video (type index T1–T8, cross-type matrix, sample register, how to file a new sample). Read it first, then the style library.
 - `references/style-library.md`: the growing style library (S0 house, S1 tutorial split-screen, S2 kinetic collage,
   S3 tracked annotation, S4 isometric build, S5 whiteboard, S6 spec tags, …), the palette library with the locked `jundy` palette, the per-part decision rubric, and how
   to add a new reference. Read it before every motion plan.

@@ -57,6 +57,7 @@ one claim, `^gradient^` headline words in the locked palette.
 Project-wide: `brand.palette` (default `jundy`). Per part: `"palette": "maroon"` on a beat colours just that beat.
 
 ### Per-part decision rubric (how Jundy decides)
+First filter by content type (`content-types.md`): the rubric only chooses among the styles that type allows.
 Outcome first: every part has a job, and the style is whatever does that job best for retention and clarity.
 1. **Name the job of the part**: hook · structure (list, steps, comparison, number) · proof (a screen, a document, a
    result) · punchline or idiom · "look at this" · section change · CTA.
@@ -227,6 +228,7 @@ point, a scene around the speaker, an echo of a word that was already shown in f
 (`kinetic` full-screen for 1.5–5 s, or over the footage). Face cut-outs inside letters are not built.
 
 ## 4. Which style when (talking-head founder content)
+This table is for type T1/T2 in `content-types.md`; read that file first, because the type decides which of these rows are allowed (e.g. no wide bottom window on portrait raw).
 | moment in the video | style | beats |
 |---|---|---|
 | hook in the first 3 s | S1 or S2 | `title` with `upper: true` + `zoom` punch on the key word, or one `kinetic` hook screen |
