@@ -1,26 +1,69 @@
 {
-  "meta": {"title": "C03 · Sep W3 · Campaign B2B · Shape Expert Network Launch (Expert Playful)", "style": "playful", "segment": "b2b", "pillar": "fitness"},
+  "meta": {
+    "title": "C03 · Sep W3 · Campaign B2B · Shape Expert Network Launch (Expert Playful)",
+    "style": "playful",
+    "segment": "b2b",
+    "pillar": "fitness"
+  },
   "slides": [
-    {"pattern": "cover", "kicker": "Shape Expert Network", "title": "Kenali lebih jauh\n{{PEMBICARA KITA}}",
-     "sub": "3 perspektif. 1 conversation.\n1 Triangle of Life.",
-     "asset": "Cutout megaphone dipegang tangan (prompt GPT di asset-requests.md)", "assetH": 300,
-     "notes": {"visual": "Cover seperti referensi: judul besar + megaphone cutout di kanan bawah + tiga ikon pilar berwarna",
-               "element": "Tiga bulatan Mind × Fitness × Nutrition (ungu, lime, kuning)",
-               "motion": "Headline rise, megaphone pop + float, tiga ikon pop berurutan",
-               "asset": "Megaphone cutout PNG transparan"}},
-    {"pattern": "speaker", "pillar": "fitness", "icon": "dumbbell", "cat": "FITNESS", "name": "Ferry Distira Herlangga", "role": "Fitness & Performance",
-     "quote": "Gerak bukan cuma soal performa. Tapi bagaimana kita hidup lebih aktif.",
-     "notes": {"visual": "Foto cutout pembicara besar di bawah, tag kategori lime miring, nama putih, jabatan biru muda",
-               "element": "Quote italic + scribble lime, pill CTA di footer",
-               "motion": "Ikon pop → tag kategori stamp → nama & jabatan slide-in → quote rise → scribble tergambar",
-               "asset": "Foto Ferry Distira Herlangga, cutout PNG (user cari)"}},
-    {"pattern": "speaker", "pillar": "nutrition", "icon": "bowl", "cat": "NUTRITION", "name": "Dr. Ni Gusti Made Anggraini", "role": "Nutrition Specialist", "align": "right",
-     "quote": "Nutrisi yang tepat bukan sekadar makan, tapi investasi untuk masa depan.", "date": "27 SEPT",
-     "notes": {"visual": "Sama seperti slide pembicara lain, ditambah sticker tanggal merah",
-               "element": "Sticker tanggal merah-pink = satu-satunya aksen merah carousel ini",
-               "motion": "Sticker tanggal stamp dengan sedikit membal",
-               "asset": "Foto Dr. Ni Gusti Made Anggraini, cutout PNG (user cari)"}},
-    {"pattern": "cta", "icon": "calendar", "title": "27 September, 19.30 WIB", "sub": "Online via Google Meet. Daftar via link di bio.", "handle": "Follow @shape.indonesia",
-     "notes": {"visual": "Penutup informasi sesi", "element": "CTA B2B: link bio", "motion": "Pill pulse", "asset": "-"}}
+    {
+      "pattern": "cover",
+      "kicker": "Shape Expert Network",
+      "title": "Kenali lebih jauh\n{{PEMBICARA KITA}}",
+      "sub": "3 perspektif. 1 conversation.\n1 Triangle of Life.",
+      "asset": "Cutout megaphone dipegang tangan (prompt GPT di asset-requests.md)",
+      "assetH": 300,
+      "notes": {
+        "visual": "Cover seperti referensi: judul besar + megaphone cutout di kanan bawah + tiga ikon pilar berwarna",
+        "element": "Tiga bulatan Mind × Fitness × Nutrition (ungu, lime, kuning)",
+        "motion": "Headline rise, megaphone pop + float, tiga ikon pop berurutan",
+        "asset": "Megaphone cutout PNG transparan"
+      }
+    },
+    {
+      "pattern": "speaker",
+      "pillar": "fitness",
+      "icon": "dumbbell",
+      "cat": "FITNESS",
+      "name": "Ferry Distira Herlangga",
+      "role": "Fitness & Performance",
+      "quote": "[Kutipan singkat dari Ferry Distira Herlangga, belum ada, jangan dikarang]",
+      "notes": {
+        "visual": "Foto cutout pembicara besar di bawah, tag kategori lime miring, nama putih, jabatan biru muda",
+        "element": "Quote italic + scribble lime, pill CTA di footer",
+        "motion": "Ikon pop → tag kategori stamp → nama & jabatan slide-in → quote rise → scribble tergambar",
+        "asset": "Foto Ferry Distira Herlangga, cutout PNG (user cari)"
+      }
+    },
+    {
+      "pattern": "speaker",
+      "pillar": "nutrition",
+      "icon": "bowl",
+      "cat": "NUTRITION",
+      "name": "Dr. Ni Gusti Made Anggraini",
+      "role": "Nutrition Specialist",
+      "align": "right",
+      "quote": "[Kutipan singkat dari Dr. Ni Gusti Made Anggraini, belum ada, jangan dikarang]",
+      "date": "27 SEPT",
+      "notes": {
+        "visual": "Sama seperti slide pembicara lain, ditambah sticker tanggal merah",
+        "element": "Sticker tanggal merah-pink = satu-satunya aksen merah carousel ini",
+        "motion": "Sticker tanggal stamp dengan sedikit membal",
+        "asset": "Foto Dr. Ni Gusti Made Anggraini, cutout PNG (user cari)"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "calendar",
+      "title": "27 September, 19.30 WIB",
+      "sub": "Online via Google Meet. Daftar via link di bio.",
+      "handle": "Follow @shape.indonesia",
+      "notes": {
+        "visual": "Penutup informasi sesi",
+        "element": "CTA B2B: link bio",
+        "motion": "Pill pulse",
+        "asset": "-"
+      }
+    }
   ]
 }

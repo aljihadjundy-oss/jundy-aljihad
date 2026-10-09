@@ -11,7 +11,7 @@ Isi file:
 - Motion = animasi masuk bawaan PowerPoint (Float In, Zoom, Wipe, Fade), jalan otomatis saat slide tampil.
   Ekspor ke video: File > Export > Create a Video.
 - Catatan visual/elemen/motion/aset per slide ada di Speaker Notes.
-- Font: Poppins (paket di carousel-output/_fonts-poppins/). Tanpa Poppins PowerPoint memakai font pengganti.
+- Font: Poppins (file TTF di assets/fonts-ttf/). Tanpa Poppins PowerPoint memakai font pengganti.
 """
 import argparse, copy, json, math, re, sys
 from pathlib import Path
