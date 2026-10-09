@@ -79,7 +79,7 @@ First sample: "checkcom x claude 1" (193 s, a 16:9 interview with two people, de
   captions stay in the bottom zone (karaoke). The picture is never covered, so the footage is 100 % clean. Turn the chrome progress bar off
   (`chrome.progress: false`): it runs through the top zone. Beats use `scale` ≈ 1.5 so cards fill the zone and read on a phone.
 - **Allowed styles.** S0 `title` (`glass: true`, on the blurred background), `checklist`, `compare`, `list`; S2 `kinetic` over the footage (`mode: overlay`, `bg: none`,
-  `y` ≈ 0.075); S5 `mindmap` (2 up + 2 down, `size` 50); S6 spec tags on a drawn, brand-free device (`scripts/scene-templates/specs.js`, kinds `air` /
+  `y` ≈ 0.075; the block is auto-pushed below the 5 % top margin, never let words touch the frame edge); S5 `mindmap` (2 up + 2 down, `size` 50); S6 spec tags on a drawn, brand-free device (`scripts/scene-templates/specs.js`, kinds `air` /
   `thinkpad` / `probook` / `chip`: a laptop or a CPU chip with monospace labels and drawn arrows). No `behind`, no bottom window (the picture is already the window).
 - **Content rules for illustrations.** Device drawings are generic outlines: no logos, no photos. Every label and number comes from the speech (specs, prices,
   model names); an ASR-garbled name (here "t4 80") is shown in its obvious form ("ThinkPad T480") and mentioned in the report.

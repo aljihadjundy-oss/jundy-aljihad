@@ -268,7 +268,7 @@ overrides) and build lines in place (`br: true` starts a new line). Per word: `s
 `light`, `serif`, `outline`, `stamp`, `vert`), `color` (`accent`, `ink` or a hex), `rot`. Beat fields: `palette`
 (`brand` default = the project palette, or any library palette: `maroon`, `paper`, `ink`, `navy`, `jundy`), `bg` / `ink` overrides (`bg: "none"` to type over the footage with
 `mode: "overlay"`), `y` (vertical centre, default 0.5), `wordGap`, `lineGap`, `every` (spacing for words with no match),
-`exit` (`cut` default, or `fade`), `sfx` (false to mute the per-word ticks). Captions step aside during a kinetic beat
+`safeTop` / `safeBottom` (fractions of the height the text block may not cross, default 0.05 / 0.95: the block is measured and pushed inside, so `y` is only a hint and words never touch the frame edge), `exit` (`cut` default, or `fade`), `sfx` (false to mute the per-word ticks). Captions step aside during a kinetic beat
 because it already shows the words (`captions: true` keeps them). `rings`: `[{ "text": "PACING", "x": 0.5, "y": 0.52, "r": 0.34, "size": 96, "spin": 16, "at": 0.1 }]` sets a keyword around a spinning circle. `stickers`: PNG cut-outs (`src`) with a
 white paper edge, or a line `icon`; `at`, `x`, `y` (centre), `w` (fraction of width), `rot`, `outline: false` for
 logos or cards that should keep their own edge (a soft shadow only).

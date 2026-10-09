@@ -54,6 +54,19 @@ export const kinetic = {
       return { el, it, rot: it.rot ?? (st === 'stamp' ? -3 : st === 'vert' ? 0 : 0) };
     });
 
+    // keep the whole block inside the safe area: words must never touch the top or bottom margin (centre y is only a hint)
+    {
+      const rows = [...box.children].filter(c => c.classList.contains('row'));
+      const gap = (b.lineGap ?? 6) * S, ch = rows.reduce((a, r) => a + r.offsetHeight, 0) + gap * Math.max(0, rows.length - 1);
+      if (ch > 0) {
+        const minTop = (b.safeTop ?? 0.05) * H, maxBot = (b.safeBottom ?? 0.95) * H, cy = (b.y ?? 0.5) * H;
+        let top = cy - ch / 2;
+        if (top < minTop) top = minTop;
+        else if (top + ch > maxBot) top = Math.max(minTop, maxBot - ch);
+        box.style.transform = `translateY(${(top + ch / 2 - H / 2).toFixed(1)}px)`;
+      }
+    }
+
     const stickers = (b.stickers || []).map((sk, i) => {
       const el = h('div', sk.outline === false ? 'sticker plain' : 'sticker', root); // outline:false for logos/cards
       const w = (sk.w ?? 0.26) * W;
