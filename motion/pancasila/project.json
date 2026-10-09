@@ -1,0 +1,29 @@
+{
+  "canvas": {
+    "w": 1920,
+    "h": 1080,
+    "fps": 30
+  },
+  "footage": false,
+  "brand": {
+    "font": "plus-jakarta-sans"
+  },
+  "chrome": {
+    "name": "PANCASILA",
+    "sub": "ORDE BARU 1966–1998",
+    "progress": true
+  },
+  "audio": {
+    "voice": false,
+    "pad": false,
+    "sfx": 0.8,
+    "target_lufs": -18
+  },
+  "beats": [],
+  "duration": 131,
+  "locale": "id-ID",
+  "captions": {
+    "enabled": false
+  },
+  "entry": "src/index.html"
+}
