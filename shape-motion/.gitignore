@@ -1,0 +1,5 @@
+assets/
+out/
+deliverables/
+node_modules/
+*.mp4

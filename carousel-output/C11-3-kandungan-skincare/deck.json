@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "C11 · Nov W3 · Regular B2C · Aesthetics — 3 Kandungan Skincare yang Sering Disalahpahami",
+    "style": "base",
+    "segment": "b2c",
+    "pillar": "aesthetics"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "icon": "drop",
+      "ghost": "SKINCARE",
+      "kicker": "Aesthetics",
+      "titleSize": 72,
+      "title": "3 Kandungan Skincare\nyang Sering\n{{Disalahpahami}}",
+      "sub": "Nomor 3 paling banyak salah paham.",
+      "notes": {
+        "visual": "Cover tipografi besar, ikon tetes di bulatan putih, ghost word SKINCARE samar",
+        "element": "Highlight biru di 'Disalahpahami'. Sub = janji kecil yang memancing swipe sampai slide #3",
+        "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → sub rise; panah next fade",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "1",
+      "label": "Kandungan #1",
+      "title": "Alkohol = pasti\nbikin kering?",
+      "body": "Dikira selalu jahat. Padahal fatty alcohol justru melembapkan.",
+      "notes": {
+        "visual": "Numeral besar samar, label pill, judul berupa pertanyaan mitos, body = fakta ringkas",
+        "element": "Format mitos → fakta dalam satu slide. Posisi angka dan label konsisten di tiga slide",
+        "motion": "Numeral fade → label pop → judul rise → body rise",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "2",
+      "label": "Kandungan #2",
+      "title": "Retinol harus\nsampai mengelupas?",
+      "body": "Mengelupas dan perih bukan tanda berhasil, bisa jadi iritasi. Mulai pelan.",
+      "notes": {
+        "visual": "Sama seperti #1",
+        "element": "-",
+        "motion": "Sama dengan #1",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "numbered",
+      "num": "3",
+      "label": "Kandungan #3",
+      "title": "Asam (AHA/BHA)\npasti keras?",
+      "body": "Bukan selalu keras: yang menentukan [[dosis & frekuensi]].",
+      "notes": {
+        "visual": "Sama seperti #1; ini slide yang dijanjikan 'paling banyak salah paham' di cover",
+        "element": "Satu-satunya aksen merah di 'dosis & frekuensi' (istilah yang ingin diingat)",
+        "motion": "Sama dengan #1, aksen merah stamp paling akhir",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "drop",
+      "title": "Simpan biar gak\nsalah paham lagi 📌",
+      "sub": "Kirim ke teman yang lagi hobi skincare",
+      "handle": "Follow @shape.indonesia",
+      "notes": {
+        "visual": "Penutup tenang: kotak biru + pill handle lime, tanpa panah next",
+        "element": "CTA simpan & share (B2C edukasi)",
+        "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+        "asset": "Tidak ada"
+      }
+    }
+  ]
+}

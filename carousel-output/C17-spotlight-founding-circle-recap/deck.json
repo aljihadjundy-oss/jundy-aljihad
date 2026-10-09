@@ -1,0 +1,18 @@
+{
+  "meta": {"title": "C17 · Des W4 · Campaign B2B · Year-End Recap Founding Circle Partners", "style": "base", "segment": "b2b", "pillar": "mind"},
+  "slides": [
+    {"pattern": "cover", "icon": "link", "kicker": "Year-End Recap", "titleSize": 80,
+     "title": "Terima kasih,\n{{Founding Circle}}\nPartners",
+     "sub": "Ekosistem wellness Indonesia dibangun bareng-bareng.",
+     "notes": {"visual": "Cover formal: ikon tautan, judul besar dengan 'Founding Circle' di highlight biru", "element": "Social proof: partner terkonfirmasi, tanpa angka",
+               "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → sub rise", "asset": "Tidak ada"}},
+    {"pattern": "logos", "title": "Dibangun\nbareng-bareng",
+     "logos": ["Fit4Go", "PPYNI", "Bisa Gerak", "Lux Entertainment", "Dreya Communications"],
+     "note": "Terima kasih atas kepercayaannya tahun ini.",
+     "notes": {"visual": "Grid 5 kotak logo simetris (3 + 2) di tengah", "element": "Grid 5 logo sesuai plan; ucapan terima kasih di bawahnya",
+               "motion": "Judul rise → logo pop berurutan → ucapan rise", "asset": "5 file logo (PNG transparan)"}},
+    {"pattern": "cta", "icon": "heart", "title": "Follow seluruh\npartner kami",
+     "sub": "Tag dan cek akun tiap partner di caption", "handle": "Follow @shape.indonesia",
+     "notes": {"visual": "Penutup tenang", "element": "CTA sesuai plan: follow seluruh partner", "motion": "Ikon pop → kotak rise → sub rise → handle pop", "asset": "Handle IG tiap partner (untuk caption)"}}
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "C08 · Okt W4 · Campaign B2B · Spotlight Founding Circle Partner",
+    "style": "base",
+    "segment": "b2b",
+    "pillar": "health"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "icon": "link",
+      "kicker": "Shape Expert Network",
+      "title": "Kenalan sama\n{{Founding Circle}}",
+      "sub": "Mereka yang membangun ekosistem wellness Indonesia bareng Shape.",
+      "notes": {
+        "visual": "Cover formal: ikon tautan (simbol jaringan), judul besar dengan 'Founding Circle' di highlight biru",
+        "element": "Social proof: framing partner terkonfirmasi, bukan angka",
+        "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → sub rise",
+        "asset": "Tidak ada"
+      },
+      "titleSize": 88
+    },
+    {
+      "pattern": "partner",
+      "kicker": "Founding Circle Partner",
+      "name": "[NAMA PARTNER]",
+      "logoName": "[Nama partner]",
+      "desc": "[Satu kalimat: bidang & apa yang mereka kerjakan]",
+      "notes": {
+        "visual": "Slide inti spotlight: logo partner besar di tengah (kotak putih), nama, satu kalimat bidang",
+        "element": "Logo besar = elemen utama (sesuai plan: 'logo Founding Circle Partner besar di tengah')",
+        "motion": "Kicker fade → logo pop → nama rise → kalimat bidang rise",
+        "asset": "Logo partner (PNG transparan) + nama + 1 kalimat bidang, dari user/partner"
+      }
+    },
+    {
+      "pattern": "quote",
+      "quote": "[Satu kalimat alasan partner bergabung ke ekosistem Shape]",
+      "who": "[Nama perwakilan]",
+      "role": "[Jabatan], [Nama partner]",
+      "asset": "FOTO / PRODUK PARTNER (bukan stock)",
+      "assetH": 220,
+      "notes": {
+        "visual": "Alasan gabung dalam kotak kutipan italic, nama perwakilan di pill putih, foto/produk partner di bawah",
+        "element": "Kalimat alasan = highlight box berisi 1 kalimat (sesuai plan). Harus kutipan asli dan disetujui partner",
+        "motion": "Tanda kutip pop → kotak kutipan rise → nama rise → foto rise",
+        "asset": "Kutipan asli (disetujui partner), foto/produk partner"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "heart",
+      "title": "Kenalan lebih\njauh, yuk",
+      "sub": "Follow & kunjungi [@handle_partner]",
+      "handle": "Follow @shape.indonesia",
+      "notes": {
+        "visual": "Penutup tenang: ikon, kotak biru, ajakan follow partner, pill handle Shape",
+        "element": "CTA sesuai plan: follow & kunjungi partner terkait",
+        "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+        "asset": "Handle Instagram partner"
+      }
+    }
+  ]
+}

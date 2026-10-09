@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "title": "C16 · Des W4 · Campaign B2B · Closing — Sampai Jumpa di 2027",
+    "style": "base",
+    "segment": "b2b",
+    "pillar": "mind"
+  },
+  "slides": [
+    {
+      "pattern": "cover",
+      "icon": "calendar",
+      "kicker": "Shape Expert Network 2026",
+      "titleSize": 80,
+      "title": "Rangkaian 2026\nResmi {{Ditutup}}",
+      "sub": "Terima kasih sudah jadi bagian dari perjalanan ini.",
+      "notes": {
+        "visual": "Cover tenang dan formal: ikon kalender, judul besar, sub",
+        "element": "Highlight biru di 'Ditutup'. Tanpa emoji besar (B2B)",
+        "motion": "Ikon pop → kicker rise → judul rise, highlight menyusul → sub rise",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "timeline",
+      "title": "Perjalanan 2026",
+      "steps": [
+        {
+          "when": "September",
+          "what": "Sesi 1 · Kickoff"
+        },
+        {
+          "when": "Oktober",
+          "what": "Sesi 2-3 · Health"
+        },
+        {
+          "when": "November",
+          "what": "Sesi 4 · Longevity"
+        },
+        {
+          "when": "Desember",
+          "what": "Sesi 5-7 · Aesthetics, Bonus, Closing"
+        }
+      ],
+      "notes": {
+        "visual": "Timeline mini: garis vertikal dan 4 kartu per bulan",
+        "element": "Timeline mini sesi 1-7 sesuai plan (dikelompokkan per bulan agar muat)",
+        "motion": "Judul rise → garis tergambar (wipe) → kartu rise berurutan",
+        "asset": "Tidak ada"
+      }
+    },
+    {
+      "pattern": "claim",
+      "label": "Momen",
+      "body": "Terima kasih untuk semua yang hadir, bertanya, dan mendukung.",
+      "asset": "KOLASE FOTO DOKUMENTASI ASLI per bulan (Sep-Des). Bukan stock",
+      "assetH": 250,
+      "notes": {
+        "visual": "Kartu kaca berisi ucapan terima kasih dan placeholder kolase foto",
+        "element": "Kolase foto asli dokumentasi sesi (plan melarang stock)",
+        "motion": "Kartu fade → kotak teks rise → foto rise",
+        "asset": "Kolase foto dokumentasi asli dari tiap bulan"
+      }
+    },
+    {
+      "pattern": "session",
+      "kicker": "Sampai jumpa di",
+      "title": "Shape Indonesia\nExpo 2027",
+      "sub": "NICE PIK 2",
+      "date": "8-10 Oktober 2027",
+      "dateRed": true,
+      "asset": "MOCKUP / FOTO VENUE NICE PIK 2",
+      "assetH": 200,
+      "notes": {
+        "visual": "Slide penutup acara: nama Expo, venue, tanggal dalam kotak merah, placeholder mockup venue",
+        "element": "Aksen merah (jatah 1x) di tanggal Expo, sesuai plan",
+        "motion": "Kicker fade → judul rise → kotak venue rise → tanggal rise → foto rise",
+        "asset": "Mockup atau foto venue NICE PIK 2"
+      }
+    },
+    {
+      "pattern": "cta",
+      "icon": "link",
+      "title": "Info early-bird\nbooth via DM",
+      "sub": "Atau cek link di bio. Sampai jumpa di 2027",
+      "handle": "@shape.indonesia",
+      "notes": {
+        "visual": "Penutup tenang",
+        "element": "CTA konversi (B2B): early-bird booth lewat DM/link bio. Tanpa harga dan kuota di feed",
+        "motion": "Ikon pop → kotak rise → sub rise → handle pop",
+        "asset": "Tidak ada"
+      }
+    }
+  ]
+}

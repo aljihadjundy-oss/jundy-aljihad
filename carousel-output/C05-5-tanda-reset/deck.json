@@ -1,0 +1,32 @@
+{
+  "meta": {"title": "C05 · Okt W1 · Mind Power · 5 Tanda Butuh Reset", "style": "base", "segment": "b2c", "pillar": "mind"},
+  "slides": [
+    {"pattern": "cover", "icon": "brain", "ghost": "RESET",
+     "kicker": "Mind Power",
+     "title": "5 Tanda Kamu Butuh\n[[Reset]]",
+     "sub": "Bukan liburan mahal.\nCukup istirahat yang bener.",
+     "notes": {"visual": "Cover tipografi besar di atas gradient+grid, ghost word RESET samar di belakang, ikon otak di bulatan putih",
+               "element": "Kicker pill pilar, highlight box biru, satu-satunya aksen merah carousel ini di kata 'Reset'",
+               "motion": "Ikon pop → kicker rise → headline rise, 'Reset' stamp merah menyusul → sub rise; panah next fade",
+               "asset": "Tidak ada (semua dibuat dari tipografi + ikon)"}},
+    {"pattern": "list", "title": "Pernah ngerasain ini?",
+     "items": ["Bangun tidur, tetap capek", "Hal kecil gampang bikin kesel", "Fokus buyar, scroll HP tanpa sadar", "Males, padahal biasanya semangat", "Tidur lama, tapi gak terasa pulih"],
+     "notes": {"visual": "Lima baris glass card, satu tanda per baris, ikon centang di bulatan biru",
+               "element": "Checklist 5 item (pengganti 5 slide, supaya total tetap ≤5 slide)",
+               "motion": "Judul rise, tiap baris slide-in dari kiri berurutan 0.25 detik",
+               "asset": "Tidak ada"}},
+    {"pattern": "compare", "title": "Reset itu gak harus mahal",
+     "left": {"label": "Dikira perlu", "title": "Liburan mahal", "body": "Seru, tapi capeknya sering ikut pulang."},
+     "right": {"label": "Sering cukup", "title": "Istirahat yang bener", "body": "Tidur cukup, jeda layar, gerak ringan."},
+     "foot": "Mulai dari yang paling kecil dulu.",
+     "notes": {"visual": "Dua kartu berdampingan: kiri kaca polos, kanan lebih terang (highlight biru)",
+               "element": "Perbandingan visual 2 kolom",
+               "motion": "Kiri slide-in dari kiri, kanan slide-in dari kanan, footer rise",
+               "asset": "Tidak ada"}},
+    {"pattern": "cta", "icon": "heart", "title": "Simpan biar inget lagi 📌", "sub": "Kirim ke teman yang lagi butuh reset", "handle": "Follow @shape.indonesia",
+     "notes": {"visual": "Penutup tenang, satu kotak biru + pill handle lime",
+               "element": "CTA simpan & share (B2C: bukan daftar webinar). Panah next tidak ada di slide terakhir",
+               "motion": "Ikon pop, kotak rise, pill handle pulse halus",
+               "asset": "Tidak ada"}}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "siaga-sumatra-motion",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs",
+    "preview": "node render.mjs --range",
+    "stills": "node render.mjs --stills"
+  },
+  "dependencies": {
+    "@fontsource/plus-jakarta-sans": "5.3.0",
+    "playwright-core": "1.56.1"
+  }
+}
