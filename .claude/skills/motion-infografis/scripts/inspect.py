@@ -32,8 +32,21 @@ dur = float(d['format'].get('duration', 0))
 aud = any(s['codec_type'] == 'audio' for s in d['streams'])
 ar = w / h
 orient = 'portrait' if ar < 0.9 else 'landscape' if ar > 1.15 else 'square'
-print(f'{w}x{h}  {orient}  {fps:.2f} fps  {dur:.1f} s  audio:{"yes" if aud else "no"}')
+# a landscape video inside a portrait file (black bars above and below): detect it, the true format is landscape
+crop = None
 if orient == 'portrait':
+    c = subprocess.run(['ffmpeg', '-hide_banner', '-ss', str(min(30, dur / 3)), '-i', sys.argv[1], '-frames:v', '12', '-vf', 'cropdetect=24:2:0', '-f', 'null', '-'], capture_output=True, text=True).stderr
+    import re
+    m = re.findall(r'crop=(\d+):(\d+):(\d+):(\d+)', c)
+    if m:
+        cw, ch, cx, cy = map(int, m[-1])
+        if ch < h * 0.8 and cw / max(ch, 1) > 1.15:
+            crop = (cw, ch, cx, cy)
+            orient = 'landscape (letterboxed inside a portrait file)'
+print(f'{w}x{h}  {orient}  {fps:.2f} fps  {dur:.1f} s  audio:{"yes" if aud else "no"}')
+if crop:
+    print(f'letterboxed: the real picture is {crop[0]}x{crop[1]} at y={crop[3]}. Crop it first: ffmpeg -i raw.mp4 -vf crop={crop[0]}:{crop[1]}:{crop[2]}:{crop[3]},fps=30 -c:v libx264 -crf 14 -c:a copy land.mp4, then prep_footage land.mp4 proj --fit blur. Two or more speakers: T5; one: T2')
+elif orient == 'portrait':
     print('raw: portrait → type T1 (founder talking head) or T3/T7; NO wide bottom window; prep_footage default (--fit cover), --focus-x if the speaker is off-centre')
 elif orient == 'landscape':
     print('raw: landscape → type T2 if one speaker (wide bottom window allowed, prep_footage --fit blur), T5 if two or more speakers, T3/T4 if a screen or slides')

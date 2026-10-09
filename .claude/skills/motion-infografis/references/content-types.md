@@ -29,7 +29,7 @@ standing rules while no sample has arrived yet. Provisional types are upgraded t
 | T2 | Talking head / explainer, landscape raw | landscape 16:9 (or 4:3), one speaker | measured (ref e rule) | ref e |
 | T3 | Tutorial / screen demo | portrait or landscape, speaker + a screen | measured | ref A |
 | T4 | Presentation / slides / keynote | landscape, speaker + slides, or slides only | provisional | none yet |
-| T5 | Podcast / interview | landscape or split, two or more speakers | provisional | none yet |
+| T5 | Podcast / interview | landscape (sometimes letterboxed in a portrait file), two or more speakers | measured (first sample) | "checkcom x claude 1" |
 | T6 | Voice-over explainer (no footage of a speaker) | any, audio only | measured | ref B, ref c |
 | T7 | Product showcase / review | portrait, object in hand or on a table | measured | ref d |
 | T8 | System / diagram motion piece (no speaker, no voice) | landscape or square | measured | refs a, b |
@@ -71,11 +71,20 @@ standing rules while no sample has arrived yet. Provisional types are upgraded t
   S0 `stat` for a number the slide mentions. No kinetic interludes over the slide. Chapter cards at section changes (S5 `chapter`).
 - **Open questions for the first sample.** Slides-only or with a speaker; landscape or portrait; animations the slides already have.
 
-## T5 Podcast / interview (provisional)
-- **Default until a sample arrives.** Two or more faces: never cover either, no shrinking of the active speaker. Motion goes to
-  lower thirds with the name, short `quote`/`stat` cards in the gaps between faces, a topic `chapter` card at each new question, and S1 `callout`
-  for a term. Captions word-timed, speaker colour per person. Keep graphics sparse (≥ 60 % clean) because the content is the conversation.
-- **Open questions for the first sample.** Split-screen two-up or one frame; landscape or portrait; whether sound design is wanted.
+## T5 Podcast / interview
+First sample: "checkcom x claude 1" (193 s, a 16:9 interview with two people, delivered as a 1080x1920 file with the real picture letterboxed in the middle).
+- **Format first.** `inspect.py` detects the letterbox. Crop the true 16:9 picture out (`crop=1080:608:0:656`), then `prep_footage --fit blur`.
+  The whole interview frame stays visible in the middle band (y ≈ 0.34–0.66), both faces uncropped. Never use `cover` (crops the faces) or `split`.
+- **Layout.** Graphics live only in the **top zone** (above the picture, set `layout.overlayTop` ≈ 0.045, `overlayBottom` ≈ 0.335) as overlay cards;
+  captions stay in the bottom zone (karaoke). The picture is never covered, so the footage is 100 % clean. Turn the chrome progress bar off
+  (`chrome.progress: false`): it runs through the top zone. Beats use `scale` ≈ 1.5 so cards fill the zone and read on a phone.
+- **Allowed styles.** S0 `title` (`glass: true`, on the blurred background), `checklist`, `compare`, `list`; S2 `kinetic` over the footage (`mode: overlay`, `bg: none`,
+  `y` ≈ 0.075); S5 `mindmap` (2 up + 2 down, `size` 50); S6 spec tags on a drawn, brand-free device (`scripts/scene-templates/specs.js`, kinds `air` /
+  `thinkpad` / `probook` / `chip`: a laptop or a CPU chip with monospace labels and drawn arrows). No `behind`, no bottom window (the picture is already the window).
+- **Content rules for illustrations.** Device drawings are generic outlines: no logos, no photos. Every label and number comes from the speech (specs, prices,
+  model names); an ASR-garbled name (here "t4 80") is shown in its obvious form ("ThinkPad T480") and mentioned in the report.
+- **Pacing.** A graphic roughly every 5–8 s in the top zone, never two identical styles in a row; every product recommendation gets one S6 scene.
+- **Not yet decided (wait for more samples).** Name lower thirds for the two speakers (needs the names), speaker-coloured captions, a two-up split.
 
 ## T6 Voice-over explainer (no speaker footage)
 - **Allowed styles.** S2 kinetic collage (carrier: words land as spoken on solid colour, stickers, hard cuts), S2 ext `rings`, S0 data beats,
@@ -117,6 +126,7 @@ words from the transcript, no invented numbers).
 | refs a, b: "Labs" intro pieces (light, dark) | T8 | isometric build, progress counter | S4 |
 | ref c: kinetic collage with ring text (20 s) | T6 | rings | S2 ext |
 | ref d: product review (101 s, portrait) | T7 | spec tags | S6 |
+| "checkcom x claude 1" (193 s interview, two speakers, letterboxed 16:9) | T5 | top-zone cards over a fully visible picture, S6 on drawn devices | S0/S2/S5/S6 |
 | ref e: marketing explainer (83 s, speaker in a dark room) | T2 | graph-paper board, wide speaker window | S5 |
 
 ## Filing a new sample

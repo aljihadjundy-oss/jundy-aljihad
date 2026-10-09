@@ -58,3 +58,6 @@ export default {
 
 The SIAGA SUMATRA project (`siaga-sumatra-motion/src/scenes/*.js`) has larger examples: a geoBoundaries map with camera zoom,
 names that fly into card titles, a formula assembled term by term, and checkmarks drawn onto a screenshot.
+
+## Ready-made scene templates
+`scripts/scene-templates/specs.js`: spec tags on a drawn device (kinds `air`, `thinkpad`, `probook`, `chip`; fields `eyebrow`, `name`, `tags: [{ text, sub, at, part, side, big }]`, `at` in seconds from the beat start). Copy it into `proj/scenes/` and use `{ "type": "custom", "mode": "overlay", "module": "scenes/specs.js", ... }`. Do not name a custom field `kicker` or `title` (the engine renders those as a header).
