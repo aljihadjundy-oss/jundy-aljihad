@@ -1,0 +1,9 @@
+{
+  "canvas": { "w": 1080, "h": 1350, "fps": 30 },
+  "footage": false,
+  "entry": "src/index.html",
+  "duration": 10,
+  "audio": { "voice": false, "pad": true, "sfx": 1.0, "target_lufs": -16 },
+  "photos": [],
+  "beats": []
+}
