@@ -250,6 +250,19 @@ A tiny real 3D renderer: an orbiting camera, flat-shaded faces lit from one side
   `links` draw a dashed arc with a travelling dot between two ids. `hud` (corner marks, tiny text, counter; `false` hides it), `caption` lines with `|serif|` words.
   Use palette `frost` (light) or `blueprint` (dark).
 
+### stack, roll, glitch, ticker, hud, slab, cursor, orbit, wipe: beats from the 2026-10 references (S7-S11)
+All are free-placed full-canvas layers (`bg: "none"` lets the footage show). Palettes: `newsroom`, `hud`, `ui`, `engrave`, `editorial` (or any). Turn `chrome.progress` off for these.
+- `stack` `{ "lines": ["Money", "still moves", "like it's"], "big": "1973.", "caption": "SWIFT launched in 1973.", "header": { "left": "Brand", "right": "Tagline" }, "every": 0.7, "dim": 0.62, "grid": true }`
+  lines land one by one, earlier lines dim to grey, `big` lands last; line items may be `{ t, at }`; `^x^` marks the accent colour.
+- `roll` `{ "lines": ["Pay anyone.", "^Anywhere.^"], "values": ["USD", "EUR"], "at": [0.9, 2.2], "valueSize": 190 }` a word rolling like a slot machine; `serif: true, align: "center"` and `values: ["ask^?^", "task"]` is the centred serif word swap.
+- `glitch` `{ "words": [{ "w": "NEVER", "at": 0.1 }, { "w": "SLEEPS.", "at": 1.1, "color": "accent" }], "palette": "newsroom", "size": 220, "split": 26 }` each word lands split in red/cyan and snaps together; the next word replaces it.
+- `ticker` `{ "items": ["AAPL +3.37%", "NVDA +2.1%"], "top": 0.045, "bottom": 0.935, "speed": 120, "palette": "newsroom", "bg": "none" }` tapes along the top and bottom edge (decoration; the items are the words you give it).
+- `hud` `{ "left": "LABEL", "right": "SCENE 02", "palette": "hud", "bg": "none", "rate": "120 FPS" }` corner brackets, labels, running timecode, REC dots.
+- `slab` `{ "text": "PLANE", "meta": "1440 x 620", "palette": "hud" }` about 3.6 s: a slab tilts in 3D, collapses to a ruler line, ends as a glowing dot; follow it with a `glitch` word.
+- `cursor` `{ "keys": [{ "t": 0.3, "x": 0.3, "y": 0.8 }, { "t": 1.6, "x": 0.5, "y": 0.46, "click": true }], "bg": "none" }` an animated pointer with a click ripple (x, y are fractions of the canvas).
+- `orbit` `{ "label": "FF", "chips": ["#2F6BFF", "#22C1F5", "#2BBF8E"], "palette": "ui", "radius": 230 }` a logo with satellite chips that spring out and circle it.
+- `wipe` `{ "t": 12.7, "dur": 0.8, "colors": ["#3B3BB0", "#5B5BE8"], "dir": 1 }` a diagonal two-panel colour wipe between parts.
+
 ### letterbox: black bars with a line of text
 `{ "type": "letterbox", "t": 52, "dur": 6, "bar": 0.11, "text": "32bit float\ninternal recording" }`
 Bars slide in at the top and bottom (ref d). `bar` = height of each bar as a fraction of the frame (check the face on close-ups, keep it small),

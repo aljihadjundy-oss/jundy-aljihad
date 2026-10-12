@@ -6,6 +6,8 @@ import { callout, annotate, zoom, transition, tag, letterbox } from './fx.js';
 import { kinetic } from './kinetic.js';
 import { iso } from './iso.js';
 import { mindmap, calendar } from './board.js';
+import { stack, roll, glitch, ticker, hud, slab, cursor, orbit, wipe } from './refs3.js';
 
 export const BEATS = { title, quote, cta, chapter, lowerthird, stat, bars, compare, checklist, list, flow, stepper, image, custom,
-  callout, annotate, zoom, transition, kinetic, tag, letterbox, iso, mindmap, calendar };
+  callout, annotate, zoom, transition, kinetic, tag, letterbox, iso, mindmap, calendar,
+  stack, roll, glitch, ticker, hud, slab, cursor, orbit, wipe };

@@ -8,7 +8,7 @@ description: Add infographic motion graphics to a video, or build a motion-infog
 Turns footage + a transcript (or pure data) into a vertical motion-graphics video. The look is the user's locked
 palette (`jundy`, from jundy-aljihad.vercel.app: near-black, violet → pink → orange) plus a style library that grows
 with every reference the user sends: house infographics (S0), tutorial split-screen (S1), kinetic collage typography
-(S2), tracked hand-drawn annotation (S3), blueprint / isometric build (S4), whiteboard on graph paper (S5), spec tags (S6),
+(S2), tracked hand-drawn annotation (S3), blueprint / isometric build (S4), whiteboard on graph paper (S5), spec tags (S6), newsroom ticker & glitch (S7), camera HUD slab (S8), product UI demo (S9), engraving word swap (S10), editorial type stack (S11),
 and whatever comes next. Styles are combined part by part so the audience
 never sees one look for a whole video. Everything on screen is a pure function of time, so renders are deterministic
 and any frame can be previewed.

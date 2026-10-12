@@ -14,6 +14,7 @@ the motion plan. The numbers below were measured on the references (time in seco
 3.2 S5 Whiteboard on graph paper (ref e): mind map, calendar, numbered chapters, the speaker as a small window
 3.3 S6 Spec tags (ref d): mono labels with curved arrows on a product shot
 3.4 Ring text (ref c, an extension of S2)
+3.5 S7 Newsroom ticker & glitch (ref 1) · 3.6 S8 Camera HUD & slab (ref 5) · 3.7 S9 Product UI demo (ref 2) · 3.8 S10 Engraving & accent word swap (ref 3) · 3.9 S11 Editorial type stack (ref 4)
 4. Which style when, for talking-head founder content
 5. Limits
 
@@ -38,6 +39,11 @@ the motion plan. The numbers below were measured on the references (time in seco
 | S4 | Blueprint / isometric build | refs a, b | isometric blocks that rise one by one, leader-line labels, HUD corners, a build-progress counter, serif-italic accent words, a wireframe globe | `iso` `title`/captions with `\|serif\|` |
 | S5 | Whiteboard on graph paper | ref e | graph-paper backdrop, big black type, mind map and calendar that draw themselves, numbered chapters on an arc, the speaker as a wide window at the bottom, one-word grey caption chips | `mindmap` `calendar` `chapter` (`arc`) `layout.pip` `backdrop` captions `word` |
 | S6 | Spec tags | ref d | small monospace labels typed in with a hand-drawn curved arrow pointing at a detail of a product shot | `tag` |
+| S7 | Newsroom ticker & glitch | ref 1 (Stockwise) | deep-indigo field, ticker tapes along the top and bottom edge, a word that lands split in red/cyan and snaps together, a violet second word, diagonal colour-panel wipes, a news card that floats in with a LIVE pill | `glitch` `ticker` `wipe` `image` |
+| S8 | Camera HUD & slab | ref 5 (PLANE → CLAUDE) | black field, one orange slab that tilts in 3D and collapses to a hairline with a ruler and a glowing dot, then a glitched word; corner brackets, timecode, REC dots, tiny mono labels | `slab` `hud` `glitch` |
+| S9 | Product UI demo | ref 2 (Frame by Frame) | light interface, an animated pointer that moves and clicks (ripple), a menu-bar app that springs open, an app logo with satellite chips that circle it | `cursor` `orbit` `image` |
+| S10 | Engraving & accent word swap | ref 3 (Claude) | warm white paper, one bold serif word whose punctuation changes (ask? → task) in a single terracotta accent, vintage engravings cut out in grey with one accent shape | `roll` (`serif`) `glitch` `image` |
+| S11 | Editorial type stack | ref 4 (Lightspark) | off-white grid paper, one neutral grotesque, lines that stack and dim as the next arrives, a huge number with a tiny caption, a slot-machine word, black bumper frames | `stack` `roll` `title` |
 
 Accents that work inside any style: `zoom` punch on the key word, `transition` leak on a layout change, `callout` for
 one claim, `^gradient^` headline words in the locked palette.
@@ -53,6 +59,11 @@ one claim, `^gradient^` headline words in the locked palette.
 | `frost` | bg #EEF1F7, surface #FFFFFF, ink #0B1220, accent #2B3FD6, accent2 #FF5A36 | S4 / refs a | the light isometric explainer |
 | `blueprint` | bg #03050D, surface #0A1230, ink #E8EEFF, accent #4C6BFF, accent2 #9DB4FF | S4 / ref b | the dark isometric explainer |
 | `graph` | bg #EDEDEA, surface #FFFFFF, ink #0F0F0F, accent and accent2 #D32F2F | S5 / ref e | whiteboard parts on graph paper |
+| `newsroom` | bg #070A1E, surface #10163A, ink #F4F6FF, accent #5B5BE8, accent2 #8C8CFF | S7 / ref 1 | the broadcast / ticker part |
+| `hud` | bg #0A0A0A, ink #F5F2EC, accent #E8421C, accent2 #FF7A4D | S8 / ref 5 | the camera-HUD slab part |
+| `ui` | bg #F7F8FB, surface #FFFFFF, ink #14213D, accent #2F6BFF, accent2 #22C1F5, accent3 #2BBF8E | S9 / ref 2 | a light product-UI part |
+| `engrave` | bg #FBFAF8, ink #141414, accent #D9704F | S10 / ref 3 | the paper + one terracotta accent part |
+| `editorial` | bg #F4F4F1, ink #111111, accent2 #8C8C88 (the dim grey) | S11 / ref 4 | the neutral type stack; pair it with a black bumper (`ink` palette) |
 
 Project-wide: `brand.palette` (default `jundy`). Per part: `"palette": "maroon"` on a beat colours just that beat.
 
@@ -66,7 +77,8 @@ Outcome first: every part has a job, and the style is whatever does that job bes
    section change → `transition` + the next part's style; CTA → S0 `cta` or an S1 callout, in the locked palette.
    Added with refs a–e: "how a system or product is built / how the pieces fit" → S4 `iso`; "a method with steps, a mind
    map, a content calendar, numbered chapters" → S5; "a detail of an object that needs naming" (a gadget, a UI part) → S6 `tag`;
-   a repeated keyword that should loop around the shot → S2 `rings`. Never send the key word of a sentence to `behind`; keep it in front.
+   a repeated keyword that should loop around the shot → S2 `rings`.
+   Added with the five 2026-10 references (S7–S11): a brand-word reveal, a bumper or a section opener on a piece without a speaker → S7 `glitch` (+ `ticker`, `wipe`) or S8 `slab` → `glitch`; a product or app shown in use → S9 `cursor` + `orbit`; a short phrase whose meaning turns on one word → S10 `roll` (`serif`); a stat or a sentence that builds line by line and ends on a number → S11 `stack`; a word that cycles through options (currencies, tools, names) → S11 `roll`. These are mostly full-screen looks: on talking-head content use them as ≤ 5 s interludes (like S2 full-screen) with the speaker's voice running, never over the face. Never send the key word of a sentence to `behind`; keep it in front.
 3. **Break ties with evidence, then novelty**: prefer the style that shows proof (a screen, a number, a real output)
    over one that only decorates; if still tied, pick the style used least recently. When the proof needs an asset the
    user has not sent, build the proof yourself as an illustration (see SKILL.md section 0 and "Proof over decoration"); the wishlist is retired.
@@ -226,6 +238,40 @@ speaker: it becomes background, the face and body cover it and the message weake
 INFRASTRUKTUR": it looked worse than the plain kinetic). Use `behind` only for texture or secondary material: a mood word that is not the
 point, a scene around the speaker, an echo of a word that was already shown in front. Key words, numbers and claims stay in front
 (`kinetic` full-screen for 1.5–5 s, or over the footage). Face cut-outs inside letters are not built.
+
+## 3.5 S7 Newsroom ticker & glitch (ref 1, "Stockwise: NEVER SLEEPS")
+Measured on an 11.7 s 16:9 piece that loops twice (a ~5.2 s cycle, indigo field #070A1E, violet #5B5BE8):
+- **0.0–0.4 s** "NEVER" lands white with a strong red/cyan split that snaps together in ~0.4 s (chromatic aberration), a pale ticker tape runs along the bottom edge and a violet tape along the top, both slightly tilted.
+- **0.4–0.9 s** the word swaps to "SLEEPS." in violet with the same landing. **~1.0 s** two diagonal colour panels (dark and bright violet) sweep across as a wipe.
+- **1.3–2.0 s** "Headlines, as they break." in white and violet on the left, a news card (image + headline) floats in at the right with a small LIVE pill, a second small card slides in under it.
+- **2.0–5.0 s** everything fades to a single glowing point, a ring pulses out, a logo mark built from five stacked bars assembles around it, and the wordmark appears with a mirrored reflection below. A final "THE MARKET" in white caps closes the loop.
+Recipe: `glitch` words (palette `newsroom`), `ticker` over it (`bg: "none"`), `wipe` between parts, `image` for the card. Use for a brand/topic reveal on a speaker-less piece (T8) or a ≤ 5 s interlude. Set `chrome.progress: false`.
+
+## 3.6 S8 Camera HUD & slab (ref 5, "PLANE → CLAUDE")
+A 8.7 s 16:9 piece, black #0A0A0A with orange #E8421C, a ~4.3 s loop, with a constant camera-HUD overlay (corner brackets, tiny mono labels top left/right, a running timecode `T1 00:00:03:12`, blinking REC dots, "120 FPS"):
+- **0–0.3 s** a flat orange slab with "PLANE" bottom-left and a mono size tag; **0.3–1.1 s** it tilts in 3D (about 60° back, 25° around) while a dot appears; **1.1–1.7 s** it falls to a hairline with a ruler (ticks and a "LINE · 1536 PX" label); **1.7–2.0 s** the line collapses into a glowing dot.
+- **~1.7 s** "CLAUDE" lands white with a red/blue split and two thin concentric rings around it, then settles; the HUD stays on.
+Recipe: `slab` (≈ 3.6 s) → `glitch` (palette `hud`), `hud` laid over both (`bg: "none"`). Use for a bumper or a title reveal on a speaker-less piece.
+
+## 3.7 S9 Product UI demo (ref 2, "Frame by Frame")
+A 13 s near-square piece (~6.3 s loop) on a light interface with soft blue gradients:
+- an arrow pointer glides to a menu-bar icon and clicks; the app panel (logo, title, a pill, a course card) springs open from that point with a blur-to-sharp settle (0.3 s), the pointer keeps moving inside it;
+- the interface zooms out to a single dark app logo with three satellite chips (blue, cyan, green) that spring out of it and circle slowly; the logo shrinks into the ring; then the loop resets.
+Recipe: `cursor` (keys with `click: true`), `orbit` (palette `ui`), `image` cards for the panel. Use to show a tool or app in use (T7) with a drawn UI; never draw a real brand's UI as if it were real.
+
+## 3.8 S10 Engraving & accent word swap (ref 3, "Claude")
+A 13 s portrait piece (~6.5 s loop), warm paper white, black bold serif/grotesque words, **one** terracotta accent (#D9704F) used for the punctuation or one shape:
+- the word changes by one letter or one mark ("ask?" → "task", a "?" that draws then becomes a dot); each change is a clean swap, no blur;
+- vintage engravings (polyhedra, a writing hand, snowflakes, a Muybridge horse ring, a Vitruvian figure) appear as grey cut-outs, each with a single accent shape (a dot, a star) laid on it, sometimes on a black card;
+- the wordmark "Claude" with its asterisk closes the loop.
+Recipe: `roll` with `serif: true, align: "center"` and `^accent^` markup for the word swap; `image` for engravings (needs public-domain engraving images the user supplies or you generate as line drawings: do not use copyrighted art); one accent colour only.
+
+## 3.9 S11 Editorial type stack (ref 4, "Lightspark: Money still moves like it's 1973")
+A 17.7 s portrait piece (a ~4.4 s loop): off-white (#F4F4F1) with a fine grid, a header row (brand left, tagline right, a thin rule and a small label), one neutral grotesque (Inter-like, weight 500), black frames in between with a white asterisk mark and one line ("Not anymore."):
+- the lines stack one by one ("Money" → "still moves" → "like it's"); **each earlier line dims to grey as the next arrives**, and the last element lands large ("1973." at ~230 px) with a tiny caption ("SWIFT launched in 1973.");
+- a second sequence: "Pay anyone." / "Anywhere." (second line grey) and a word that rolls like a slot machine (USD → EUR) in a fixed window;
+- black bumper frames cut the sequences (hard cuts, 0.4 s).
+Recipe: `stack` (`header`, `lines`, `big`, `caption`), `roll` (`lines`, `values`), a black `kinetic` or `title` (palette `ink`) as the bumper. Use for statement-driven T6 pieces, or a ≤ 5 s interlude in a talking head. Numbers only when said or supplied.
 
 ## 4. Which style when (talking-head founder content)
 This table is for type T1/T2 in `content-types.md`; read that file first, because the type decides which of these rows are allowed (e.g. no wide bottom window on portrait raw).

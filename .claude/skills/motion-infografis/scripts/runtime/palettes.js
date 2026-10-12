@@ -21,6 +21,17 @@ export const PALETTES = {
     pos: '#34D399', neg: '#FB7185', glass: 'rgba(10, 18, 48, 0.88)', glow: ['#102A7A', '#0A1230'] },
   graph: { bg: '#EDEDEA', surface: '#FFFFFF', ink: '#0F0F0F', accent: '#D32F2F', accent2: '#D32F2F', accent3: '#555555',
     pos: '#2E7D32', neg: '#D32F2F', glass: 'rgba(237, 237, 234, 0.94)', glow: ['#E0E0DC', '#EDEDEA'] },
+  // five motion references added 2026-10 (refs 1-5, see style-library S7-S11)
+  newsroom: { bg: '#070A1E', surface: '#10163A', ink: '#F4F6FF', accent: '#5B5BE8', accent2: '#8C8CFF', accent3: '#3B3BB0',
+    pos: '#34D399', neg: '#FB7185', glass: 'rgba(7, 10, 30, 0.88)', glow: ['#1B1F63', '#070A1E'] },
+  hud: { bg: '#0A0A0A', surface: '#141414', ink: '#F5F2EC', accent: '#E8421C', accent2: '#FF7A4D', accent3: '#8A2A12',
+    pos: '#34D399', neg: '#E8421C', glass: 'rgba(10, 10, 10, 0.88)', glow: ['#2A0F08', '#0A0A0A'] },
+  ui: { bg: '#F7F8FB', surface: '#FFFFFF', ink: '#14213D', accent: '#2F6BFF', accent2: '#22C1F5', accent3: '#2BBF8E',
+    pos: '#2BBF8E', neg: '#E5484D', glass: 'rgba(255, 255, 255, 0.92)', glow: ['#DCE8FF', '#F7F8FB'] },
+  engrave: { bg: '#FBFAF8', surface: '#F1EFEA', ink: '#141414', accent: '#D9704F', accent2: '#D9704F', accent3: '#8A8A85',
+    pos: '#4C8B5F', neg: '#D9704F', glass: 'rgba(251, 250, 248, 0.92)', glow: ['#F1EFEA', '#FBFAF8'] },
+  editorial: { bg: '#F4F4F1', surface: '#FFFFFF', ink: '#111111', accent: '#111111', accent2: '#8C8C88', accent3: '#B9B9B4',
+    pos: '#2E7D32', neg: '#D32F2F', glass: 'rgba(244, 244, 241, 0.94)', glow: ['#E9E9E4', '#F4F4F1'] },
 };
 export const TOKENS = ['bg', 'surface', 'ink', 'accent', 'accent2', 'accent3', 'pos', 'neg', 'glass'];
 

@@ -87,16 +87,19 @@ First sample: "checkcom x claude 1" (193 s, a 16:9 interview with two people, de
 - **Not yet decided (wait for more samples).** Name lower thirds for the two speakers (needs the names), speaker-coloured captions, a two-up split.
 
 ## T6 Voice-over explainer (no speaker footage)
+- **Added with the 2026-10 refs.** S11 editorial type stack (`stack`, `roll`, black bumper) for statement-driven pieces, S10 engraving + word swap (`roll` serif) for a literary or brand-story piece; both are full-screen, so keep one palette and one accent per piece.
 - **Allowed styles.** S2 kinetic collage (carrier: words land as spoken on solid colour, stickers, hard cuts), S2 ext `rings`, S0 data beats,
   S4 `iso` for a build, `motion backdrop` for continuity. Face rules do not apply, so full-screen is fine; keep palette changes deliberate.
 - **Pacing.** A new visual every 0.25–0.5 s for kinetic; hard cuts, no long fades.
 
 ## T7 Product showcase / review
+- **Added with the 2026-10 refs.** S9 product UI demo (`cursor`, `orbit`) when the product is an app or a tool: draw a generic UI, never a real brand's screen.
 - **Allowed styles.** S6 spec tags (carrier: mono labels with curved arrows on a detail), S1 callout for a spec, S0 `stat` for a measured value
   said aloud, `zoom` into a detail. Keep the product visible: tags beside the detail, never over it.
 - **Bans.** No full-screen kinetic. No numbers that were not said or supplied.
 
 ## T8 System / diagram motion piece (no speaker, no voice)
+- **Added with the 2026-10 refs.** S7 newsroom ticker & glitch (`glitch`, `ticker`, `wipe`) for a brand or topic reveal, S8 camera HUD & slab (`slab`, `hud`, `glitch`) for a title or bumper, in addition to S4.
 - **Allowed styles.** S4 blueprint / isometric (carrier: plates, blocks, wireframe globe, leader labels, dashed links, a progress counter), palettes
   `frost` (light) and `blueprint` (dark), mono labels, serif italic accent word.
 - **Pacing.** One slow build, a phase caption per stage, a pull-back before the title.
@@ -111,6 +114,11 @@ First sample: "checkcom x claude 1" (193 s, a 16:9 interview with two people, de
 | S4 blueprint / iso | + (split) | + | – | – | – | + | – | ✓ |
 | S5 whiteboard (wide bottom window) | ✗ (split or small window only) | ✓ | ✗ | – | ✗ | ✗ | ✗ | ✗ |
 | S6 spec tags | + | + | + | – | ✗ | – | ✓ | – |
+| S7 newsroom ticker & glitch | + (≤ 5 s interlude) | – | ✗ | – | ✗ | + | – | ✓ |
+| S8 camera HUD & slab | + (≤ 5 s opener) | – | ✗ | – | ✗ | + | – | ✓ |
+| S9 product UI demo | – | – | + | – | ✗ | – | ✓ | + |
+| S10 engraving & word swap | + (≤ 5 s) | – | ✗ | – | ✗ | ✓ | – | + |
+| S11 editorial type stack | + (≤ 5 s) | – | ✗ | – | ✗ | ✓ | – | + |
 | `behind` (decoration only) | – | + | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
 
 The rubric still applies inside a type (no two consecutive parts in the same style, no style over 50 % of graphic time, face never covered,
@@ -127,6 +135,11 @@ words from the transcript, no invented numbers).
 | ref c: kinetic collage with ring text (20 s) | T6 | rings | S2 ext |
 | ref d: product review (101 s, portrait) | T7 | spec tags | S6 |
 | "checkcom x claude 1" (193 s interview, two speakers, letterboxed 16:9) | T5 | top-zone cards over a fully visible picture, S6 on drawn devices | S0/S2/S5/S6 |
+| ref 1 "Stockwise: NEVER SLEEPS" (11.7 s, 16:9 loop, no speaker) | T8 | ticker tapes, red/cyan glitch word, diagonal wipe, news card | S7 |
+| ref 5 "PLANE → CLAUDE" (8.7 s, 16:9 loop) | T8 | camera HUD, tilting slab to a ruler line, glitch word | S8 |
+| ref 2 "Frame by Frame" UI demo (13 s, near-square) | T7 | animated pointer + click, menu-bar app, orbiting chips | S9 |
+| ref 3 "Claude" engravings (13 s, portrait) | T6 | paper white, serif word swap, one terracotta accent, engravings | S10 |
+| ref 4 "Lightspark" (17.7 s, portrait) | T6 | editorial type stack, dim previous lines, big number, rolling word, black bumper | S11 |
 | ref e: marketing explainer (83 s, speaker in a dark room) | T2 | graph-paper board, wide speaker window | S5 |
 
 ## Filing a new sample
