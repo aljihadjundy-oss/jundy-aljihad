@@ -106,7 +106,7 @@ export const compare = {
         borderRadius: '999px', background: tone(tn), color: 'var(--bg)', marginBottom: `${18 * S}px` }, side.title);
       const rows = (side.items || []).map(t => {
         const r = div(col, { display: 'flex', gap: `${12 * S}px`, alignItems: 'flex-start', marginTop: `${14 * S}px`, fontSize: `${26 * S}px`, fontWeight: '600', lineHeight: '1.3' });
-        div(r, { marginTop: `${2 * S}px` }, icon(ic, 30 * S, tone(tn)));
+        div(r, { marginTop: `${2 * S}px` }, icon(tn === 'pos' ? 'check' : tn === 'neg' ? 'x' : ic, 30 * S, tone(tn))); // the icon follows the tone, so a green column never shows a cross
         div(r, {}, t);
         return r;
       });

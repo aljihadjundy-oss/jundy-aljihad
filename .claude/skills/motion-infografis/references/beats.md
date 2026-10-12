@@ -131,7 +131,7 @@ Per-item `color` (`accent`, `accent2`, `pos`, `neg` or hex) and `display` (custo
   "left": { "title": "Salah", "items": ["Nunggu air naik", "Cari info di grup"] },
   "right": { "title": "Benar", "items": ["Kenali jalur dulu", "Pantau info resmi"] } }
 ```
-`leftTone` / `rightTone` default `neg` / `pos` (x and check icons). `rightAt`: seconds the right column waits after the
+`leftTone` / `rightTone` default `neg` / `pos`; the icon follows the tone (`pos` = check, `neg` = x), whichever side it is on. `rightAt`: seconds the right column waits after the
 left one (default 0.9); raise it to land the right column on the spoken word.
 
 ### list: numbered points
