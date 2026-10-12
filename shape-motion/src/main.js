@@ -4,12 +4,15 @@ import words from './scenes/s2_words.js';
 import question from './scenes/s3_question.js';
 import map from './scenes/s4_map.js';
 import themes from './scenes/s5_themes.js';
-import numbers from './scenes/s6_numbers.js';
+import matching from './scenes/s_matching.js';
+import doing from './scenes/s_doing.js';
+import pipeline from './scenes/s_pipeline.js';
 import road from './scenes/s7_road.js';
-import partners from './scenes/s8_partners.js';
+import potential from './scenes/s6_numbers.js';
+import difference from './scenes/s_difference.js';
 import close from './scenes/s9_close.js';
 
-const SCENES = [opening, words, question, map, themes, numbers, road, partners, close];
+const SCENES = [opening, words, question, map, matching, themes, doing, pipeline, road, potential, difference, close];
 
 async function getJSON(url) { try { const r = await fetch(url, { cache: 'no-store' }); return r.ok ? r.json() : null; } catch { return null; } }
 

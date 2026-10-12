@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-"""Sound design for the Shape sponsor film (cinematic-tech, with fitness / wellness motifs).
+"""Sound design for the Shape sponsor film: calm and visionary. Warm major pads, soft bell pings, gentle air. No impacts, no sub thumps, no sudden risers.
 
 Invoked by render.mjs as:  shape_audio.py <project> <out.wav> [start end]
 Reads out/meta.json (scene windows + sound cues emitted by the scenes) and synthesizes everything — no samples, no licences.
 
 Palette of sounds
-  bed      : sub drone (D) + slow minor pad chords + a soft sub pulse that follows the scene energy
-  impacts  : hit (sub thump + noise tail), riser, swell, whoosh, sweep, radar
-  tech     : ping (pentatonic, echoed), scatter (dots lighting up), tick, count, scan, rise
-  Shape    : heart  — lub-dub heartbeat   (health / longevity)
-             breath — inhale/exhale air   (wellness / mind)
-             clink  — metallic weight clank (fitness)
+  bed      : very quiet root drone (D) + slow open major pad chords (D, Bm, G, A) + a sparse bell line every ~2.6 s; no pulse, no beat
+  accents  : hit (= soft bloom, a warm swelling tone), riser (gentle air swell), swell, whoosh (soft air), sweep, radar
+  tech     : ping (D major pentatonic, echoed), scatter (dots lighting up), tick (soft), count, rise
+  wellness : breath — inhale/exhale air under the logo
 """
 import json, math, os, re, subprocess, sys, wave
 import numpy as np
@@ -72,33 +70,32 @@ def glide(n, f0, f1):
 
 # ------------------------------------------------------------------ one-shot sounds
 def s_hit():
-    n = int(2.4 * SR); t = tt(n)
-    f = 38 + 90 * np.exp(-t / 0.045)
-    sub = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t / 0.55)
-    body = lp(noise(n), 900) * np.exp(-t / 0.18) * 0.8
-    air = hp(noise(n), 3500) * np.exp(-t / 0.5) * 0.35
-    click = noise(n) * np.exp(-t / 0.003) * 0.5
-    return (sub * 1.1 + body + air + click)
+    """soft bloom: a warm low tone that swells in and fades out — no impact, no click, no noise burst."""
+    n = int(3.2 * SR); t = tt(n)
+    env = np.minimum(1, t / 0.18) ** 2 * np.exp(-t / 0.9)
+    x = (np.sin(2 * np.pi * 73.4 * t) * 0.8 + np.sin(2 * np.pi * 110.0 * t) * 0.5 + np.sin(2 * np.pi * 146.8 * t) * 0.35 + np.sin(2 * np.pi * 220.0 * t) * 0.2) * env
+    bell = np.sin(2 * np.pi * 587.3 * t) * np.exp(-t / 0.9) * np.minimum(1, t / 0.02) * 0.18
+    return lp(x, 900, 1) + bell
 def s_riser(dur):
+    """gentle rising air + soft tone; swells then dissolves, never peaks."""
     n = int(dur * SR); t = tt(n); k = t / dur
-    a = sweep_noise(n, 250, 7500, 0.5) * k ** 2.2
-    b = glide(n, 110, 900) * 0.22 * k ** 1.6
-    c = np.sin(2 * np.pi * np.cumsum(70 + 40 * k) / SR) * 0.3 * k
-    return (a * 0.9 + b + c) * np.minimum(1, (dur - t) / 0.04 + 0.0)
+    a = sweep_noise(n, 300, 3200, 0.5) * np.sin(np.pi * k) ** 2 * 0.35
+    b = glide(n, 146.8, 293.7) * 0.25 * np.sin(np.pi * k) ** 2
+    return a + b
 def s_ping(f, n_s=1.6):
     n = int(n_s * SR); t = tt(n)
     x = np.sin(2 * np.pi * f * t) * np.exp(-t / 0.35) + 0.3 * np.sin(2 * np.pi * f * 2.0 * t) * np.exp(-t / 0.15) + 0.12 * np.sin(2 * np.pi * f * 3.01 * t) * np.exp(-t / 0.08)
-    x *= np.minimum(1, t / 0.004)
+    x = lp(x, 4200, 1) * np.minimum(1, t / 0.012)
     # tape-style echo
     d = int(0.27 * SR); e = np.zeros(n + 3 * d); e[:n] += x
-    for k in (1, 2, 3): e[k * d:k * d + n] += x * (0.38 ** k)
+    for k in (1, 2, 3): e[k * d:k * d + n] += x * (0.42 ** k)
     return e
 def s_tick(f=2400):
     n = int(0.09 * SR); t = tt(n)
-    return (np.sin(2 * np.pi * f * t) * np.exp(-t / 0.014) + 0.4 * np.sin(2 * np.pi * f * 1.5 * t) * np.exp(-t / 0.008)) * np.minimum(1, t / 0.0008)
+    return lp(np.sin(2 * np.pi * f * t) * np.exp(-t / 0.03), 3500, 1) * np.minimum(1, t / 0.004)
 def s_whoosh(length=0.8, f0=250, f1=3200):
     n = int(length * SR)
-    return sweep_noise(n, f0, f1, 0.6) * ad(n, length * 0.55, length * 0.45) * 0.9
+    return lp(sweep_noise(n, f0, min(f1, 1800), 0.6), 2200, 1) * ad(n, length * 0.55, length * 0.45) * 0.7
 def s_breath():
     n = int(2.4 * SR); t = tt(n)
     a = sweep_noise(n // 2, 500, 2600, 0.55) * ad(n // 2, 0.7, 0.5, 1.5)          # inhale: brighter and rising
@@ -122,59 +119,57 @@ def s_clink():
     return x * 0.5
 def s_sweep():
     n = int(1.1 * SR); t = tt(n)
-    x = glide(n, 3400, 380) * ad(n, 0.01, 0.9, 1.4) * 0.6 + sweep_noise(n, 5000, 600, 0.4) * ad(n, 0.02, 0.8) * 0.35
+    x = glide(n, 1800, 400) * ad(n, 0.15, 0.9, 1.4) * 0.35 + lp(sweep_noise(n, 2400, 500, 0.4), 2400, 1) * ad(n, 0.2, 0.8) * 0.2
     return x
 def s_radar():
     n = int(2.8 * SR); t = tt(n)
-    blip = np.sin(2 * np.pi * 1180 * t) * np.exp(-t / 0.22) * np.minimum(1, t / 0.003) * 0.7
+    blip = np.sin(2 * np.pi * 880 * t) * np.exp(-t / 0.3) * np.minimum(1, t / 0.01) * 0.6
     sw = sweep_noise(n, 400, 1800, 0.35) * np.exp(-((t - 1.0) / 0.55) ** 2) * 0.45
     d = int(0.38 * SR); e = np.zeros(n + 2 * d); e[:n] += blip
     for k in (1, 2): e[k * d:k * d + n] += blip * (0.4 ** k)
     out = np.zeros(len(e)); out[:n] += sw; out += e
     return out
 def s_rise():
-    n = int(0.7 * SR); t = tt(n)
-    x = glide(n, 90, 330) * ad(n, 0.02, 0.5) * 0.7 + sweep_noise(n, 600, 3800, 0.5) * ad(n, 0.1, 0.4) * 0.45
-    x += np.sin(2 * np.pi * 55 * t) * np.exp(-t / 0.2) * 0.5
-    return x
+    n = int(0.9 * SR); t = tt(n)
+    return glide(n, 220, 440) * ad(n, 0.25, 0.6, 1.5) * 0.45 + lp(sweep_noise(n, 600, 2400, 0.5), 2500, 1) * ad(n, 0.3, 0.5) * 0.2
 def s_swell(dur):
     n = int(dur * SR); t = tt(n)
     chord = sum(np.sin(2 * np.pi * f * t) for f in (146.8, 174.6, 220.0, 261.6, 329.6))
     return (lp(chord, 1400) * ad(n, dur * 0.8, dur * 0.2, 2.0) * 0.14 + sweep_noise(n, 800, 6000, 0.6) * ad(n, dur * 0.85, dur * 0.15) * 0.22)
 
-PENT = [587.3, 698.5, 880.0, 1046.5, 1174.7, 1396.9, 1760.0]   # D minor pentatonic-ish
+PENT = [587.3, 659.3, 740.0, 880.0, 987.8, 1174.7, 1480.0]   # D major pentatonic: open, hopeful
 # ------------------------------------------------------------------ cues
 for i, c in enumerate(meta['cues']):
     g = float(c.get('gain', 1.0)); ty = c['type']; at = c['t']
     pan = float(np.clip(rng.normal(0, 0.28), -0.7, 0.7))
     if ty == 'hit':
-        place(s_hit(), at, 0.95 * g, 0, 0.30)
+        place(s_hit(), at, 0.5 * g, 0, 0.45)
     elif ty == 'riser':
-        place(s_riser(c.get('dur', 2.5)), at, 0.55 * g, 0, 0.25)
+        place(s_riser(c.get('dur', 2.5)), at, 0.45 * g, 0, 0.35)
     elif ty == 'ping':
-        place(s_ping(PENT[i % len(PENT)]), at, 0.20 * g, pan, 0.5)
+        place(s_ping(PENT[i % len(PENT)]), at, 0.15 * g, pan, 0.6)
     elif ty == 'tick':
-        place(s_tick(2200 + (i % 4) * 180), at, 0.20 * g, pan, 0.08)
+        place(s_tick(1500 + (i % 4) * 150), at, 0.09 * g, pan, 0.15)
     elif ty == 'whoosh':
-        place(s_whoosh(0.85), at - 0.4, 0.38 * g, pan * 0.5, 0.25)
+        place(s_whoosh(0.95), at - 0.45, 0.25 * g, pan * 0.5, 0.35)
     elif ty == 'breath':
-        place(s_breath(), at, 0.38 * g, 0, 0.35)
+        place(s_breath(), at, 0.28 * g, 0, 0.45)
     elif ty == 'heart':
-        place(s_heart(), at, 0.95 * g, 0, 0.12)
+        place(s_hit(), at, 0.3 * g, 0, 0.3)
     elif ty == 'clink':
-        place(s_clink(), at, 0.30 * g, pan * 0.6, 0.4)
+        place(s_ping(PENT[3], 1.2), at, 0.12 * g, pan, 0.5)
     elif ty == 'sweep':
-        place(s_sweep(), at, 0.30 * g, 0, 0.4)
+        place(s_sweep(), at, 0.28 * g, 0, 0.5)
     elif ty == 'radar':
-        place(s_radar(), at, 0.30 * g, 0.2, 0.4)
+        place(s_radar(), at, 0.22 * g, 0.2, 0.5)
     elif ty == 'rise':
-        place(s_rise(), at, 0.55 * g, 0, 0.2)
+        place(s_rise(), at, 0.4 * g, 0, 0.35)
     elif ty == 'swell':
-        place(s_swell(c.get('dur', 2.0)), at, 0.9 * g, 0, 0.4)
+        place(s_swell(c.get('dur', 2.0)), at, 0.8 * g, 0, 0.5)
     elif ty == 'count':
         d = c.get('dur', 1.2); k = int(d * 22)
         for q in range(k):
-            f = 1500 + 1300 * q / max(1, k); place(s_tick(f), at + q * d / k, 0.16 * g * (0.5 + 0.5 * q / k), pan, 0.05)
+            f = 1500 + 1300 * q / max(1, k); place(s_tick(f * 0.6), at + q * d / k, 0.07 * g * (0.5 + 0.5 * q / k), pan, 0.1)
     elif ty == 'scan':
         d = c.get('dur', 3.0); k = int(d * 16)
         for q in range(k):
@@ -183,7 +178,7 @@ for i, c in enumerate(meta['cues']):
         d = c.get('dur', 3.0)
         for q in range(int(d * 8)):
             tq = at + rng.random() * d
-            place(s_ping(PENT[int(rng.integers(2, 7))], 0.9), tq, 0.07 * g * (0.4 + 0.6 * (q / (d * 8))), float(rng.uniform(-0.8, 0.8)), 0.55)
+            place(s_ping(PENT[int(rng.integers(2, 7))], 0.9), tq, 0.05 * g * (0.4 + 0.6 * (q / (d * 8))), float(rng.uniform(-0.8, 0.8)), 0.55)
 
 # ------------------------------------------------------------------ bed
 scenes = {b['id']: b for b in meta['beats']}
@@ -191,17 +186,18 @@ def lvl(sid, drone=0.0, pad=0.0, pulse=0.0, start=0.0, end=None, ramp=1.0):
     b = scenes[sid]; a = b['t'] + start; e = b['t'] + (end if end is not None else b['dur'])
     return a, e, drone, pad, pulse, ramp
 LEV = [
-    lvl('open', drone=0.8, pad=0.0, pulse=0.0),
-    lvl('words', drone=0.7, pad=0.5, pulse=0.9),
-    lvl('question', drone=0.4, pad=0.25, pulse=0.0),
-    lvl('map', drone=0.7, pad=0.8, pulse=0.55, start=3.2),
-    lvl('map', drone=0.7, pad=0.8, pulse=0.0, start=0.0, end=3.2),
-    lvl('themes', drone=0.7, pad=0.8, pulse=0.65),
-    lvl('numbers', drone=0.7, pad=0.8, pulse=0.8),
-    lvl('road', drone=0.6, pad=0.8, pulse=0.55),
-    lvl('partners', drone=0.8, pad=0.9, pulse=0.8),
-    lvl('close', drone=0.8, pad=1.0, pulse=0.45, end=3.4),
-    lvl('close', drone=0.8, pad=1.0, pulse=0.0, start=3.4),
+    lvl('open', drone=0.7, pad=0.6),
+    lvl('words', drone=0.5, pad=0.9),
+    lvl('question', drone=0.35, pad=0.6),
+    lvl('map', drone=0.5, pad=1.0),
+    lvl('matching', drone=0.5, pad=1.0),
+    lvl('themes', drone=0.5, pad=1.0),
+    lvl('doing', drone=0.5, pad=1.0),
+    lvl('pipeline', drone=0.5, pad=1.0),
+    lvl('road', drone=0.5, pad=1.0),
+    lvl('potential', drone=0.5, pad=1.0),
+    lvl('difference', drone=0.5, pad=1.0),
+    lvl('close', drone=0.6, pad=1.0),
 ]
 def curve(idx):
     c = np.zeros(N)
@@ -220,8 +216,8 @@ dr_c, pd_c, pu_c = curve(0), curve(1), curve(2)
 drone = (np.sin(2 * np.pi * 36.71 * t_all) * 0.9 + np.sin(2 * np.pi * 73.42 * t_all + 0.6) * 0.45 +
          lp(signal.sawtooth(2 * np.pi * 73.42 * (1 + 0.0015 * np.sin(t_all * 0.4)) * t_all), 260) * 0.35)
 drone *= 0.7 + 0.3 * np.sin(2 * np.pi * 0.07 * t_all)
-CH = [[146.8, 174.6, 220.0, 261.6, 329.6], [116.5, 146.8, 174.6, 220.0, 293.7], [98.0, 116.5, 146.8, 174.6, 261.6], [110.0, 146.8, 164.8, 196.0, 261.6]]
-SEG = 8.0; pad = np.zeros(N)
+CH = [[146.8, 185.0, 220.0, 277.2, 329.6], [123.5, 185.0, 246.9, 293.7, 370.0], [98.0, 196.0, 246.9, 293.7, 370.0], [110.0, 220.0, 277.2, 329.6, 440.0]]   # D · Bm · G · A (open, major, hopeful)
+SEG = 10.0; pad = np.zeros(N)
 for ci in range(int(DUR / SEG) + 2):
     a, b = ci * SEG - 2.0, (ci + 1) * SEG + 2.0
     i0, i1 = max(0, int(a * SR)), min(N, int(b * SR))
@@ -235,25 +231,14 @@ for ci in range(int(DUR / SEG) + 2):
 pad = lp(pad, 2400, 2) * (0.75 + 0.25 * np.sin(2 * np.pi * 0.11 * t_all + 1.0))
 pad /= np.max(np.abs(pad)) + 1e-9; drone /= np.max(np.abs(drone)) + 1e-9
 
-bed = drone * dr_c * db(-13) + pad * pd_c * db(-21)
+bed = drone * dr_c * db(-22) + pad * pd_c * db(-15)
 dry[:, 0] += bed; dry[:, 1] += bed * 0.97
-wet[:, 0] += pad * pd_c * db(-27); wet[:, 1] += pad * pd_c * db(-27) * 0.95
+wet[:, 0] += pad * pd_c * db(-22); wet[:, 1] += pad * pd_c * db(-22) * 0.95
 
-# sub pulse at 92 BPM, with an off-beat tick-hat for energy
-BPM = 92.0; beat = 60.0 / BPM
-def thump(g):
-    n = int(0.42 * SR); t = tt(n); f = 46 + 70 * np.exp(-t / 0.035)
-    return (np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t / 0.16) + lp(noise(n), 220) * np.exp(-t / 0.03) * 0.35) * g
-k = 0
-while k * beat < DUR:
-    tb = k * beat; ii = int(tb * SR)
-    if ii < N:
-        amp = pu_c[ii] * (1.0 if k % 4 == 0 else 0.7)
-        if amp > 0.02:
-            place(thump(1.0), tb, 0.55 * amp, 0, 0.06)
-        if amp > 0.3 and k % 2 == 1:
-            n = int(0.05 * SR); h = hp(noise(n), 6500) * np.exp(-tt(n) / 0.012); place(h, tb + beat / 2, 0.06 * amp, 0.25, 0.1)
-    k += 1
+# slow, sparse bell line over the pad (one soft note every ~2.6 s): a calm, forward-looking feel instead of a beat
+MEL = [0, 2, 3, 5, 3, 2, 4, 3]
+for q, tb in enumerate(np.arange(1.2, DUR - 3.0, 2.6)):
+    place(s_ping(PENT[MEL[q % len(MEL)]], 2.2), float(tb), 0.07, float(((q % 3) - 1) * 0.35), 0.65)
 
 # ------------------------------------------------------------------ reverb (synthetic hall)
 def make_ir(sec=2.6):

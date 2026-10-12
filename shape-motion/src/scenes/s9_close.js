@@ -21,11 +21,10 @@ export default {
     const org = mono(root, 'ORGANIZED BY EVENTIME · CO-ORGANIZED BY GEARRA · AFFILIATE OF EXPOSASIA', 0, 985, { size: 12, ls: 0.24, w: W, align: 'center', color: 'rgba(246,250,253,.5)' });
     const black = el(root, 'layer', { background: '#000', opacity: 0 });
 
-    ctx.cue(0.2, 'whoosh', { gain: 0.6 });
-    ctx.cue(0.5, 'hit', { gain: 0.9 });
-    ctx.cue(1.0, 'breath', { gain: 0.8 });
-    ctx.cue(2.4, 'ping', { gain: 0.6 });
-    ctx.cue(3.6, 'swell', { dur: 3.0 });
+    ctx.cue(0.3, 'hit', { gain: 0.5 });
+    ctx.cue(1.0, 'breath', { gain: 0.6 });
+    ctx.cue(2.4, 'ping', { gain: 0.5 });
+    ctx.cue(3.4, 'swell', { dur: 3.0, gain: 0.7 });
 
     return async lt => {
       await slot.update(lt);

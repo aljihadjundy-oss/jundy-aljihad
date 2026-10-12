@@ -64,4 +64,4 @@ exposes `/rt/engine.js` (easing + helpers), `/p/…` (the project) and `/fonts/�
 `window.__ready` (a promise), `window.seek(t)` (may be async), `window.__duration`, `window.__fps`, `window.__cues` (`[{t, type, …}]`),
 and optionally `window.__beats` / `window.__extra` (copied into `out/meta.json`).
 Set `"audio": {"script": "tools/my_audio.py"}` to replace the generic mixer with a project-specific synth (called as `script <project> <out.wav> [start end]`).
-Worked example: the Shape Indonesia sponsor film (9 scenes, dot-matrix map, isometric builds, custom sound design).
+Worked example: the Shape Indonesia sponsor film (12 scenes, dot-matrix map, isometric builds, custom sound design).

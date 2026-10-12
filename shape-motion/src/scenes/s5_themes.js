@@ -2,12 +2,12 @@ import { E, clamp, prog, lerp, el, mono, statement, s, isoProject, isoBox, isoFl
 
 // 05 — six themes rise on an isometric platform; the active one lights up and its description appears in the index on the right.
 export default {
-  id: 'themes', name: 'ONE PLATFORM CONNECTING', dur: 11.0,
+  id: 'themes', name: 'ONE PLATFORM CONNECTING', dur: 10.0,
   build(root, ctx) {
     const T = ctx.content.themes;
     const svg = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'layer' }, root);
     svg.style.overflow = 'visible';
-    const U = 72, P = isoProject(922, 404, U);
+    const U = 72, P = isoProject(1015, 404, U);
     const floor = isoFloor(svg, P, { x0: -1, y0: -1, nx: 9, ny: 7, step: 1 });
     const slab = isoBox(svg, P, { x: -0.6, y: -0.6, w: 7.9, d: 5.4, top: '#183858', left: '#0c2236', right: '#08182a', edge: 'rgba(140,200,234,.35)' });
     const H3 = [1.2, 1.6, 1.4, 1.9, 1.3, 1.1];
@@ -36,10 +36,10 @@ export default {
       return { bar, num, name, desc };
     });
 
-    const t0 = 1.3, gap = 1.0;
-    T.forEach((_, i) => { ctx.cue(t0 + i * gap, 'rise'); ctx.cue(t0 + i * gap + 0.55, 'ping', { gain: 0.45 }); });
+    const t0 = 1.2, gap = 0.9;
+    T.forEach((_, i) => { ctx.cue(t0 + i * gap, 'rise', { gain: 0.6 }); ctx.cue(t0 + i * gap + 0.4, 'ping', { gain: 0.4 }); });
     ctx.cue(0.3, 'whoosh', { gain: 0.5 });
-    ctx.cue(8.0, 'sweep', { gain: 0.8 }); ctx.cue(8.9, 'hit', { gain: 0.7 });
+    ctx.cue(6.9, 'sweep', { gain: 0.5 }); ctx.cue(7.6, 'hit', { gain: 0.5 });
 
     return lt => {
       floor.set(E.outCubic(prog(lt, 0.2, 1.3)));
@@ -52,21 +52,21 @@ export default {
         b.set(H3[i] * k, { topFill: hot ? '#d9f0fb' : '#6FA6C8' });
         // link to hub
         const tp = P(gx(i) + BW / 2, gy(i) + BW / 2, H3[i] * Math.min(1, k));
-        const hp = P(3.35, 2.1, 3.3);
-        const lk = E.inOutCubic(prog(lt, 7.5 + i * 0.12, 0.8));
-        lines[i].setAttribute('d', `M${tp[0].toFixed(1)},${tp[1].toFixed(1)} C${tp[0].toFixed(1)},${(tp[1] - 120).toFixed(1)} ${hp[0].toFixed(1)},${(hp[1] + 90).toFixed(1)} ${hp[0].toFixed(1)},${hp[1].toFixed(1)}`);
+        const hp = P(3.35, 2.1, 5.0);
+        const lk = E.inOutCubic(prog(lt, 6.9 + i * 0.12, 0.8));
+        lines[i].setAttribute('d', `M${tp[0].toFixed(1)},${tp[1].toFixed(1)} C${tp[0].toFixed(1)},${(tp[1] - 160).toFixed(1)} ${hp[0].toFixed(1)},${(hp[1] + 110).toFixed(1)} ${hp[0].toFixed(1)},${hp[1].toFixed(1)}`);
         lines[i].style.strokeDasharray = '3 7';
         lines[i].style.opacity = lk.toFixed(3);
         lines[i].style.strokeDashoffset = (-lt * 14).toFixed(1);
       });
-      const hp = P(3.35, 2.1, 3.3), nk = E.outBack(prog(lt, 7.9, 0.6));
+      const hp = P(3.35, 2.1, 5.0), nk = E.outBack(prog(lt, 7.3, 0.6));
       node.setAttribute('cx', hp[0]); node.setAttribute('cy', hp[1]); node.setAttribute('r', 7 * nk);
-      const cyc = lt > 8 ? ((lt - 8) % 1.8) / 1.8 : 0;
+      const cyc = lt > 7.3 ? ((lt - 7.3) % 1.8) / 1.8 : 0;
       nodeRing.setAttribute('cx', hp[0]); nodeRing.setAttribute('cy', hp[1]); nodeRing.setAttribute('r', 10 + cyc * 70);
       nodeRing.style.opacity = (nk > 0 ? (1 - cyc) * 0.8 : 0).toFixed(3);
       // text
       const vis = (e, t, d = 24) => { const k = E.outExpo(prog(lt, t, 0.8)); e.style.opacity = k.toFixed(3); e.style.transform = `translate3d(0,${((1 - k) * d).toFixed(1)}px,0)`; };
-      vis(kick, 0.4, 12); vis(s1, 0.6, 40); vis(s2, 1.1, 40); vis(cap, 8.2, 12);
+      vis(kick, 0.4, 12); vis(s1, 0.6, 40); vis(s2, 1.1, 40); vis(cap, 7.5, 12);
       rows.forEach((r, i) => {
         const ti = t0 + i * gap, shown = E.outExpo(prog(lt, ti, 0.7));
         const hot = clamp(1 - Math.abs(lt - (ti + gap / 2)) / (gap * 0.75)) > 0 && lt >= ti && lt < ti + gap ? 1 : 0;
