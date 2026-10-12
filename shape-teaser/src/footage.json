@@ -36,10 +36,14 @@
    "scene": "S2 Convergence (latar teks)",
    "start": 10.4,
    "dur": 4.0,
-   "desc": "Exhibition hall / stage / lighting rig: wide, slow, premium venue feel.",
+   "desc": "FOTO venue NICE (dari Jundy): hall lobby, lounge, ballroom",
    "search": "exhibition hall wide, conference stage lighting, expo venue cinematic",
    "id_desc": "Hall pameran / panggung / lighting rig: wide dan lambat, kesan venue premium.",
-   "clipStart": 8.0
+   "stills": [
+    "venue_hall.jpg",
+    "venue_lounge_b.jpg",
+    "venue_ballroom.jpg"
+   ]
   },
   "s2-b2b": {
    "scene": "S2 Convergence (panel kiri B2B)",

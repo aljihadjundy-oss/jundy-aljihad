@@ -26,7 +26,7 @@ export default {
     const L = {};
     L.rule = el(lock, '', { width: '72px', height: '4px', background: COLORS.accent, opacity: 0, transformOrigin: '0 50%' });
     L.logoSlot = el(lock, '', { width: `${lw}px`, height: `${lh}px` });
-    L.tag = mono(lock, EV.tagline, { flow: true, size: P ? 24 : 20, ls: 0.2, color: COLORS.mist });
+    L.tag = el(lock, '', { fontSize: `${P ? 32 : 26}px`, fontWeight: 400, color: COLORS.mist, lineHeight: 1.45, maxWidth: `${P ? W - 2 * MX : 780}px`, opacity: 0 }, EV.descriptor);
     L.date = mono(lock, `${EV.date} · ${EV.location}`, { flow: true, size: P ? 24 : 21, ls: 0.14, color: COLORS.white, wrap: true, w: W - 2 * MX });
     L.fmt = mono(lock, EV.format.join(' · '), { flow: true, size: P ? 21 : 17, ls: 0.22, color: COLORS.accent });
     L.cta = el(lock, '', { padding: P ? '26px 40px' : '20px 36px', background: COLORS.accent, color: COLORS.ink, fontWeight: 700, fontSize: `${P ? 32 : 28}px`, borderRadius: '999px', opacity: 0, marginTop: `${P ? 18 : 10}px`, whiteSpace: 'nowrap' }, `${EV.ctaPrimary} →`);

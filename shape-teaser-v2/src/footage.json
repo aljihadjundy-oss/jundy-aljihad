@@ -4,10 +4,12 @@
    "scene": "S2 kata INNOVATION (potongan 1/2)",
    "start": 8.0,
    "dur": 2.0,
-   "desc": "Exhibition hall / stage / lighting rig: wide, slow, premium venue feel.",
+   "desc": "FOTO venue NICE (dari Jundy): hall lobby, lounge, ballroom",
    "search": "exhibition hall wide, conference stage lighting, expo venue cinematic",
    "id_desc": "Hall pameran / panggung / lighting rig: wide dan lambat, kesan venue premium.",
-   "clipStart": 8.0
+   "stills": [
+    "venue_hall.jpg"
+   ]
   },
   "s1-biometric": {
    "scene": "S2 kata INNOVATION (potongan 2/2)",

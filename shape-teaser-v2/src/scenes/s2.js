@@ -6,7 +6,7 @@ export default {
   id: 's2', name: 'THREE WORDS', dur: 10.0, hardOut: false,
   build(root, ctx) {
     const CUTS = ['s2-venue', 's1-biometric', 's2-b2b', 's4-matchmaking', 's2-community', 's1-athlete'], SEG = 10 / 6;
-    const slots = CUTS.map((id, i) => makeSlot(root, id, ctx, ctx.t0 + i * SEG, SEG + 0.2, { kb: [i % 2 ? 1 : -1, i % 3 === 0 ? -1 : 0], dim: 0.1 }));
+    const slots = CUTS.map((id, i) => makeSlot(root, id, ctx, ctx.t0 + i * SEG, SEG + 0.2, { kb: [i % 2 ? 1 : -1, i % 3 === 0 ? -1 : 0], dim: id === 's2-venue' ? 0.3 : 0.1 }));
     const wsz = 188;
     const words = TRIO.map((t, i) => kin(root, [t], { size: wsz, weight: 800, x: MX, y: H - MY - wsz * 1.12 - 6, w: W - 2 * MX }));
     const cnt = TRIO.map((t, i) => mono(root, `SHAPE INDONESIA · ${pad2(i + 1)} / 03`, { x: MX, y: 128, size: 17, ls: 0.28, color: COLORS.mist }));

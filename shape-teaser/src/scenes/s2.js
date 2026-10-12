@@ -18,7 +18,7 @@ export default {
     const pt = (pn, f) => [pn.x + f[0] * pw, pn.y + f[1] * ph];
     const mid = P ? [W / 2, (PN[0].y + ph + PN[1].y) / 2] : [W / 2, PN[0].y + ph / 2];
     // venue footage + text
-    const venue = makeSlot(root, 's2-venue', ctx, ctx.t0 + 2.4, 4.0, { kb: [0, -1], dim: 0.25 });
+    const venue = makeSlot(root, 's2-venue', ctx, ctx.t0 + 2.4, 4.0, { kb: [0, -1], dim: 0.35 });
     const size = P ? 80 : 66;
     const wrap = el(root, 'abs', { left: `${MX}px`, bottom: `${MY}px`, width: `${W - 2 * MX}px`, display: 'flex', flexDirection: 'column', rowGap: `${size * 0.1}px` });
     const lA = kin(wrap, ['Where', 'connections', 'become', 'visible,'], { flow: true, size, w: W - 2 * MX });

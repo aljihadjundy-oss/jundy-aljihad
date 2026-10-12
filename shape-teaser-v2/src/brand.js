@@ -4,6 +4,7 @@ export const BG = { gradient: 'linear-gradient(135deg, #091F39 0%, #1C3D5A 55%, 
 export const EVENT = {
   name: 'SHAPE INDONESIA',
   tagline: 'The Definitive Wellbeing & Lifestyle Expo',
+  descriptor: 'Connecting Fitness, Health Technology, Longevity, Nutrition, Wellness and Aesthetics across Southeast Asia.',
   edition: 'EXPO 2027',
   date: '8–10 OCTOBER 2027',
   location: 'NICE PIK 2 · JAKARTA, INDONESIA',

@@ -73,8 +73,10 @@ export function makeSlot(parent, id, ctx, absStart, dur, o = {}) {
   const bw = o.w ?? W, bh = o.h ?? H;
   const box = el(parent, 'abs', { left: `${o.x ?? 0}px`, top: `${o.y ?? 0}px`, width: `${bw}px`, height: `${bh}px`, overflow: 'hidden', background: '#0A2440' });
   const inner = el(box, 'abs', { left: 0, top: 0, width: `${bw}px`, height: `${bh}px`, transformOrigin: '50% 50%' });
-  let img = null;
-  if (info) img = el(inner, 'abs', { left: 0, top: 0, width: `${bw}px`, height: `${bh}px`, objectFit: 'cover', objectPosition: o.pos ?? '50% 50%', filter: `saturate(${o.cold ? 0.35 : 0.6}) contrast(1.15) brightness(0.8)` }, null, 'img');
+  let img = null, simgs = null;
+  if (spec?.stills) {
+    simgs = spec.stills.map(f => { const im = el(inner, 'abs', { left: 0, top: 0, width: `${bw}px`, height: `${bh}px`, objectFit: 'cover', objectPosition: o.pos ?? '50% 50%', filter: 'saturate(0.55) contrast(1.1) brightness(0.72)', opacity: 0 }, null, 'img'); im.src = `/p/assets/stills/${f}`; return im; });
+  } else if (info) img = el(inner, 'abs', { left: 0, top: 0, width: `${bw}px`, height: `${bh}px`, objectFit: 'cover', objectPosition: o.pos ?? '50% 50%', filter: `saturate(${o.cold ? 0.35 : 0.6}) contrast(1.15) brightness(0.8)` }, null, 'img');
   else {
     inner.style.background = 'linear-gradient(135deg,#0E2B4A,#1C3D5A 55%,#123152)';
     el(inner, 'abs', { inset: 0, backgroundImage: 'repeating-linear-gradient(135deg, rgba(125,184,224,.06) 0 2px, transparent 2px 54px)' });
@@ -91,6 +93,17 @@ export function makeSlot(parent, id, ctx, absStart, dur, o = {}) {
   return {
     el: box,
     async update(lt) {
+      if (simgs) {   // photo sequence: crossfade between stills, each with its own slow push
+        if (!simgs._d) { simgs._d = true; await Promise.all(simgs.map(i => i.decode().catch(() => {}))); }
+        const n = simgs.length, seg = dur / n;
+        inner.style.transform = 'none';
+        simgs.forEach((im, i) => {
+          const a = i === 0 ? 1 : clamp((lt - (i * seg - 0.25)) / 0.25), kk = clamp((lt - i * seg + 0.25) / (seg + 0.5));
+          im.style.opacity = a.toFixed(3);
+          im.style.transform = `scale(${(1.02 + 0.07 * kk).toFixed(4)}) translate3d(${((i % 2 ? 1 : -1) * 16 * kk).toFixed(1)}px,${((i % 3 === 0 ? -1 : 0) * 12 * kk).toFixed(1)}px,0)`;
+        });
+        return;
+      }
       const k = clamp(lt / dur);
       inner.style.transform = `scale(${(1 + 0.06 * k).toFixed(4)}) translate3d(${(kb[0] * 14 * k).toFixed(1)}px,${(kb[1] * 14 * k).toFixed(1)}px,0)`;
       if (img) {
