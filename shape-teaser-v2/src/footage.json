@@ -1,0 +1,102 @@
+{
+ "slots": {
+  "s2-venue": {
+   "scene": "S2 kata INNOVATION (potongan 1/2)",
+   "start": 8.0,
+   "dur": 2.0,
+   "desc": "Exhibition hall / stage / lighting rig: wide, slow, premium venue feel.",
+   "search": "exhibition hall wide, conference stage lighting, expo venue cinematic",
+   "id_desc": "Hall pameran / panggung / lighting rig: wide dan lambat, kesan venue premium.",
+   "clipStart": 8.0
+  },
+  "s1-biometric": {
+   "scene": "S2 kata INNOVATION (potongan 2/2)",
+   "start": 9.67,
+   "dur": 2.0,
+   "desc": "Biometric / health data: smartwatch heart rate, body scan or health dashboard close-up. Cool tones.",
+   "search": "smartwatch heart rate close up, health data screen, body scan biometric",
+   "id_desc": "Data kesehatan: smartwatch detak jantung, body scan, atau dashboard kesehatan. Nuansa dingin."
+  },
+  "s2-b2b": {
+   "scene": "S2 kata BUSINESS (potongan 1/2)",
+   "start": 11.33,
+   "dur": 2.0,
+   "desc": "B2B moment: handshake, pitch at a booth, buyer and exhibitor talking.",
+   "search": "business handshake expo, pitching at booth, networking event professionals",
+   "id_desc": "Momen B2B: jabat tangan, pitching di booth, buyer dan exhibitor berbincang."
+  },
+  "s4-matchmaking": {
+   "scene": "S2 kata BUSINESS (potongan 2/2)",
+   "start": 13.0,
+   "dur": 2.0,
+   "desc": "B2B matchmaking lounge: pairs talking at tables, tablets and samples.",
+   "search": "business lounge meeting, buyers sellers table, matchmaking networking",
+   "id_desc": "Lounge B2B matchmaking: pasangan berbincang di meja, tablet dan sampel."
+  },
+  "s2-community": {
+   "scene": "S2 kata LIFESTYLE (potongan 1/2)",
+   "start": 14.67,
+   "dur": 2.0,
+   "desc": "Consumers interacting: visitors trying products, group fitness class, community gathering.",
+   "search": "community fitness class, visitors trying products, wellness festival crowd",
+   "id_desc": "Konsumen berinteraksi: mencoba produk, kelas kebugaran, komunitas berkumpul."
+  },
+  "s1-athlete": {
+   "scene": "S2 kata LIFESTYLE (potongan 2/2)",
+   "start": 16.33,
+   "dur": 2.0,
+   "desc": "Athlete training, close and moody (silhouette or partial face). One fragment of a fragmented industry.",
+   "search": "athlete training dark silhouette, sprinter slow motion, gym athlete moody",
+   "id_desc": "Atlet sedang berlatih, tertutup dan moody (siluet atau sebagian wajah)."
+  },
+  "s3-mind": {
+   "scene": "S3 Theme 01 Mind Power",
+   "start": 18.0,
+   "dur": 2.7,
+   "desc": "Mental fitness and focus: meditation, breathwork, focused working, cognitive training.",
+   "search": "mental wellness focus, breathwork, neuro cognitive training, calm focus",
+   "id_desc": "Kebugaran mental dan fokus: meditasi, breathwork, latihan kognitif."
+  },
+  "s3-health": {
+   "scene": "S3 Theme 02 Health",
+   "start": 20.6,
+   "dur": 2.7,
+   "desc": "Preventive care and connected health tech: diagnostics, doctor with tablet, wearable.",
+   "search": "doctor tablet diagnostics, health check technology, wearable device health",
+   "id_desc": "Perawatan preventif dan health tech: diagnostik, dokter dengan tablet, wearable."
+  },
+  "s3-fitness": {
+   "scene": "S3 Theme 03 Fitness",
+   "start": 23.2,
+   "dur": 2.7,
+   "desc": "Movement and performance: gym training, equipment, padel or running. Dramatic low light.",
+   "search": "gym training dark, barbell slow motion, padel match, running group",
+   "id_desc": "Gerak dan performa: latihan gym, alat, padel atau lari. Cahaya redup dramatis."
+  },
+  "s3-longevity": {
+   "scene": "S3 Theme 04 Longevity & Biohacking",
+   "start": 25.8,
+   "dur": 2.7,
+   "desc": "Science-backed longevity: lab, recovery tech (cold plunge, sauna, red light), active older adult.",
+   "search": "cold plunge recovery, sauna wellness, biohacking lab, active senior",
+   "id_desc": "Longevity berbasis sains: lab, recovery tech (cold plunge, sauna), lansia aktif."
+  },
+  "s3-nutrition": {
+   "scene": "S3 Theme 05 Nutrition",
+   "start": 28.4,
+   "dur": 2.7,
+   "desc": "Functional food and supplements: smoothie pour, vitamins, colourful ingredients. Slow motion.",
+   "search": "healthy smoothie pour slow motion, supplements close up, meal prep ingredients",
+   "id_desc": "Makanan fungsional dan suplemen: smoothie dituang, vitamin, bahan warna-warni."
+  },
+  "s3-aesthetics": {
+   "scene": "S3 Theme 06 Aesthetics",
+   "start": 31.0,
+   "dur": 2.7,
+   "desc": "Beauty technology and personal care: skincare device, treatment, confident portrait.",
+   "search": "skincare device treatment, beauty technology, confident portrait cinematic",
+   "id_desc": "Teknologi kecantikan dan perawatan diri: alat skincare, treatment, potret percaya diri."
+  }
+ },
+ "unused": {}
+}
