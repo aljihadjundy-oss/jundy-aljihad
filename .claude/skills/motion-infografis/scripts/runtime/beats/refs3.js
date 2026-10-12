@@ -11,6 +11,7 @@ const css = (el, o) => Object.assign(el.style, o);
 const mix = (a, bcol, k) => `color-mix(in srgb, ${a} ${Math.round(clamp(k, 0, 1) * 100)}%, ${bcol})`;
 // text with ^accent^ markup
 const mark = (t, col) => String(t).replace(/\^([^^]+)\^/g, `<span style="color:${col}">$1</span>`);
+const strong = t => String(t).replace(/\^([^^]+)\^/g, '<b style="font-weight:800">$1</b>');   // editorial emphasis: heavier weight, same ink
 function backdrop(root, b, p, { grid = false } = {}) {
   const bg = h('div', 'layer', root);
   bg.style.background = b.bg === 'none' ? 'transparent' : p.bg;
@@ -37,7 +38,7 @@ export const stack = {
     }
     const box = h('div', 'abs', root); css(box, { left: `${m}px`, right: `${m}px`, top: `${(b.y ?? 0.2) * H}px`, fontFamily: SANS, color: p.ink });
     const items = (b.lines || []).map((l, i) => ({ t: typeof l === 'string' ? l : l.t, at: (typeof l === 'object' && l.at != null) ? l.at : 0.12 + i * (b.every ?? 0.7) }));
-    const els = items.map(it => { const el = h('div', null, box, mark(it.t, p.accent2)); css(el, { fontSize: `${size}px`, fontWeight: 500, lineHeight: 1.08, letterSpacing: '-0.02em' }); return el; });
+    const els = items.map(it => { const el = h('div', null, box, strong(it.t)); css(el, { fontSize: `${size}px`, fontWeight: 500, lineHeight: 1.08, letterSpacing: '-0.02em' }); return el; });
     let bigEl = null, capEl = null;
     const bigAt = b.bigAt ?? (items.length ? items[items.length - 1].at + (b.every ?? 0.7) + 0.2 : 0.2);
     if (b.big) {
