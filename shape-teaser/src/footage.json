@@ -1,0 +1,140 @@
+{
+ "slots": {
+  "s1-athlete": {
+   "scene": "S1 Hook",
+   "start": 1.0,
+   "dur": 4.4,
+   "desc": "Athlete training, close and moody (silhouette or partial face). One fragment of a fragmented industry.",
+   "search": "athlete training dark silhouette, sprinter slow motion, gym athlete moody",
+   "id_desc": "Atlet sedang berlatih, tertutup dan moody (siluet atau sebagian wajah)."
+  },
+  "s1-biometric": {
+   "scene": "S1 Hook",
+   "start": 1.75,
+   "dur": 3.65,
+   "desc": "Biometric / health data: smartwatch heart rate, body scan or health dashboard close-up. Cool tones.",
+   "search": "smartwatch heart rate close up, health data screen, body scan biometric",
+   "id_desc": "Data kesehatan: smartwatch detak jantung, body scan, atau dashboard kesehatan. Nuansa dingin."
+  },
+  "s1-meditation": {
+   "scene": "S1 Hook",
+   "start": 2.5,
+   "dur": 2.9,
+   "desc": "Person meditating or breathing calmly in a dim room. Almost still.",
+   "search": "meditation dark room, breathing mindfulness cinematic, yoga silhouette",
+   "id_desc": "Orang bermeditasi atau mengatur napas di ruangan redup. Hampir diam."
+  },
+  "s1-aesthetic": {
+   "scene": "S1 Hook",
+   "start": 3.25,
+   "dur": 2.15,
+   "desc": "Beauty / aesthetics: skincare application, clinic treatment or mirror close-up. Clean, cool.",
+   "search": "skincare close up cinematic, aesthetic clinic treatment, face mask beauty",
+   "id_desc": "Estetika: skincare, perawatan klinik, atau close-up cermin. Bersih dan dingin."
+  },
+  "s2-venue": {
+   "scene": "S2 Convergence (latar teks)",
+   "start": 10.4,
+   "dur": 4.0,
+   "desc": "Exhibition hall / stage / lighting rig: wide, slow, premium venue feel.",
+   "search": "exhibition hall wide, conference stage lighting, expo venue cinematic",
+   "id_desc": "Hall pameran / panggung / lighting rig: wide dan lambat, kesan venue premium."
+  },
+  "s2-b2b": {
+   "scene": "S2 Convergence (panel kiri B2B)",
+   "start": 8.0,
+   "dur": 3.0,
+   "desc": "B2B moment: handshake, pitch at a booth, buyer and exhibitor talking.",
+   "search": "business handshake expo, pitching at booth, networking event professionals",
+   "id_desc": "Momen B2B: jabat tangan, pitching di booth, buyer dan exhibitor berbincang."
+  },
+  "s2-community": {
+   "scene": "S2 Convergence (panel kanan konsumen)",
+   "start": 8.0,
+   "dur": 3.0,
+   "desc": "Consumers interacting: visitors trying products, group fitness class, community gathering.",
+   "search": "community fitness class, visitors trying products, wellness festival crowd",
+   "id_desc": "Konsumen berinteraksi: mencoba produk, kelas kebugaran, komunitas berkumpul."
+  },
+  "s3-mind": {
+   "scene": "S3 Theme 01 Mind Power",
+   "start": 18.0,
+   "dur": 2.7,
+   "desc": "Mental fitness and focus: meditation, breathwork, focused working, cognitive training.",
+   "search": "mental wellness focus, breathwork, neuro cognitive training, calm focus",
+   "id_desc": "Kebugaran mental dan fokus: meditasi, breathwork, latihan kognitif."
+  },
+  "s3-health": {
+   "scene": "S3 Theme 02 Health",
+   "start": 20.67,
+   "dur": 2.7,
+   "desc": "Preventive care and connected health tech: diagnostics, doctor with tablet, wearable.",
+   "search": "doctor tablet diagnostics, health check technology, wearable device health",
+   "id_desc": "Perawatan preventif dan health tech: diagnostik, dokter dengan tablet, wearable."
+  },
+  "s3-fitness": {
+   "scene": "S3 Theme 03 Fitness",
+   "start": 23.33,
+   "dur": 2.7,
+   "desc": "Movement and performance: gym training, equipment, padel or running. Dramatic low light.",
+   "search": "gym training dark, barbell slow motion, padel match, running group",
+   "id_desc": "Gerak dan performa: latihan gym, alat, padel atau lari. Cahaya redup dramatis."
+  },
+  "s3-longevity": {
+   "scene": "S3 Theme 04 Longevity & Biohacking",
+   "start": 26.0,
+   "dur": 2.7,
+   "desc": "Science-backed longevity: lab, recovery tech (cold plunge, sauna, red light), active older adult.",
+   "search": "cold plunge recovery, sauna wellness, biohacking lab, active senior",
+   "id_desc": "Longevity berbasis sains: lab, recovery tech (cold plunge, sauna), lansia aktif."
+  },
+  "s3-nutrition": {
+   "scene": "S3 Theme 05 Nutrition",
+   "start": 28.67,
+   "dur": 2.7,
+   "desc": "Functional food and supplements: smoothie pour, vitamins, colourful ingredients. Slow motion.",
+   "search": "healthy smoothie pour slow motion, supplements close up, meal prep ingredients",
+   "id_desc": "Makanan fungsional dan suplemen: smoothie dituang, vitamin, bahan warna-warni."
+  },
+  "s3-aesthetics": {
+   "scene": "S3 Theme 06 Aesthetics",
+   "start": 31.33,
+   "dur": 2.7,
+   "desc": "Beauty technology and personal care: skincare device, treatment, confident portrait.",
+   "search": "skincare device treatment, beauty technology, confident portrait cinematic",
+   "id_desc": "Teknologi kecantikan dan perawatan diri: alat skincare, treatment, potret percaya diri."
+  },
+  "s4-keynote": {
+   "scene": "S4 Curated",
+   "start": 40.0,
+   "dur": 2.0,
+   "desc": "Keynote stage with a giant LED screen, audience silhouettes.",
+   "search": "keynote stage LED screen, conference speaker stage, audience silhouettes",
+   "id_desc": "Panggung keynote dengan LED raksasa, siluet penonton."
+  },
+  "s4-matchmaking": {
+   "scene": "S4 Connected",
+   "start": 42.0,
+   "dur": 2.0,
+   "desc": "B2B matchmaking lounge: pairs talking at tables, tablets and samples.",
+   "search": "business lounge meeting, buyers sellers table, matchmaking networking",
+   "id_desc": "Lounge B2B matchmaking: pasangan berbincang di meja, tablet dan sampel."
+  },
+  "s4-crowd": {
+   "scene": "S4 Credible",
+   "start": 44.0,
+   "dur": 2.0,
+   "desc": "Crowd and experts: audience listening, panel discussion, applause.",
+   "search": "panel discussion audience, applause conference, expert speaker crowd",
+   "id_desc": "Penonton dan pakar: mendengarkan, diskusi panel, tepuk tangan."
+  },
+  "s5-drone": {
+   "scene": "S5 Journey",
+   "start": 46.0,
+   "dur": 6.0,
+   "desc": "Slow forward flyover of a modern venue / waterfront convention complex (dimmed in the film).",
+   "search": "drone flyover convention center, aerial exhibition venue, drone city waterfront",
+   "id_desc": "Terbang maju pelan di atas venue modern / kompleks konvensi tepi laut (di video digelapkan)."
+  }
+ }
+}
