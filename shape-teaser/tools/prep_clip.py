@@ -5,7 +5,7 @@
   python3 tools/prep_clip.py ~/Downloads/footage/ --batch                 # files named like the slot id (s3-fitness*.mp4 ...) -> matching slots
   python3 tools/prep_clip.py clip.mp4 s5-drone --start 2.5                # use the part starting at 2.5 s
 
-Writes assets/footage/<id>/ (1920x1080) and assets/footage/<id>_v/ (1080x1920, centre crop; --posx 0..1 moves the crop), 30 fps, as many frames as the slot needs.
+Writes assets/footage/<id>/ (1920x1080); with --portrait also <id>_v/ (1080x1920, centre crop), 30 fps, as many frames as the slot needs.
 """
 import argparse, glob, json, os, re, shutil, subprocess, sys
 
@@ -17,7 +17,7 @@ manifest = json.load(open(MAN)) if os.path.exists(MAN) else {}
 
 ap = argparse.ArgumentParser()
 ap.add_argument('src'); ap.add_argument('slot', nargs='?'); ap.add_argument('--start', type=float, default=0.0)
-ap.add_argument('--posx', type=float, default=0.5); ap.add_argument('--batch', action='store_true')
+ap.add_argument('--posx', type=float, default=0.5); ap.add_argument('--batch', action='store_true'); ap.add_argument('--portrait', action='store_true', help='also write 1080x1920 frames (<id>_v); the final film is landscape only')
 a = ap.parse_args()
 
 def probe_dur(p):
@@ -31,7 +31,7 @@ def do(src, slot, start=0.0):
     have = probe_dur(src) - start
     if have < need:
         print(f'  ! {slot}: clip has {have:.1f}s after start, slot needs {need:.1f}s; the last frame will be held')
-    for suffix, w, h, crop in (('', 1920, 1080, 'crop=1920:1080'), ('_v', 1080, 1920, f'crop=1080:1920:(iw-1080)*{a.posx}:0')):
+    for suffix, w, h, crop in (('', 1920, 1080, 'crop=1920:1080'), ('_v', 1080, 1920, f'crop=1080:1920:(iw-1080)*{a.posx}:0'))[: 2 if a.portrait else 1]:
         d = os.path.join(FOOT, slot + suffix); shutil.rmtree(d, ignore_errors=True); os.makedirs(d)
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', str(start), '-t', str(need), '-i', src,
                         '-vf', f'fps=30,scale={w}:{h}:force_original_aspect_ratio=increase,{crop},setsar=1', '-q:v', '3', os.path.join(d, '%06d.jpg')], check=True)
@@ -43,7 +43,7 @@ if a.batch:
         b = os.path.basename(f).lower()
         m = next((s for s in sorted(SLOTS, key=len, reverse=True) if b.startswith(s)), None)
         if m and os.path.splitext(f)[1].lower() in ('.mp4', '.mov', '.m4v', '.webm'):
-            do(f, m)
+            do(f, m, SLOTS[m].get('clipStart', 0.0))
 else:
     if not a.slot: sys.exit('give a slot id, e.g. s3-fitness')
     do(a.src, a.slot, a.start)

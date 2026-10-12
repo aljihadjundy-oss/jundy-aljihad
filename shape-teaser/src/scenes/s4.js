@@ -6,7 +6,7 @@ export default {
   id: 's4', name: 'NETWORK', dur: 12.0,
   build(root, ctx) {
     const { g } = makeCanvas(root);
-    const hub = P ? [W / 2, 940] : [W / 2, H * 0.47], HR = P ? 70 : 74;
+    const hub = P ? [W / 2, 940] : [W / 2, H * 0.47], HR = P ? 88 : 104;
     const lsz = P ? 21 : 16;
     const nB = NW.b2b.length, nC = NW.b2c.length;
     const colB = P ? MX + 14 : W * 0.34, colC = P ? MX + 14 : W * 0.66;
@@ -18,8 +18,8 @@ export default {
                     ...CN.map(n => ({ n, e: mono(root, n.t, { size: lsz, ls: 0.1, color: COLORS.white, x: n.x + 28, y: n.y - lsz * 0.75 }) }))];
     const hdrB = mono(root, 'B2B AUDIENCE', { size: P ? 22 : 17, color: COLORS.accent, ...(P ? { x: MX, y: 415 } : { x: colB - 26 - 460, y: H * 0.115, w: 460, align: 'right' }) });
     const hdrC = mono(root, 'B2C AUDIENCE', { size: P ? 22 : 17, color: COLORS.warm, ...(P ? { x: MX, y: 1034 } : { x: colC + 28, y: H * 0.115 }) });
-    const hubT = el(root, 'abs', { left: `${hub[0] - HR}px`, top: `${hub[1] - 26}px`, width: `${HR * 2}px`, textAlign: 'center', fontWeight: 800, fontSize: `${P ? 26 : 25}px`, lineHeight: 1.05, opacity: 0 }, 'SHAPE');
-    const hubS = mono(root, 'INDONESIA<br>EXPO 2027', { x: hub[0] - HR, y: hub[1] + 2, w: HR * 2, align: 'center', size: P ? 11 : 10, ls: 0.14, color: COLORS.mist });
+    const lgW = HR * 1.8, lgH = lgW * 1056 / 3044;
+    const hubLogo = el(root, 'abs', { left: `${hub[0] - lgW / 2}px`, top: `${hub[1] - lgH / 2}px`, width: `${lgW}px`, opacity: 0 }, null, 'img'); hubLogo.src = ctx.logo;
     const hsz = P ? 66 : 58;
     const head = kin(root, NW.headline.map(t => NW.accent.includes(t) ? { t, c: t === 'lifestyle.' ? 'warm' : 'acc' } : t), { size: hsz, x: MX, y: H - MY - hsz * 1.12 * (P ? 2 : 1), w: W - 2 * MX });
     // tricolon
@@ -59,10 +59,10 @@ export default {
         });
         // hub
         const hk = ease(prog(lt, 2.8, 0.8)) * netA;
-        g.fillStyle = `rgba(9,31,57,${0.92 * hk})`; g.strokeStyle = `rgba(255,255,255,${0.85 * hk})`; g.lineWidth = 2;
-        g.beginPath(); g.arc(hub[0], hub[1], HR * (0.8 + 0.2 * hk), 0, 6.283); g.fill(); g.stroke();
-        hubT.style.opacity = hubS.style.opacity = hk.toFixed(3);
-      } else hubT.style.opacity = hubS.style.opacity = '0';
+        g.fillStyle = `rgba(9,31,57,${0.94 * hk})`;
+        g.beginPath(); g.arc(hub[0], hub[1], HR * (0.8 + 0.2 * hk), 0, 6.283); g.fill();
+        hubLogo.style.opacity = hk.toFixed(3); hubLogo.style.transform = `scale(${(0.9 + 0.1 * hk).toFixed(3)})`;
+      } else hubLogo.style.opacity = '0';
       labels.forEach(({ n, e }) => { e.style.opacity = (ease(prog(lt, n.at, 0.6)) * netA).toFixed(3); });
       hdrB.style.opacity = (ease(prog(lt, 0.2, 0.6)) * netA).toFixed(3); hdrC.style.opacity = (ease(prog(lt, 2.0, 0.6)) * netA).toFixed(3);
       head.set(lt, 1.0, 5.6);

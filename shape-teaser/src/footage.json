@@ -38,7 +38,8 @@
    "dur": 4.0,
    "desc": "Exhibition hall / stage / lighting rig: wide, slow, premium venue feel.",
    "search": "exhibition hall wide, conference stage lighting, expo venue cinematic",
-   "id_desc": "Hall pameran / panggung / lighting rig: wide dan lambat, kesan venue premium."
+   "id_desc": "Hall pameran / panggung / lighting rig: wide dan lambat, kesan venue premium.",
+   "clipStart": 8.0
   },
   "s2-b2b": {
    "scene": "S2 Convergence (panel kiri B2B)",
@@ -134,7 +135,8 @@
    "dur": 6.0,
    "desc": "Slow forward flyover of a modern venue / waterfront convention complex (dimmed in the film).",
    "search": "drone flyover convention center, aerial exhibition venue, drone city waterfront",
-   "id_desc": "Terbang maju pelan di atas venue modern / kompleks konvensi tepi laut (di video digelapkan)."
+   "id_desc": "Terbang maju pelan di atas venue modern / kompleks konvensi tepi laut (di video digelapkan).",
+   "clipStart": 0.0
   }
  }
 }
