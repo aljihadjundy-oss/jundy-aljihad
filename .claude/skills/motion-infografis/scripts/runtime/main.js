@@ -262,7 +262,7 @@ async function init() {
     return out;
   };
   const cardW = cardLayer ? windows('card') : [];
-  const inW = (T, ws) => (ws.some(([a, b]) => T >= a && T < b) ? 1 : 0);   // hard cut, no ramp
+  const inW = (T, ws) => (ws.some(([a, b]) => T >= a - 1e-6 && T < b - 1e-6) ? 1 : 0);   // hard cut, no ramp
   const insertW = footage ? windows('insert') : [], fullW = footage ? windows('full') : [], splitW = footage ? windows('split') : [], behindW = footage ? windows(null, true) : [];
   // the chrome (progress bar, badge) steps aside over a screen in split mode and over kinetic typography scenes
   const kinW = beats.filter(x => x.b.type === 'kinetic' && x.b.chrome !== true).map(x => [x.b.t, x.b.t + x.b.dur]);
@@ -303,7 +303,7 @@ async function init() {
     bdrops.forEach(d => { d.el.style.opacity = (d.hard ? (T >= d.a && T < d.b ? 1 : 0) : kOf(T, [[d.a, d.b]])).toFixed(3); });
     for (const it of beats) {
       const lt = T - it.b.t;
-      const vis = it.b.mode === 'card' ? lt >= 0 && lt < it.b.dur : lt >= -0.2 && lt <= it.b.dur + 0.1;   // card parts are hard cuts
+      const vis = it.b.mode === 'card' ? T >= it.b.t - 1e-6 && T < it.b.t + it.b.dur - 1e-6 : lt >= -0.2 && lt <= it.b.dur + 0.1;   // card parts are hard cuts (same float expression as the card window, so no one-frame leftover)
       it.layer.style.display = vis ? '' : 'none';
       if (!vis) continue;
       if (it.headUpd) it.headUpd(lt);
