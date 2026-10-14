@@ -70,6 +70,7 @@ export const iso = {
     let R = { x: 0, y: 0, w: W, h: H };
     if (ctx.mode === 'split') R = { ...ctx.panel };
     else if (ctx.mode === 'insert' && ctx.pip?.bottom) R = { x: 0, y: 0, w: W, h: ctx.pip.y - 24 * S };
+    else if (ctx.mode === 'card' && ctx.stage) R = { ...ctx.stage };
     const compact = R.h < 0.7 * H;
     const n = b.grid ?? 8, g0 = b.gridOrigin ?? [-1, -1];
     const auto = Math.min(0.95 * R.w / (1.732 * n), 0.74 * R.h / (n + 2.2));

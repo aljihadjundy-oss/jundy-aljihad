@@ -247,6 +247,12 @@ What happens (measured on 720x1280 at 24 fps, about 20 switches in 62 s, each st
 - **The transition is a hard cut**, not a fade or slide: the very next frame is the other state. Only the graphic whips in (it slides in from the right with a horizontal motion blur for ≈ 0.2 s, 4–5 frames); the exit is the cut back to FULL.
 - **The double layer.** In CARD the top of the card is cropped a little (≈ 15–20 % of the picture's height, the empty background above the speaker) and the speaker is layered ABOVE the card (frame × person matte), so the cap and head break the card's top edge and stand in front of the graphic area. Hands and arms stay on the card.
 - **Rhythm.** FULL for the hook and for the emotional or personal lines, CARD whenever a graphic or a demo is shown (a headline with a red underline, a prompt box that types, a document that fills in, a phone grid). A new graphic every 2–5 s inside a CARD stretch; the stretch lasts as long as the explanation.
+**Card-stretch rules (learned the hard way; the runtime enforces what it can).**
+1. **One persistent stage.** The whole CARD stretch has ONE grid-paper backdrop (`layout.card.palette`, default `frost`); card beats never paint their own. A gap between two card beats shows an empty stage, so card beats must be **contiguous** (end of one = start of the next, no gaps; a gap shorter than 1 s is merged into the stretch and reported as "empty stage"). A real return to FULL needs a gap of at least 1 s.
+2. **Hard cuts only.** A card beat is visible exactly from `t` to `t + dur`; it has no exit fade, and the next beat in the stretch replaces it on the same frame. Nothing from the previous state may linger: a non-card beat (title, kinetic, glitch) that runs across the start of a card stretch is cut at the boundary (the runtime warns), and a beat that starts inside a card stretch is reported. Plan FULL overlays to end before the cut.
+3. **Light palettes only** on the stage (`frost`, `graph`, `engrave`, `editorial`, `paper`): the card caption is dark. Data beats scale up automatically (1.6x) because the stage is large.
+4. **Check every boundary** on the final MP4: frames at t−0.1, t+0.07 and t+0.25 around each beat start and end, looking for a leftover element, a flash of another colour, or an empty stage.
+
 Recipe (only when the RAW footage is landscape): `prep_footage.py raw.mp4 proj --dual --focus-x 0.5` (writes the portrait cover frames AND `frames_land`), `matte.py proj --land` (the pop-out mask), then beats with `"mode": "card"` (any data beat, `custom`, `image`, `stack`…) plus `palette: "frost"` or `"graph"` and `backdrop: "grid"`; `layout.card: { w: 0.88, bottom: 0.04, top: 0.16, r: 28 }`. The runtime does the hard cuts (a card part starts and ends with a cut; adjacent card parts under 1 s apart stay in one CARD stretch), the whip-in, the dark caption above the card, and hides the progress bar. Parts not in card mode stay FULL (cover). Use a light palette on the stage: the card caption is dark. Not for portrait raw (the face is already large; use `split`).
 
 ## 3.5 S7 Newsroom ticker & glitch (ref 1, "Stockwise: NEVER SLEEPS")
@@ -282,6 +288,23 @@ A 17.7 s portrait piece (a ~4.4 s loop): off-white (#F4F4F1) with a fine grid, a
 - a second sequence: "Pay anyone." / "Anywhere." (second line grey) and a word that rolls like a slot machine (USD → EUR) in a fixed window;
 - black bumper frames cut the sequences (hard cuts, 0.4 s).
 Recipe: `stack` (`header`, `lines`, `big`, `caption`), `roll` (`lines`, `values`), a black `kinetic` or `title` (palette `ink`) as the bumper. Use for statement-driven T6 pieces, or a ≤ 5 s interlude in a talking head. Numbers only when said or supplied.
+
+## 3.11 Matching the motion to the topic (every part, not decoration)
+A part's motion should *say* what the speaker says. Pick the metaphor first, then the style:
+| the speaker says | motion that fits | style / beat |
+|---|---|---|
+| a person, an event, a quote | their photo as a card, a red ring on the face or the detail, a name tag, one researched fact with its source | S0 `image` (`rings`, `tag`, `caption`) |
+| "naik dua kali lipat", growth, compounding | big multiplier + the source line; or bars that double step by step (derived arithmetic, labelled as illustration) | `stat` with `note`, `bars` |
+| a small thing becomes a big thing (1 minute → 1 hour) | two solids, a small block and a tower, linked by a dashed arc | S4 `iso` |
+| something fixed / static / "titik tetap" | a flat slab that collapses to a hairline and a dot | S8 `slab` |
+| a word that flips meaning (berbulan-bulan → satu jam, statis → dinamis) | a serif word swap | S10 `roll` (`serif`) |
+| a method with steps, a pile of parts, hub and spokes | a mind map or a flow that draws itself | S5 `mindmap`, S0 `flow` |
+| predictable vs changing, order vs chaos | two clusters of solids: identical neat blocks vs different heights and positions | S4 `iso` |
+| a tool in someone's hands, "AI cuma alat" | the human logo with small satellite chips (AI, tool) circling it | S9 `orbit` |
+| a one-line verdict or a hard statement | the sentence on its own, dimming earlier lines, ending on a big word | S11 `stack` (≤ 5 s, full screen) |
+| a first reaction, "salah besar" | a glitch word over the face's top margin | S7 `glitch` |
+| a list of reasons | numbered list, each item landing on its word | S0 `list` |
+Rules: at most one metaphor per part; never put a metaphor where the transcript has no matching moment; a researched fact (date, prize, study) needs a source line or a caveat on the card.
 
 ## 4. Which style when (talking-head founder content)
 This table is for type T1/T2 in `content-types.md`; read that file first, because the type decides which of these rows are allowed (e.g. no wide bottom window on portrait raw).

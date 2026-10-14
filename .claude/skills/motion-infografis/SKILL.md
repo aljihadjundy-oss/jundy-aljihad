@@ -29,16 +29,18 @@ aja berdasarkan referensi video yang pernah gua kirim." This replaces the earlie
    `references/content-types.md` (T1–T8) and say so. The type fixes layout, allowed styles and bans.
 2. **Plan silently, then self-check.** Write the plan table (time, style, beat, text, why) and run the retention check
    (`retention.md`) and the rubric yourself. The table goes in the final reply, not in a gate.
-3. **Generate every visual yourself.** The user supplies the footage only. Build illustrations, diagrams, UI mock-ups, charts, 3D scenes and
+3. **Research what the speaker names.** A person, a date, a prize, a study or a number the speaker mentions: look it up (WebSearch, standard mode), keep only what is confirmed by two sources or by a primary source, and put it on a card with its source as small text (a `note`, `caption` or `tag`), plus a caveat when sources differ or the claim is narrow (for example "terutama tugas software"). Never show an unverified figure. List the sources in the final reply.
+3b. **Generate every visual yourself.** The user supplies the footage only. Build illustrations, diagrams, UI mock-ups, charts, 3D scenes and
    typographic scenes with the engine (S0–S6 beats, `custom` beats for bespoke scenes, `iso` for systems), following the measured styles of
    the reference samples. Use the user's own assets if they happen to be in the folder, but never ask for them.
    Guardrails for generated visuals: they are *illustrations*, so no fake screenshots of a real product, no real brand logos or people's faces
    drawn as if real, no invented statistics, sources, quotes or testimonials. A number appears only if the speaker says it (then it comes from the
    transcript) and a source line only if the speaker names one. A part that would need proof the user has not given is shown as a diagram of the
    idea (what it is, how it works), not as fake evidence.
-4. **Preview yourself.** Render stills (1–2 per beat), build the contact sheet and *look at it*: face clear, nothing over captions, readable at
+4. **Match the motion to the topic** (`references/style-library.md` §3.11): each part gets the metaphor that says what the speaker says, from the whole style library (S0–S12), not only the data beats; rotate styles and keep card stretches contiguous (§3.10 rules).
+4b. **Preview yourself.** Render stills (1–2 per beat), build the contact sheet and *look at it*: face clear, nothing over captions, readable at
    phone size, styles rotate, portrait raw has no wide bottom window, no `behind` on key text. Fix and re-render stills until it is clean.
-5. **Render, verify, deliver** in the same turn: full render, loudness −14 LUFS, 1080x1920/30 fps, last-frame check, compressed copy ≤ 28 MB.
+5. **Render, verify, deliver** in the same turn (verify = the transition check: `python3 $S/check_transitions.py proj proj/out/final.mp4` builds a sheet of frames at t−0.1, t+0.07, t+0.25 around every beat start and end; look for leftovers, colour flashes and empty stages, fix, re-render): full render, loudness −14 LUFS, 1080x1920/30 fps, last-frame check, compressed copy ≤ 28 MB.
    **Send the finished video straight into the chat with `SendUserFile` (`display: "attach"`, the ≤ 28 MB copy), every time, as the user's standing order ("video langsung kasih ke gua ke chat ini"). Never just leave a path in the scratchpad.**
 6. **Report in the reply:** the type and why, the style per part (the plan table), what you generated, anything you left out on purpose (an
    unsourced claim, a part where you chose a diagram over proof), and a one-line offer for tweaks. No questions beforehand.

@@ -171,18 +171,18 @@ export const hud = {
 export const slab = {
   defaults: { mode: 'full', free: true },
   build(root, b, ctx) {
-    const { W, H, S } = ctx, p = pal(b, 'hud');
-    backdrop(root, b, p, { grid: true });
+    const { W, H, S } = ctx, p = pal(b, 'hud'), cy = (b.y ?? 0.5) * H;
+    backdrop(root, b, p, { grid: b.bg !== 'none' });
     const stage = h('div', 'abs', root); css(stage, { left: 0, top: 0, width: `${W}px`, height: `${H}px`, perspective: `${1400 * S}px` });
     const sw = W * 0.8, sh = sw * 0.42;
-    const sl = h('div', 'abs', stage); css(sl, { left: `${(W - sw) / 2}px`, top: `${H * 0.5 - sh / 2}px`, width: `${sw}px`, height: `${sh}px`, background: p.accent, transformStyle: 'preserve-3d' });
+    const sl = h('div', 'abs', stage); css(sl, { left: `${(W - sw) / 2}px`, top: `${cy - sh / 2}px`, width: `${sw}px`, height: `${sh}px`, background: p.accent, transformStyle: 'preserve-3d' });
     const lab = h('div', 'abs', sl, b.text ?? 'PLANE'); css(lab, { left: `${40 * S}px`, bottom: `${22 * S}px`, fontSize: `${(b.size ?? 120) * S}px`, fontWeight: 900, color: '#0A0A0A', letterSpacing: '-0.03em', fontFamily: SANS });
     const meta = h('div', 'abs', sl, b.meta ?? ''); css(meta, { right: `${24 * S}px`, bottom: `${24 * S}px`, fontFamily: MONO, fontSize: `${16 * S}px`, color: '#0A0A0A' });
     const ruler = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'layer' }, root);
-    const line = s('path', { d: `M${W * 0.1} ${H / 2}H${W * 0.9}`, stroke: p.accent, 'stroke-width': 3 * S, fill: 'none' }, ruler);
+    const line = s('path', { d: `M${W * 0.1} ${cy}H${W * 0.9}`, stroke: p.accent, 'stroke-width': 3 * S, fill: 'none' }, ruler);
     const ticks = [];
-    for (let i = 0; i <= 16; i++) ticks.push(s('path', { d: `M${W * 0.1 + (W * 0.8 / 16) * i} ${H / 2 - 18 * S}v${i % 4 === 0 ? 30 * S : 16 * S}`, stroke: p.ink, 'stroke-width': 1.5 * S }, ruler));
-    const dot = h('div', 'abs', root); css(dot, { left: `${W / 2 - 16 * S}px`, top: `${H / 2 - 16 * S}px`, width: `${32 * S}px`, height: `${32 * S}px`, borderRadius: '50%', background: '#fff', boxShadow: `0 0 ${60 * S}px ${24 * S}px ${p.accent}` });
+    for (let i = 0; i <= 16; i++) ticks.push(s('path', { d: `M${W * 0.1 + (W * 0.8 / 16) * i} ${cy - 18 * S}v${i % 4 === 0 ? 30 * S : 16 * S}`, stroke: p.ink, 'stroke-width': 1.5 * S }, ruler));
+    const dot = h('div', 'abs', root); css(dot, { left: `${W / 2 - 16 * S}px`, top: `${cy - 16 * S}px`, width: `${32 * S}px`, height: `${32 * S}px`, borderRadius: '50%', background: '#fff', boxShadow: `0 0 ${60 * S}px ${24 * S}px ${p.accent}` });
     ctx.cue(0.5, 'whoosh', { gain: 0.5 }); ctx.cue(2.0, 'tick', { gain: 0.6 });
     return lt => {
       const o = fadeOut(lt, ctx, 0.2);
@@ -230,8 +230,8 @@ export const orbit = {
     const { W, H, S } = ctx, p = pal(b, 'ui'), R = (b.radius ?? 230) * S, cx = W / 2, cy = (b.y ?? 0.45) * H;
     backdrop(root, b, p);
     const ring = h('div', 'abs', root); css(ring, { width: `${R * 1.9}px`, height: `${R * 1.9}px`, left: `${cx - R * 0.95}px`, top: `${cy - R * 0.95}px`, borderRadius: '50%', background: `${p.ink}0F` });
-    const logo = h('div', 'abs', root, b.label ?? ''); css(logo, { width: `${190 * S}px`, height: `${190 * S}px`, left: `${cx - 95 * S}px`, top: `${cy - 95 * S}px`, borderRadius: `${46 * S}px`, background: p.ink, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: `${70 * S}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 ${20 * S}px ${50 * S}px ${p.ink}44` });
-    const chips = (b.chips || [p.accent, p.accent2, p.accent3]).map(c => { const el = h('div', 'abs', root); css(el, { width: `${74 * S}px`, height: `${74 * S}px`, borderRadius: `${22 * S}px`, background: c, left: `${cx - 37 * S}px`, top: `${cy - 37 * S}px`, boxShadow: `0 ${10 * S}px ${24 * S}px ${c}55` }); return el; });
+    const logo = h('div', 'abs', root, b.label ?? ''); css(logo, { width: `${190 * S}px`, height: `${190 * S}px`, left: `${cx - 95 * S}px`, top: `${cy - 95 * S}px`, borderRadius: `${46 * S}px`, background: p.ink, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: `${(b.labelSize ?? 70) * S}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 ${20 * S}px ${50 * S}px ${p.ink}44` });
+    const chips = (b.chips || [p.accent, p.accent2, p.accent3]).map(c0 => { const c = typeof c0 === 'string' ? c0 : c0.color, lab = typeof c0 === 'string' ? '' : (c0.label ?? ''); const el = h('div', 'abs', root, lab); css(el, { minWidth: `${74 * S}px`, height: `${74 * S}px`, padding: lab ? `0 ${22 * S}px` : '0', borderRadius: `${22 * S}px`, background: c, color: '#fff', fontFamily: SANS, fontWeight: 700, fontSize: `${26 * S}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap', left: `${cx - 37 * S}px`, top: `${cy - 37 * S}px`, boxShadow: `0 ${10 * S}px ${24 * S}px ${c}55` }); return el; });
     ctx.cue(0.35, 'pop', { gain: 0.6 });
     return lt => {
       const o = fadeOut(lt, ctx, 0.3), k = E.outBack(prog(lt, 0.2, 0.7)), spin = (b.spin ?? 22) * Math.max(0, lt - 0.5);

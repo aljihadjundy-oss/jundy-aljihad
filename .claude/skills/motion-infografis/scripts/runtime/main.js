@@ -107,7 +107,7 @@ async function init() {
   // beat.backdrop: "grid" | "dots" | "plain" paints this part's own background (in the beat's palette) under the footage / PiP,
   // e.g. graph paper behind a whiteboard-style part (ref e). It fades in and out with the beat.
   const rgba = (hex, a) => { const n = parseInt(hex.replace('#', '').padStart(6, '0'), 16); return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`; };
-  const bdrops = (proj.beats || []).filter(b => b.backdrop).map(b => {
+  const bdrops = (proj.beats || []).filter(b => b.backdrop && b.mode !== 'card').map(b => {
     const pal = PALETTES[b.palette] ?? brand;
     const el = h('div', 'layer', stage);
     const line = rgba(pal.ink, 0.09), dot = rgba(pal.ink, 0.22), u = Math.round(54 * S);
@@ -116,6 +116,15 @@ async function init() {
     el.style.opacity = '0';
     return { el, a: b.t, b: b.t + b.dur, hard: b.mode === 'card' };
   });
+  // card stage (S12): ONE persistent backdrop for the whole card stretch (layout.card.palette, default frost, grid paper), so nothing flashes between two card
+  // parts; individual card beats do not paint their own backdrop. The card parts must use a light palette (the caption above the card is dark).
+  const cardPal = PALETTES[lc.palette ?? 'frost'] ?? PALETTES.frost;
+  const cardBg = card && usesCard ? h('div', 'layer', stage) : null;
+  if (cardBg) {
+    const line = rgba(cardPal.ink, 0.09), u2 = Math.round(54 * S);
+    cardBg.style.background = `linear-gradient(${line} 2px, transparent 2px) 0 0 / ${u2}px ${u2}px, linear-gradient(90deg, ${line} 2px, transparent 2px) 0 0 / ${u2}px ${u2}px, ${cardPal.bg}`;
+    cardBg.style.opacity = '0';
+  }
   const footage = footageMeta ? buildFootage(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, pip, split) : null;
   const cardLayer = footage && card && usesCard
     ? buildCard(stage, card, footageMeta, { r: Math.round((lc.r ?? 28) * S), pop: lc.pop }, i => `${PROJ}footage/frames_land/${String(i).padStart(6, '0')}.jpg`,
@@ -143,6 +152,20 @@ async function init() {
     return { b, def, i };
   });
 
+  // hard cuts: a non-card beat that runs across the start of a card stretch is cut at the boundary (it would otherwise linger over the new state),
+  // and gaps inside a card stretch (an empty stage) are reported
+  if (cardLayer) {
+    const cb = beats.filter(x => x.b.mode === 'card').map(x => [x.b.t, x.b.t + x.b.dur]).sort((a, b) => a[0] - b[0]);
+    const cw = [];
+    for (const v of cb) { const l = cw[cw.length - 1]; if (l && v[0] - l[1] < 1.0) { if (v[0] - l[1] > 0.05) console.warn(`card stretch: ${(v[0] - l[1]).toFixed(2)} s with no card beat at ${l[1].toFixed(2)} s (empty stage)`); l[1] = Math.max(l[1], v[1]); } else cw.push([...v]); }
+    for (const x of beats) {
+      if (x.b.mode === 'card') continue;
+      for (const [a, e] of cw) {
+        if (x.b.t < a - 0.01 && x.b.t + x.b.dur > a + 0.01) { console.warn(`beat ${x.i} (${x.b.type}) runs into a card stretch at ${a.toFixed(2)} s: cut to end there`); x.b.dur = a - x.b.t; }
+        else if (x.b.t >= a - 0.01 && x.b.t < e - 0.02 && x.b.type !== 'zoom') console.warn(`beat ${x.i} (${x.b.type}, ${x.b.mode}) starts inside a card stretch (${a.toFixed(1)}-${e.toFixed(1)} s)`);
+      }
+    }
+  }
   for (const it of beats) {
     const { b, def } = it;
     const layer = h('div', 'layer', b.behind ? behindLayer : def.defaults.onTop ? fxLayer : beatsLayer);
@@ -152,7 +175,7 @@ async function init() {
     const ctx = {
       W, H, S, m, mode: b.mode, t0, OUT, dur: b.dur, captionsY, locale: proj.locale || 'id-ID', brand,
       asset, aspect: src => aspects[src] ?? 1, pip, root: layer, panel: { x: 0, y: 0, w: W, h: split.seam }, seam: split.seam,
-      words: allWords, beatT: b.t, hasFootage: !!footage,
+      words: allWords, beatT: b.t, hasFootage: !!footage, stage: card ? { x: 0, y: 0, w: W, h: Math.round(card.capY - 20 * S) } : null,
       cue: (lt, type, opt = {}) => cues.push({ t: +(b.t + lt).toFixed(3), type, ...opt }),
     };
     // header (kicker + title) for data beats
@@ -280,7 +303,7 @@ async function init() {
     bdrops.forEach(d => { d.el.style.opacity = (d.hard ? (T >= d.a && T < d.b ? 1 : 0) : kOf(T, [[d.a, d.b]])).toFixed(3); });
     for (const it of beats) {
       const lt = T - it.b.t;
-      const vis = lt >= -0.2 && lt <= it.b.dur + 0.1;
+      const vis = it.b.mode === 'card' ? lt >= 0 && lt < it.b.dur : lt >= -0.2 && lt <= it.b.dur + 0.1;   // card parts are hard cuts
       it.layer.style.display = vis ? '' : 'none';
       if (!vis) continue;
       if (it.headUpd) it.headUpd(lt);
@@ -297,6 +320,7 @@ async function init() {
     }
     const splitK = kOf(T, splitW);
     const cardK = inW(T, cardW);
+    if (cardBg) cardBg.style.opacity = cardK.toFixed(0);
     if (footage) await footage.update(T, kOf(T, insertW), Math.max(kOf(T, fullW), cardK), splitK, zoomAt(T));
     if (cardLayer) await cardLayer.update(T, cardK);
     if (person) await person.update(T, kOf(T, behindW), zoomAt(T));
