@@ -303,7 +303,7 @@ async function init() {
     bdrops.forEach(d => { d.el.style.opacity = (d.hard ? (T >= d.a && T < d.b ? 1 : 0) : kOf(T, [[d.a, d.b]])).toFixed(3); });
     for (const it of beats) {
       const lt = T - it.b.t;
-      const vis = it.b.mode === 'card' ? T >= it.b.t - 1e-6 && T < it.b.t + it.b.dur - 1e-6 : lt >= -0.2 && lt <= it.b.dur + 0.1;   // card parts are hard cuts (same float expression as the card window, so no one-frame leftover)
+      const vis = it.b.mode === 'card' || it.b.mode === 'full' ? T >= it.b.t - 1e-6 && T < it.b.t + it.b.dur - 1e-6 : lt >= -0.2 && lt <= it.b.dur + 0.1;   // full + card parts: hard cuts, no early/late frame (an opaque stack/slab background would flash over the neighbouring state)   // card parts are hard cuts (same float expression as the card window, so no one-frame leftover)
       it.layer.style.display = vis ? '' : 'none';
       if (!vis) continue;
       if (it.headUpd) it.headUpd(lt);
