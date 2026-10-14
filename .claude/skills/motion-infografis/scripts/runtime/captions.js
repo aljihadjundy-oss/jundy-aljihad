@@ -5,7 +5,7 @@ import { E, prog, h } from './engine.js';
 //        · "word" (one word at a time in a grey chip). enter: "smear" = words blur in from the left and out to the right.
 // when: "always" (default) · "split" (only while the footage is in split mode, e.g. when burned-in subtitles get cropped).
 // In split mode the caption line moves to the seam and uses splitStyle (default "box"), left-aligned by default.
-export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
+export function buildCaptions(stage, W, H, words, cfg = {}, split = null, card = null) {
   const maxWords = cfg.maxWords ?? 4, maxChars = cfg.maxChars ?? 22, gapBreak = cfg.gapBreak ?? 0.55;
   const phrases = [];
   let cur = [];
@@ -34,7 +34,12 @@ export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
   if (cfg.upper) el.style.textTransform = 'uppercase';
   const normalY = Math.round((cfg.y ?? 0.775) * H);
   let shown = -1, spans = [], mode = '';
-  const setMode = inSplit => {
+  const setMode = (inSplit, inCard = false) => {
+    if (inCard) {   // landscape card state: dark bold words on the light backdrop, just above the card
+      if (mode === 'card') return;
+      mode = 'card'; el.className = 'cap cap-card'; el.style.fontSize = `${Math.round(W * 0.05)}px`; el.style.textAlign = 'center'; el.style.padding = `0 ${Math.round(W * 0.07)}px`; el.style.top = `${card.y}px`;
+      return;
+    }
     const st = inSplit ? splitStyle : style;
     const md = `${inSplit ? 'split-' : ''}${st}`;
     if (md === mode) return;
@@ -50,10 +55,11 @@ export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
   };
   return {
     phrases,
-    update(T, hideK = 0, splitK = 0) {
-      const inSplit = !!split && splitK > 0.5;
-      setMode(inSplit);
-      shade.style.opacity = inSplit || when === 'split' ? '0' : '1';
+    update(T, hideK = 0, splitK = 0, cardK = 0) {
+      const inCard = !!card && cardK > 0.5;
+      const inSplit = !inCard && !!split && splitK > 0.5;
+      setMode(inSplit, inCard);
+      shade.style.opacity = inSplit || inCard || when === 'split' ? '0' : '1';
       let idx = -1;
       for (let i = 0; i < phrases.length; i++) {
         if (T >= phrases[i].start && T < phrases[i].end) { idx = i; break; }
@@ -64,7 +70,7 @@ export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
         line.innerHTML = '';
         spans = idx < 0 ? [] : phrases[idx].map(w => h('span', 'cw', line, w.w));
       }
-      const visible = when !== 'split' || inSplit;
+      const visible = when !== 'split' || inSplit || inCard;
       if (idx < 0 || !visible) { el.style.opacity = '0'; return; }
       const p = phrases[idx];
       if (cfg.enter === 'smear') {
@@ -85,7 +91,7 @@ export function buildCaptions(stage, W, H, words, cfg = {}, split = null) {
         p.forEach((w, i) => { if (T >= w.s - 0.02) a = i; });
         spans.forEach((sp, i) => { sp.style.display = i === a ? '' : 'none'; });
       }
-      const karaoke = mode === 'karaoke';
+      const karaoke = mode === 'karaoke' || mode === 'card';
       p.forEach((w, i) => spans[i].classList.toggle('on', karaoke && T >= w.s && T < (p[i + 1] ? p[i + 1].s : p.end)));
     },
   };

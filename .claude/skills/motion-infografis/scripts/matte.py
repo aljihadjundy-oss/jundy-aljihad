@@ -4,6 +4,7 @@
   python3 matte.py myproject                       # every frame
   python3 matte.py myproject --range 12.5,19       # only the seconds you need (much faster)
   python3 matte.py myproject --smooth 0.6          # temporal smoothing 0..1 (default 0.55): less flicker on hair edges
+  python3 matte.py myproject --land                # matte the LANDSCAPE frames (footage/frames_land) for the pop-out card state (S12)
 
 Writes myproject/footage/matte/000001.jpg … (grayscale, half size: white = person). The renderer stays deterministic: the
 masks are plain files, produced here once. Beats with "behind": true then composite between the background footage and the
@@ -20,6 +21,7 @@ ap.add_argument('--feather', type=float, default=1.6, help='edge blur in px at o
 ap.add_argument('--lo', type=float, default=0.30, help='confidence below this is background')
 ap.add_argument('--hi', type=float, default=0.72, help='confidence above this is fully person')
 ap.add_argument('--holes', type=float, default=0.02, help='fill holes in the person up to this fraction of the frame (lenses, gaps in hair); 0 = off')
+ap.add_argument('--land', action='store_true', help='matte footage/frames_land (landscape picture) into footage/matte_land, for the card pop-out')
 ap.add_argument('--model', default=None)
 a = ap.parse_args()
 
@@ -48,13 +50,13 @@ seg = vision.ImageSegmenter.create_from_options(vision.ImageSegmenterOptions(
     base_options=mpt.BaseOptions(model_asset_path=model), running_mode=vision.RunningMode.IMAGE,
     output_confidence_masks=True, output_category_mask=False))
 
-out = os.path.join(P, 'footage', 'matte')
+out = os.path.join(P, 'footage', 'matte_land' if a.land else 'matte')
 os.makedirs(out, exist_ok=True)
-W, H = meta['w'], meta['h']
+W, H = (meta['land']['w'], meta['land']['h']) if a.land else (meta['w'], meta['h'])
 ow, oh = W // 2, H // 2
 prev = None
 for n, i in enumerate(range(i0, i1 + 1)):
-    img = cv2.imread(os.path.join(P, 'footage', 'frames', f'{i:06d}.jpg'))
+    img = cv2.imread(os.path.join(P, 'footage', 'frames_land' if a.land else 'frames', f'{i:06d}.jpg'))
     if img is None:
         continue
     res = seg.segment(mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)))

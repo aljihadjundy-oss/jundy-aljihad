@@ -14,7 +14,7 @@ the motion plan. The numbers below were measured on the references (time in seco
 3.2 S5 Whiteboard on graph paper (ref e): mind map, calendar, numbered chapters, the speaker as a small window
 3.3 S6 Spec tags (ref d): mono labels with curved arrows on a product shot
 3.4 Ring text (ref c, an extension of S2)
-3.5 S7 Newsroom ticker & glitch (ref 1) · 3.6 S8 Camera HUD & slab (ref 5) · 3.7 S9 Product UI demo (ref 2) · 3.8 S10 Engraving & accent word swap (ref 3) · 3.9 S11 Editorial type stack (ref 4)
+3.10 S12 Landscape card switcher with pop-out (ref 6) · 3.5 S7 Newsroom ticker & glitch (ref 1) · 3.6 S8 Camera HUD & slab (ref 5) · 3.7 S9 Product UI demo (ref 2) · 3.8 S10 Engraving & accent word swap (ref 3) · 3.9 S11 Editorial type stack (ref 4)
 4. Which style when, for talking-head founder content
 5. Limits
 
@@ -44,6 +44,7 @@ the motion plan. The numbers below were measured on the references (time in seco
 | S9 | Product UI demo | ref 2 (Frame by Frame) | light interface, an animated pointer that moves and clicks (ripple), a menu-bar app that springs open, an app logo with satellite chips that circle it | `cursor` `orbit` `image` |
 | S10 | Engraving & accent word swap | ref 3 (Claude) | warm white paper, one bold serif word whose punctuation changes (ask? → task) in a single terracotta accent, vintage engravings cut out in grey with one accent shape | `roll` (`serif`) `glitch` `image` |
 | S11 | Editorial type stack | ref 4 (Lightspark) | off-white grid paper, one neutral grotesque, lines that stack and dim as the next arrives, a huge number with a tiny caption, a slot-machine word, black bumper frames | `stack` `roll` `title` |
+| S12 | Landscape card switcher (pop-out) | ref 6 (reels explainer, 62 s) | for LANDSCAPE raw: hard cuts between a full-portrait close-up and a bottom card with the graphic above; the speaker's cap breaks the card's top edge (two layers); graphics whip in with a motion blur | `layout.card` `mode: "card"` `backdrop` captions dark |
 
 Accents that work inside any style: `zoom` punch on the key word, `transition` leak on a layout change, `callout` for
 one claim, `^gradient^` headline words in the locked palette.
@@ -78,7 +79,8 @@ Outcome first: every part has a job, and the style is whatever does that job bes
    Added with refs a–e: "how a system or product is built / how the pieces fit" → S4 `iso`; "a method with steps, a mind
    map, a content calendar, numbered chapters" → S5; "a detail of an object that needs naming" (a gadget, a UI part) → S6 `tag`;
    a repeated keyword that should loop around the shot → S2 `rings`.
-   Added with the five 2026-10 references (S7–S11): a brand-word reveal, a bumper or a section opener on a piece without a speaker → S7 `glitch` (+ `ticker`, `wipe`) or S8 `slab` → `glitch`; a product or app shown in use → S9 `cursor` + `orbit`; a short phrase whose meaning turns on one word → S10 `roll` (`serif`); a stat or a sentence that builds line by line and ends on a number → S11 `stack`; a word that cycles through options (currencies, tools, names) → S11 `roll`. These are mostly full-screen looks: on talking-head content use them as ≤ 5 s interludes (like S2 full-screen) with the speaker's voice running, never over the face. Never send the key word of a sentence to `behind`; keep it in front.
+   Added with the five 2026-10 references (S7–S11): a brand-word reveal, a bumper or a section opener on a piece without a speaker → S7 `glitch` (+ `ticker`, `wipe`) or S8 `slab` → `glitch`; a product or app shown in use → S9 `cursor` + `orbit`; a short phrase whose meaning turns on one word → S10 `roll` (`serif`); a stat or a sentence that builds line by line and ends on a number → S11 `stack`; a word that cycles through options (currencies, tools, names) → S11 `roll`.
+   For LANDSCAPE raw footage the default carrier is S12: FULL (cover) on the hook and the personal lines, CARD (graphic on top, pop-out speaker) whenever a part is shown; the other styles' beats then run in card mode. These are mostly full-screen looks: on talking-head content use them as ≤ 5 s interludes (like S2 full-screen) with the speaker's voice running, never over the face. Never send the key word of a sentence to `behind`; keep it in front.
 3. **Break ties with evidence, then novelty**: prefer the style that shows proof (a screen, a number, a real output)
    over one that only decorates; if still tied, pick the style used least recently. When the proof needs an asset the
    user has not sent, build the proof yourself as an illustration (see SKILL.md section 0 and "Proof over decoration"); the wishlist is retired.
@@ -238,6 +240,14 @@ speaker: it becomes background, the face and body cover it and the message weake
 INFRASTRUKTUR": it looked worse than the plain kinetic). Use `behind` only for texture or secondary material: a mood word that is not the
 point, a scene around the speaker, an echo of a word that was already shown in front. Key words, numbers and claims stay in front
 (`kinetic` full-screen for 1.5–5 s, or over the footage). Face cut-outs inside letters are not built.
+
+## 3.10 S12 Landscape card switcher with pop-out (ref 6: a 62 s reels explainer, shot landscape, delivered 9:16)
+What happens (measured on 720x1280 at 24 fps, about 20 switches in 62 s, each state lasting 2–10 s):
+- **Two states of the same raw footage.** **FULL**: the landscape picture is cover-cropped so the speaker fills the 9:16 frame (face large, centred; white bold word caption with a dark outline at ≈ 0.66 H). **CARD**: the whole landscape picture is a rounded card at the bottom (≈ 87 % of the width, ≈ 4 % margin below, corner radius ≈ 3 % of the width, a soft shadow) and everything above it is a light grid-paper stage for a graphic or a UI mock-up; the caption moves to just above the card, in black bold words.
+- **The transition is a hard cut**, not a fade or slide: the very next frame is the other state. Only the graphic whips in (it slides in from the right with a horizontal motion blur for ≈ 0.2 s, 4–5 frames); the exit is the cut back to FULL.
+- **The double layer.** In CARD the top of the card is cropped a little (≈ 15–20 % of the picture's height, the empty background above the speaker) and the speaker is layered ABOVE the card (frame × person matte), so the cap and head break the card's top edge and stand in front of the graphic area. Hands and arms stay on the card.
+- **Rhythm.** FULL for the hook and for the emotional or personal lines, CARD whenever a graphic or a demo is shown (a headline with a red underline, a prompt box that types, a document that fills in, a phone grid). A new graphic every 2–5 s inside a CARD stretch; the stretch lasts as long as the explanation.
+Recipe (only when the RAW footage is landscape): `prep_footage.py raw.mp4 proj --dual --focus-x 0.5` (writes the portrait cover frames AND `frames_land`), `matte.py proj --land` (the pop-out mask), then beats with `"mode": "card"` (any data beat, `custom`, `image`, `stack`…) plus `palette: "frost"` or `"graph"` and `backdrop: "grid"`; `layout.card: { w: 0.88, bottom: 0.04, top: 0.16, r: 28 }`. The runtime does the hard cuts (a card part starts and ends with a cut; adjacent card parts under 1 s apart stay in one CARD stretch), the whip-in, the dark caption above the card, and hides the progress bar. Parts not in card mode stay FULL (cover). Use a light palette on the stage: the card caption is dark. Not for portrait raw (the face is already large; use `split`).
 
 ## 3.5 S7 Newsroom ticker & glitch (ref 1, "Stockwise: NEVER SLEEPS")
 Measured on an 11.7 s 16:9 piece that loops twice (a ~5.2 s cycle, indigo field #070A1E, violet #5B5BE8):

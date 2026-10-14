@@ -8,7 +8,7 @@ description: Add infographic motion graphics to a video, or build a motion-infog
 Turns footage + a transcript (or pure data) into a vertical motion-graphics video. The look is the user's locked
 palette (`jundy`, from jundy-aljihad.vercel.app: near-black, violet → pink → orange) plus a style library that grows
 with every reference the user sends: house infographics (S0), tutorial split-screen (S1), kinetic collage typography
-(S2), tracked hand-drawn annotation (S3), blueprint / isometric build (S4), whiteboard on graph paper (S5), spec tags (S6), newsroom ticker & glitch (S7), camera HUD slab (S8), product UI demo (S9), engraving word swap (S10), editorial type stack (S11),
+(S2), tracked hand-drawn annotation (S3), blueprint / isometric build (S4), whiteboard on graph paper (S5), spec tags (S6), newsroom ticker & glitch (S7), camera HUD slab (S8), product UI demo (S9), engraving word swap (S10), editorial type stack (S11), landscape card switcher (S12),
 and whatever comes next. Styles are combined part by part so the audience
 never sees one look for a whole video. Everything on screen is a pure function of time, so renders are deterministic
 and any frame can be previewed.
@@ -25,7 +25,7 @@ Two modes, one engine:
 When the user hands over material, **you decide and you execute; do not ask and do not wait for approval.** The user said: "claude akan
 decide dan menilai bahan ini cocoknya untuk style yang mana, terus langsung eksekusi. Aset full gua gaperlu cari, lu generate motionnya
 aja berdasarkan referensi video yang pernah gua kirim." This replaces the earlier plan-then-"eksekusi" gate and the asset wishlist.
-1. **Inspect and classify.** `python3 $S/inspect.py raw.mp4` (format), then read the transcript (content). Pick the type in
+1. **Inspect and classify.** `python3 $S/probe_raw.py raw.mp4` (format), then read the transcript (content). Pick the type in
    `references/content-types.md` (T1–T8) and say so. The type fixes layout, allowed styles and bans.
 2. **Plan silently, then self-check.** Write the plan table (time, style, beat, text, why) and run the retention check
    (`retention.md`) and the rubric yourself. The table goes in the final reply, not in a gate.
@@ -53,7 +53,7 @@ Collect, and ask only for what you cannot infer:
   suggest running the skill in Claude Code on their own machine, where local paths just work.
 - **Transcript source**: an SRT/VTT they already have (CapCut, Descript, YouTube) is best. Otherwise auto-transcribe
   if `faster-whisper` works in this environment. Failing that, ask for an SRT or for key moments with timestamps.
-- **Content type**: classify the video before planning (`python3 $S/inspect.py raw.mp4` gives the format half) (founder talking head portrait, landscape talking head, tutorial, presentation, podcast, voice-over, product, system motion piece) and read the matching row in `references/content-types.md`. It decides the layout, the allowed styles and the bans; state it on top of the plan table (`Type: T1 · raw: portrait`) and set `contentType` in project.json. New samples from the user are filed there.
+- **Content type**: classify the video before planning (`python3 $S/probe_raw.py raw.mp4` gives the format half) (founder talking head portrait, landscape talking head, tutorial, presentation, podcast, voice-over, product, system motion piece) and read the matching row in `references/content-types.md`. It decides the layout, the allowed styles and the bans; state it on top of the plan table (`Type: T1 · raw: portrait`) and set `contentType` in project.json. New samples from the user are filed there.
 - **Canvas**: default 1080×1920 at 30 fps. Other sizes work (layout scales with the short side), but 9:16 is the tuned one.
 - **Brand**: the `jundy` palette is locked as the default for this user; do not ask about colours. Other palettes
   from the library can colour single parts for variety (see `references/style-library.md`). Logo/badge only if given.
@@ -75,6 +75,7 @@ Needs Node 18+, Python 3 with numpy + pillow, ffmpeg with libx264, and Chrome/Ch
 S=<skill>/scripts
 python3 $S/prep_footage.py raw.mp4 proj                  # frames + audio + project.json (cover-crop to 9:16)
 python3 $S/prep_footage.py raw.mov proj --fit blur       # landscape/screen recording inside a blurred 9:16 frame
+python3 $S/prep_footage.py raw.mp4 proj --dual --focus-x 0.5   # LANDSCAPE raw: cover frames + the landscape picture, for S12 card parts (then: python3 $S/matte.py proj --land)
 python3 $S/transcribe.py proj --srt subs.srt             # or: python3 $S/transcribe.py proj   (whisper, if installed)
 ```
 `--focus-x 0.35` moves the cover crop toward the speaker if they are not centred. `--start/--end` trim.

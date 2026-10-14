@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Probe a raw video and print what the intake needs to classify it (see references/content-types.md).
 
-  python3 inspect.py raw.mp4
+  python3 probe_raw.py raw.mp4
 
 Prints size, orientation, fps, duration, audio, and the recommended prep_footage flags. Content type itself is a judgement
 from the transcript (talking head, tutorial, podcast …); this only settles the format half: the raw orientation decides
@@ -49,7 +49,7 @@ if crop:
 elif orient == 'portrait':
     print('raw: portrait → type T1 (founder talking head) or T3/T7; NO wide bottom window; prep_footage default (--fit cover), --focus-x if the speaker is off-centre')
 elif orient == 'landscape':
-    print('raw: landscape → type T2 if one speaker (wide bottom window allowed, prep_footage --fit blur), T5 if two or more speakers, T3/T4 if a screen or slides')
+    print('raw: landscape → type T2 if one speaker (S12 card switcher: prep_footage --dual --focus-x <x>, matte.py --land; or the wide bottom window with --fit blur), T5 if two or more speakers, T3/T4 if a screen or slides')
 else:
     print('raw: square → prep_footage --fit blur; treat as T2 for layout, no wide bottom window unless the speaker has room')
 if not aud:

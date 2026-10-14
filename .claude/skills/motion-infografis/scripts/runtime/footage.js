@@ -99,3 +99,29 @@ export function buildPerson(stage, W, H, meta, frameUrl, maskUrl) {
     },
   };
 }
+
+// Landscape "card" state (S12): the raw landscape picture sits as a rounded card at the bottom, its TOP slightly cut off, and the speaker is
+// layered ABOVE the card (frame x person matte) so the cap / head breaks the card's top edge, the "double layer" look. The upper area is free for
+// graphics. Needs footage/frames_land (prep_footage --dual) and, for the pop-out, footage/matte_land (matte.py --land). Hard cut in and out.
+export function buildCard(stage, g, meta, cfg, landUrl, maskUrl) {
+  const cardEl = h('div', 'abs', stage);
+  Object.assign(cardEl.style, { left: `${g.x}px`, top: `${g.top}px`, width: `${g.w}px`, height: `${g.h}px`, overflow: 'hidden', borderRadius: `${cfg.r}px`, display: 'none',
+    boxShadow: '0 30px 70px -30px rgba(0,0,0,.55)' });
+  const img = h('img', 'abs', cardEl);
+  Object.assign(img.style, { left: '0', top: `${-g.cut}px`, width: `${g.w}px`, height: `${g.fullH}px` });
+  const person = cfg.pop === false || !maskUrl ? null : buildPerson(stage, meta.land.w, meta.land.h, { fps: meta.fps, count: meta.count }, landUrl, maskUrl);
+  if (person) {
+    const cv = stage.lastChild;
+    Object.assign(cv.style, { left: `${g.x}px`, top: `${g.fullTop}px`, width: `${g.w}px`, height: `${g.fullH}px` });
+  }
+  let cur = -1;
+  return {
+    async update(T, k) {
+      cardEl.style.display = k > 0.5 ? '' : 'none';
+      if (k <= 0.5) { if (person) await person.update(T, 0); return; }
+      const idx = clamp(Math.floor(T * meta.fps + 1e-6) + 1, 1, meta.count);
+      if (idx !== cur) { img.src = landUrl(idx); try { await img.decode(); } catch (e) { /* keep last frame */ } cur = idx; }
+      if (person) await person.update(T, 1);
+    },
+  };
+}

@@ -1,6 +1,6 @@
 import { h, E, prog, pose, place } from './engine.js';
 import { buildBackground, buildChrome } from './layers.js';
-import { buildFootage, buildPerson } from './footage.js';
+import { buildFootage, buildPerson, buildCard } from './footage.js';
 import { buildCaptions } from './captions.js';
 import { headline } from './components.js';
 import { BEATS } from './beats/index.js';
@@ -88,6 +88,21 @@ async function init() {
   // split mode: top panel for a screen/graphic, bottom panel shows the face window of the footage
   const split = { seam: Math.round((proj.layout?.seam ?? 0.5) * H), focus: proj.layout?.splitFocus ?? 0.33, zoom: proj.layout?.splitZoom ?? 1 };
 
+  // card mode (S12): the raw LANDSCAPE picture as a rounded card at the bottom (its top slightly cut), the speaker layered above it, graphics on top.
+  // layout.card: { w: 0.88, bottom: 0.04, top: 0.14 (fraction of the picture cut off at the top), r: 28, pop: true }. Needs prep_footage --dual.
+  const lc = proj.layout?.card ?? {};
+  const land = footageMeta?.land;
+  const usesCard = (proj.beats || []).some(b => b.mode === 'card');
+  if (usesCard && !land) console.warn('mode "card" needs landscape frames: run prep_footage.py raw.mp4 proj --dual. Card beats fall back to split.');
+  const card = (() => {
+    if (!land) return null;
+    const cw = Math.round((lc.w ?? 0.88) * W), fullH = Math.round(cw * land.h / land.w), cut = Math.round((lc.top ?? 0.14) * fullH);
+    const x = Math.round((W - cw) / 2), fullTop = Math.round(H - fullH - (lc.bottom ?? 0.04) * H);
+    const g = { x, w: cw, fullH, fullTop, cut, top: fullTop + cut, h: fullH - cut };
+    g.capY = fullTop - Math.round(64 * S) - Math.round(0.05 * W) * 1.2;   // the caption line sits just above the picture / cap tip
+    return g;
+  })();
+
   const bg = buildBackground(stage, W, H, brand);
   // beat.backdrop: "grid" | "dots" | "plain" paints this part's own background (in the beat's palette) under the footage / PiP,
   // e.g. graph paper behind a whiteboard-style part (ref e). It fades in and out with the beat.
@@ -99,9 +114,12 @@ async function init() {
     el.style.background = b.backdrop === 'grid' ? `linear-gradient(${line} 2px, transparent 2px) 0 0 / ${u}px ${u}px, linear-gradient(90deg, ${line} 2px, transparent 2px) 0 0 / ${u}px ${u}px, ${pal.bg}`
       : b.backdrop === 'dots' ? `radial-gradient(circle, ${dot} 2.5px, transparent 3px) 0 0 / ${u}px ${u}px, ${pal.bg}` : pal.bg;
     el.style.opacity = '0';
-    return { el, a: b.t, b: b.t + b.dur };
+    return { el, a: b.t, b: b.t + b.dur, hard: b.mode === 'card' };
   });
   const footage = footageMeta ? buildFootage(stage, W, H, footageMeta, i => `${PROJ}footage/frames/${String(i).padStart(6, '0')}.jpg`, pip, split) : null;
+  const cardLayer = footage && card && usesCard
+    ? buildCard(stage, card, footageMeta, { r: Math.round((lc.r ?? 28) * S), pop: lc.pop }, i => `${PROJ}footage/frames_land/${String(i).padStart(6, '0')}.jpg`,
+        lc.pop === false ? null : i => `${PROJ}footage/matte_land/${String(i).padStart(6, '0')}.jpg`) : null;
   // behind: true on a beat puts it BETWEEN the background footage and the speaker (needs scripts/matte.py masks), so the speaker
   // stays in front of the scene or text. The base footage fades out like a full-screen part; the matted speaker stays.
   const hasBehind = footage && (proj.beats || []).some(b => b.behind);
@@ -117,6 +135,7 @@ async function init() {
     const b = { ...def.defaults, ...b0 };
     if (!footage) b.behind = false;
     if (b.behind) b.mode = 'full';
+    if (b.mode === 'card' && !cardLayer) b.mode = 'split';
     if (!footage && b.mode !== 'overlay') b.mode = 'full';
     if (!footage && b.mode === 'overlay' && !def.defaults.free) b.mode = 'full';
     // a beat that reaches the end of the video holds to the last frame: no exit fade, no PiP springing back mid-frame
@@ -128,8 +147,8 @@ async function init() {
     const { b, def } = it;
     const layer = h('div', 'layer', b.behind ? behindLayer : def.defaults.onTop ? fxLayer : beatsLayer);
     if (b.palette && PALETTES[b.palette]) { applyPalette(layer.style, PALETTES[b.palette]); layer.style.color = 'var(--ink)'; } // per-part palette for variety (text colour follows it)
-    const t0 = b.mode === 'overlay' ? 0.2 : 0.55;
-    const OUT = b.dur - 0.45;
+    const t0 = b.mode === 'overlay' ? 0.2 : b.mode === 'card' ? 0.08 : 0.55;
+    const OUT = b.mode === 'card' ? b.dur - 0.06 : b.dur - 0.45;   // card parts end on a hard cut
     const ctx = {
       W, H, S, m, mode: b.mode, t0, OUT, dur: b.dur, captionsY, locale: proj.locale || 'id-ID', brand,
       asset, aspect: src => aspects[src] ?? 1, pip, root: layer, panel: { x: 0, y: 0, w: W, h: split.seam }, seam: split.seam,
@@ -162,7 +181,7 @@ async function init() {
         };
       }
     } else {
-      const headW = b.mode === 'insert' && !pip.bottom ? W - 2 * m - pip.w - 28 * S : W - 2 * m;
+      const headW = b.mode === 'insert' && !pip.bottom && b.mode !== 'card' ? W - 2 * m - pip.w - 28 * S : W - 2 * m;
       if (hasHead) {
         head = h('div', 'abs', layer);
         place(head, m, top + 10 * S, headW);
@@ -175,8 +194,8 @@ async function init() {
         };
         headH = head.offsetHeight;
       }
-      const mainTop = b.mode === 'insert' && !pip.bottom ? Math.max(pip.y + pip.h + 40 * S, hasHead ? top + headH + 48 * S : 0) : (hasHead ? top + headH + (b.mode === 'split' ? 36 : 56) * S : top);
-      const zoneBottom = b.mode === 'split' ? split.seam - Math.round(48 * S) : b.mode === 'insert' && pip.bottom ? pip.y - Math.round(44 * S) : bottom;
+      const mainTop = b.mode === 'insert' && !pip.bottom ? Math.max(pip.y + pip.h + 40 * S, hasHead ? top + headH + 48 * S : 0) : (hasHead ? top + headH + (b.mode === 'split' || b.mode === 'card' ? 36 : 56) * S : top);
+      const zoneBottom = b.mode === 'card' ? Math.round(card.capY - 36 * S) : b.mode === 'split' ? split.seam - Math.round(48 * S) : b.mode === 'insert' && pip.bottom ? pip.y - Math.round(44 * S) : bottom;
       zone = { x: m, y: mainTop, w: W - 2 * m, h: zoneBottom - mainTop };
       ctx.zone = zone;
       place(box, zone.x, zone.y, zone.w);
@@ -219,6 +238,8 @@ async function init() {
     for (const v of iv) { const l = out[out.length - 1]; if (l && v[0] - l[1] < 1.0) l[1] = Math.max(l[1], v[1]); else out.push([...v]); }
     return out;
   };
+  const cardW = cardLayer ? windows('card') : [];
+  const inW = (T, ws) => (ws.some(([a, b]) => T >= a && T < b) ? 1 : 0);   // hard cut, no ramp
   const insertW = footage ? windows('insert') : [], fullW = footage ? windows('full') : [], splitW = footage ? windows('split') : [], behindW = footage ? windows(null, true) : [];
   // the chrome (progress bar, badge) steps aside over a screen in split mode and over kinetic typography scenes
   const kinW = beats.filter(x => x.b.type === 'kinetic' && x.b.chrome !== true).map(x => [x.b.t, x.b.t + x.b.dur]);
@@ -249,14 +270,14 @@ async function init() {
     return best;
   };
 
-  const captions = words ? buildCaptions(stage, W, H, words, capCfg, splitW.length ? split : null) : null;
+  const captions = words ? buildCaptions(stage, W, H, words, capCfg, splitW.length ? split : null, cardLayer ? { y: Math.round(card.capY) } : null) : null;
   const chrome = proj.chrome !== false ? buildChrome(stage, W, H, proj.chrome || {}, asset, total) : null;
   stage.appendChild(fxLayer);
   const chapters = beats.filter(x => x.b.type === 'chapter').map(x => ({ num: x.b.num, name: x.b.label ?? x.b.name, start: x.b.t }));
 
   window.seek = async T => {
     bg.update(T);
-    bdrops.forEach(d => { d.el.style.opacity = kOf(T, [[d.a, d.b]]).toFixed(3); });
+    bdrops.forEach(d => { d.el.style.opacity = (d.hard ? (T >= d.a && T < d.b ? 1 : 0) : kOf(T, [[d.a, d.b]])).toFixed(3); });
     for (const it of beats) {
       const lt = T - it.b.t;
       const vis = lt >= -0.2 && lt <= it.b.dur + 0.1;
@@ -268,15 +289,22 @@ async function init() {
         pose(it.box, { y: 40 * (1 - k) - 20 * x, o: k * (1 - x) });
       }
       it.update(lt);
+      if (it.b.mode === 'card') {   // graphics whip in from the right with a motion blur (0.22 s), then sit still; the exit is the hard cut
+        const w = E.outCubic(prog(lt, 0, 0.22));
+        it.layer.style.transform = w < 1 ? `translateX(${((1 - w) * W * 0.45).toFixed(1)}px)` : '';
+        it.layer.style.filter = w < 1 ? `blur(${((1 - w) * 16).toFixed(1)}px)` : '';
+      }
     }
     const splitK = kOf(T, splitW);
-    if (footage) await footage.update(T, kOf(T, insertW), kOf(T, fullW), splitK, zoomAt(T));
+    const cardK = inW(T, cardW);
+    if (footage) await footage.update(T, kOf(T, insertW), Math.max(kOf(T, fullW), cardK), splitK, zoomAt(T));
+    if (cardLayer) await cardLayer.update(T, cardK);
     if (person) await person.update(T, kOf(T, behindW), zoomAt(T));
     // kinetic scenes already show the spoken words, so captions step aside (kinetic `captions: true` keeps them)
-    if (captions) captions.update(T, Math.max(kOf(T, kinCapW), pip.bottom ? kOf(T, insertW) : 0), splitK);
+    if (captions) captions.update(T, Math.max(kOf(T, kinCapW), pip.bottom ? kOf(T, insertW) : 0), splitK, cardK);
     if (chrome) {
       const ch = [...chapters].reverse().find(c => T >= c.start) || null;
-      chrome.update(T, ch, Math.max(chromeHideSplit ? splitK : 0, kOf(T, kinW)));
+      chrome.update(T, ch, Math.max(chromeHideSplit ? splitK : 0, kOf(T, kinW), cardK));
     }
   };
   window.__duration = total;

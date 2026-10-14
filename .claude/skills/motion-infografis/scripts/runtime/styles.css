@@ -96,3 +96,7 @@ html, body { margin: 0; overflow: hidden; background: var(--bg); color: var(--in
 .cap-word .cw { margin: 0; padding: 0; color: #fff; text-shadow: none; }
 /* monospace labels (tag, iso HUD, mindmap) */
 .mono { font-family: "MonoFont", "DejaVu Sans Mono", Menlo, monospace; }
+
+/* caption on the landscape card state: dark bold words on the light backdrop, the spoken word in a dark chip */
+.cap-card .cw { font-weight: 800; color: #0B0B0B; text-shadow: none; }
+.cap-card .cw.on { color: #fff; background: #0B0B0B; }

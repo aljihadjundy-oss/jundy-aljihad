@@ -85,7 +85,7 @@ shrunk automatically and the renderer prints a warning. Stat numbers shrink to f
 | `t` | start time in seconds (clip time, same clock as transcript.md) |
 | `dur` | seconds on screen, including the ~0.45 s exit. 3.5–8 s is typical |
 | `type` | one of the types below |
-| `mode` | `overlay` / `insert` / `full` / `split`; each type has a sensible default |
+| `mode` | `overlay` / `insert` / `full` / `split` / `card`; each type has a sensible default. `card` (S12, landscape raw only, needs `prep_footage --dual`): the picture becomes a rounded card at the bottom with the speaker layered over its top edge, the beat fills the stage above; hard cuts in and out, whip-in, dark captions. `layout.card: { w: 0.88, bottom: 0.04, top: 0.16, r: 28, pop: true }` |
 | `pos` | overlay zone: `top` / `center` / `bottom` |
 | `kicker` | small uppercase label above the title (data beats) |
 | `title` | kinetic headline for data beats (`titleSize` to override) |

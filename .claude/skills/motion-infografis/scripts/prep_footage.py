@@ -8,6 +8,7 @@ Creates <project>/project.json if it does not exist yet.
   python3 prep_footage.py raw.mov myproject --fit blur           # landscape clip inside a blurred 9:16 frame
   python3 prep_footage.py raw.mp4 myproject --start 3.2 --end 61 # trim
   python3 prep_footage.py raw.mp4 myproject --focus-x 0.4        # cover-crop centred slightly left
+  python3 prep_footage.py raw.mp4 myproject --dual --focus-x 0.5 # LANDSCAPE raw: portrait cover frames AND the landscape picture (for mode "card")
 """
 import argparse, json, os, shutil, subprocess, sys
 
@@ -22,6 +23,7 @@ ap.add_argument('--focus-x', type=float, default=0.5, help='cover crop horizonta
 ap.add_argument('--focus-y', type=float, default=0.5, help='cover crop vertical focus 0..1')
 ap.add_argument('--start', type=float, default=0.0)
 ap.add_argument('--end', type=float, default=None)
+ap.add_argument('--dual', action='store_true', help='landscape raw: also write footage/frames_land (the whole landscape picture, canvas wide) for the card state (S12)')
 ap.add_argument('--quality', type=int, default=3, help='JPEG qscale (2 best … 31 worst)')
 a = ap.parse_args()
 
@@ -61,6 +63,20 @@ cmd += ['-q:v', str(a.quality), os.path.join(frames, '%06d.jpg')]
 print('extracting frames …', flush=True)
 subprocess.run(cmd, check=True)
 count = len([f for f in os.listdir(frames) if f.endswith('.jpg')])
+land = None
+if a.dual:
+    sw, sh = int(v.get('width') or 0), int(v.get('height') or 0)
+    if sw < sh:
+        print('--dual ignored: the raw footage is portrait (the card state is only for landscape raw)')
+    else:
+        lh = round(W * sh / sw / 2) * 2
+        ldir = os.path.join(fdir, 'frames_land')
+        shutil.rmtree(ldir, ignore_errors=True)
+        os.makedirs(ldir, exist_ok=True)
+        print('extracting landscape frames …', flush=True)
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', str(a.start), '-t', str(dur), '-i', a.video, '-vf', f'fps={a.fps},scale={W}:{lh}:flags=lanczos',
+                        '-q:v', str(a.quality), os.path.join(ldir, '%06d.jpg')], check=True)
+        land = {'w': W, 'h': lh}
 
 wav = os.path.join(fdir, 'audio.wav')
 if has_audio:
@@ -68,7 +84,7 @@ if has_audio:
 
 meta = {'src': os.path.abspath(a.video), 'fps': a.fps, 'count': count, 'duration': round(count / a.fps, 3), 'w': W, 'h': H,
         'fit': a.fit, 'start': a.start, 'end': end, 'hasAudio': has_audio,
-        'source': {'w': v.get('width'), 'h': v.get('height'), 'fps': v.get('r_frame_rate'), 'duration': src_dur}}
+        'source': {'w': v.get('width'), 'h': v.get('height'), 'fps': v.get('r_frame_rate'), 'duration': src_dur}, 'land': land}
 json.dump(meta, open(os.path.join(fdir, 'footage.json'), 'w'), indent=2)
 
 pj = os.path.join(a.project, 'project.json')

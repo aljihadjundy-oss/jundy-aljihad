@@ -47,6 +47,7 @@ standing rules while no sample has arrived yet. Provisional types are upgraded t
 - **Typical mix.** Hook S1/S2 → structure S0 → proof S1 split → punchline S2 overlay → CTA S0 (see "worked mix" in `style-library.md` §4).
 
 ## T2 Talking head / explainer, landscape raw
+- **Default carrier for a landscape raw (added from ref 6): S12 card switcher.** Alternate FULL (the cover crop, the speaker large) and CARD (the landscape picture as a rounded card at the bottom, its top cut a little, the speaker's cap breaking the edge, the graphic on a light grid stage above, dark captions above the card), with HARD cuts between them. Prep with `prep_footage.py raw.mp4 proj --dual --focus-x <speaker x>` and `matte.py proj --land`; beats use `mode: "card"`. See `style-library.md` §3.10. The older wide bottom window (S5, `layout.pip` bottom) remains available for whiteboard parts.
 - **Why separate.** A landscape frame has empty space left and right of the speaker, so the speaker can be a wide window and the rest
   becomes a board. This is the only type where the wide bottom window (`layout.pip: {pos: "bottom"}`) is allowed.
 - **Allowed styles.** S5 whiteboard on graph paper (`mindmap`, `calendar`, `chapter` `arc`, `backdrop: "grid"`, palette `graph`, captions `word`),
@@ -73,7 +74,7 @@ standing rules while no sample has arrived yet. Provisional types are upgraded t
 
 ## T5 Podcast / interview
 First sample: "checkcom x claude 1" (193 s, a 16:9 interview with two people, delivered as a 1080x1920 file with the real picture letterboxed in the middle).
-- **Format first.** `inspect.py` detects the letterbox. Crop the true 16:9 picture out (`crop=1080:608:0:656`), then `prep_footage --fit blur`.
+- **Format first.** `probe_raw.py` detects the letterbox. Crop the true 16:9 picture out (`crop=1080:608:0:656`), then `prep_footage --fit blur`.
   The whole interview frame stays visible in the middle band (y ≈ 0.34–0.66), both faces uncropped. Never use `cover` (crops the faces) or `split`.
 - **Layout.** Graphics live only in the **top zone** (above the picture, set `layout.overlayTop` ≈ 0.045, `overlayBottom` ≈ 0.335) as overlay cards;
   captions stay in the bottom zone (karaoke). The picture is never covered, so the footage is 100 % clean. Turn the chrome progress bar off
@@ -119,6 +120,7 @@ First sample: "checkcom x claude 1" (193 s, a 16:9 interview with two people, de
 | S9 product UI demo | – | – | + | – | ✗ | – | ✓ | + |
 | S10 engraving & word swap | + (≤ 5 s) | – | ✗ | – | ✗ | ✓ | – | + |
 | S11 editorial type stack | + (≤ 5 s) | – | ✗ | – | ✗ | ✓ | – | + |
+| S12 landscape card switcher | ✗ (portrait raw: use `split`) | ✓ | + | + | + | – | – | – |
 | `behind` (decoration only) | – | + | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
 
 The rubric still applies inside a type (no two consecutive parts in the same style, no style over 50 % of graphic time, face never covered,
@@ -140,6 +142,7 @@ words from the transcript, no invented numbers).
 | ref 2 "Frame by Frame" UI demo (13 s, near-square) | T7 | animated pointer + click, menu-bar app, orbiting chips | S9 |
 | ref 3 "Claude" engravings (13 s, portrait) | T6 | paper white, serif word swap, one terracotta accent, engravings | S10 |
 | ref 4 "Lightspark" (17.7 s, portrait) | T6 | editorial type stack, dim previous lines, big number, rolling word, black bumper | S11 |
+| ref 6 reels explainer (62 s, landscape raw delivered 9:16) | T2 | hard cuts between full close-up and a bottom card with the pop-out cap, whip-in graphics, dark captions above the card | S12 |
 | ref e: marketing explainer (83 s, speaker in a dark room) | T2 | graph-paper board, wide speaker window | S5 |
 
 ## Filing a new sample
