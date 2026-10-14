@@ -99,7 +99,7 @@ export function imageCard(parent, src, aspect, { w = 520, hgt = null, radius = 3
   if (tag) {
     const tg = h('div', 'abs', el, tag);
     Object.assign(tg.style, { left: '50%', bottom: '16px', transform: 'translateX(-50%)', whiteSpace: 'nowrap', fontSize: '19px', fontWeight: '700',
-      letterSpacing: '.08em', textTransform: 'uppercase', color: '#fff', background: 'var(--glass)', padding: '7px 14px', borderRadius: '999px' });
+      letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--ink)', background: 'var(--glass)', padding: '7px 14px', borderRadius: '999px' });
   }
   const api = {
     el, w, h: H0, aspect,

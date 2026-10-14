@@ -202,7 +202,7 @@ async function init() {
     }
     const mod = def.async ? await def.load(b, ctx) : null;
     // content scale: larger on dedicated (insert/full) screens; shrink and rebuild until it fits its zone
-    let F = b.scale ?? (TEXTY.has(b.type) ? 1 : b.mode === 'overlay' ? 0.95 : 1.3);
+    let F = b.scale ?? (b.mode === 'card' ? (TEXTY.has(b.type) ? 1.1 : 1.6) : TEXTY.has(b.type) ? 1 : b.mode === 'overlay' ? 0.95 : 1.3);   // the card stage is big: data beats scale up
     let pend = [], content = null, bh = 0, grown = false;
     const canGrow = GROWABLE.has(b.type) && b.mode !== 'overlay' && b.scale == null;
     for (let attempt = 0; attempt < 5; attempt++) {

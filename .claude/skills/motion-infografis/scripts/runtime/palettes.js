@@ -38,4 +38,6 @@ export const TOKENS = ['bg', 'surface', 'ink', 'accent', 'accent2', 'accent3', '
 // set palette tokens as CSS variables on an element (document root, or one beat's layer for a per-part palette)
 export function applyPalette(style, pal) {
   for (const k of TOKENS) if (pal[k] != null) style.setProperty(`--${k}`, pal[k]);
+  // soft / muted text follow the palette's ink, so light palettes (frost, graph, paper, editorial…) get dark secondary text, not the dark-theme white
+  if (pal.ink != null) { style.setProperty('--ink-soft', `color-mix(in srgb, ${pal.ink} 74%, transparent)`); style.setProperty('--ink-mute', `color-mix(in srgb, ${pal.ink} 52%, transparent)`); }
 }
