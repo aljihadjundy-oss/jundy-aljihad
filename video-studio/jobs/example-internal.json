@@ -1,0 +1,13 @@
+{
+  "id": "20261020-internal-osiris-recap",
+  "lane": "internal",
+  "brand": "osiris-event",
+  "requester": "PIC Osiris Event",
+  "goal": "Tim internal memahami capaian dan rencana kuartal berikutnya dalam 45 detik.",
+  "audience": "Tim PT SKD lintas lini bisnis",
+  "format": { "ratio": "16:9", "duration_s": 45, "fps": 30, "mode": "from-scratch" },
+  "inputs": { "script_or_brief": "projects/internal/20261020-osiris-recap/brief.md", "sources": ["projects/internal/20261020-osiris-recap/data.xlsx"] },
+  "constraints": { "no_invented_numbers": true, "sound": "calm", "max_words_per_screen": 7 },
+  "approval": { "storyboard": "PIC lini bisnis", "stills": "PIC lini bisnis", "final": "PIC lini bisnis" },
+  "deliver": { "max_mb": 28, "extras": ["storyboard"] }
+}

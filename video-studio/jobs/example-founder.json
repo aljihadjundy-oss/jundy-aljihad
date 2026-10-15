@@ -1,0 +1,13 @@
+{
+  "id": "20261020-founder-3-pelajaran",
+  "lane": "founder",
+  "brand": "jundy",
+  "requester": "Jundy",
+  "goal": "Penonton menyimpan dan membagikan 3 pelajaran memimpin tim kreatif.",
+  "audience": "Founder dan pemilik bisnis kreatif muda",
+  "format": { "ratio": "9:16", "duration_s": 60, "fps": 30, "mode": "footage-overlay" },
+  "inputs": { "script_or_brief": "projects/founder/20261020-3-pelajaran/brief.md", "raw_video": "projects/founder/20261020-3-pelajaran/raw.mp4", "srt": "projects/founder/20261020-3-pelajaran/raw.srt", "sources": [] },
+  "constraints": { "no_invented_numbers": true, "sound": "calm", "max_words_per_screen": 7 },
+  "approval": { "storyboard": "Jundy", "stills": "Jundy", "final": "Jundy" },
+  "deliver": { "max_mb": 28, "extras": ["captions_srt"] }
+}

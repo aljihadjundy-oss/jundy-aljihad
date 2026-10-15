@@ -1,0 +1,13 @@
+{
+  "id": "20261020-client-teaser-eventx",
+  "lane": "client",
+  "brand": "client-eventx",
+  "requester": "Account Manager",
+  "goal": "Calon sponsor memahami nilai bisnis acara dan mendaftar sebagai mitra.",
+  "audience": "Calon sponsor dan exhibitor (B2B)",
+  "format": { "ratio": "16:9", "duration_s": 60, "fps": 30, "mode": "from-scratch" },
+  "inputs": { "script_or_brief": "projects/client/eventx/20261020-teaser/brief.md", "assets": ["brand-kits/client-eventx/logo.png"], "sources": ["projects/client/eventx/20261020-teaser/deck.pdf"] },
+  "constraints": { "no_invented_numbers": true, "confidential_docs": ["proposal-komersial.pdf"], "sound": "calm", "max_words_per_screen": 7 },
+  "approval": { "storyboard": "Account Manager lalu klien", "stills": "Account Manager", "final": "Klien" },
+  "deliver": { "max_mb": 28, "extras": ["vo_script", "footage_list", "storyboard"] }
+}

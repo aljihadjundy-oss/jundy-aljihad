@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SKD Video Studio job",
+  "type": "object",
+  "required": ["id", "lane", "brand", "goal", "format", "approval"],
+  "properties": {
+    "id": { "type": "string", "description": "yyyymmdd-slug, unik" },
+    "lane": { "enum": ["founder", "internal", "client"] },
+    "brand": { "type": "string", "description": "nama folder di brand-kits/, mis. jundy, shape, sinatif-agency, osiris-event, hexolution, sinatif-academy, client-<nama>" },
+    "requester": { "type": "string", "description": "siapa yang meminta (nama atau agent)" },
+    "goal": { "type": "string", "description": "satu kalimat: video ini harus membuat penonton melakukan apa" },
+    "audience": { "type": "string" },
+    "format": {
+      "type": "object",
+      "properties": {
+        "ratio": { "enum": ["16:9", "9:16", "1:1", "4:5"] },
+        "duration_s": { "type": "number" },
+        "fps": { "type": "integer", "default": 30 },
+        "mode": { "enum": ["from-scratch", "footage-overlay"], "description": "from-scratch = motion graphic murni; footage-overlay = ada video mentah (talking head) yang diberi motion" }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {
+        "script_or_brief": { "type": "string" },
+        "raw_video": { "type": "string", "description": "path file, kalau mode footage-overlay" },
+        "srt": { "type": "string" },
+        "assets": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array", "items": { "type": "string" }, "description": "dokumen sumber untuk semua angka dan klaim di layar" }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "no_invented_numbers": { "type": "boolean", "default": true },
+        "confidential_docs": { "type": "array", "items": { "type": "string" }, "description": "dokumen yang isinya tidak boleh muncul" },
+        "sound": { "enum": ["calm", "energetic", "none"], "default": "calm" },
+        "max_words_per_screen": { "type": "integer", "default": 7 }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "required": ["storyboard", "stills", "final"],
+      "properties": {
+        "storyboard": { "type": "string", "description": "siapa yang menyetujui storyboard" },
+        "stills": { "type": "string" },
+        "final": { "type": "string" }
+      }
+    },
+    "deliver": {
+      "type": "object",
+      "properties": {
+        "max_mb": { "type": "number", "default": 28 },
+        "extras": { "type": "array", "items": { "enum": ["vo_script", "footage_list", "storyboard", "captions_srt"] } }
+      }
+    }
+  }
+}
